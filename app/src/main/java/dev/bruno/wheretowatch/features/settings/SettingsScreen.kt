@@ -43,7 +43,7 @@ import dev.bruno.wheretowatch.AppPreferences
 import dev.bruno.wheretowatch.services.country.model.Country
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.settings.SettingsScreen.Event.ThemeConfigSelected
-import dev.bruno.wheretowatch.ui.theme.WhereToWatchTheme
+import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
