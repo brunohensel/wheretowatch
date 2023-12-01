@@ -23,7 +23,7 @@ import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.LIGHT
 import dev.bruno.wheretowatch.di.ActivityKey
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.home.HomeScreen
-import dev.bruno.wheretowatch.ui.theme.WhereToWatchTheme
+import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
 import javax.inject.Inject
 
 @ContributesMultibinding(scope = AppScope::class, boundType = Activity::class)
