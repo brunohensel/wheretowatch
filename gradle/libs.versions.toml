@@ -4,6 +4,7 @@ androidx-activity = "1.8.0"
 androidx-core = "1.12.0"
 anvil = "2.4.8"
 circuit = "0.17.0"
+coil = "2.5.0"
 compose-boom = "2023.10.01"
 compose-compiler = "1.5.5-dev-k1.9.21-163bb051fe5"
 dagger = "2.48.1"
@@ -34,6 +35,7 @@ circuit-circuitx = { module = "com.slack.circuit:circuitx-android", version.ref 
 circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
 circuit-codegen-ksp = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 dagger-apt-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dagger-runtime = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.circuit.circuitx)
     implementation(libs.circuit.foundation)
     implementation(libs.circuit.codegen.annotations)
+    implementation(libs.coil.compose)
     ksp(libs.circuit.codegen.ksp)
     kapt(libs.dagger.apt.compiler)
     implementation(libs.dagger.runtime)
