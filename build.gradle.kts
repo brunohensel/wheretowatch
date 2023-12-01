@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.anvil) apply false
+    alias(libs.plugins.detekt) apply true
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
@@ -9,6 +10,22 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.sqldelight) apply false
+}
+
+detekt {
+    source.setFrom(
+        files(
+            fileTree(
+                "dir" to projectDir,
+                "includes" to listOf("**/*.kt"),
+                "excludes" to listOf("**/build/**", "**/resources/**")
+            )
+        )
+    )
+    config.setFrom("detekt/config.yml")
+    baseline = file("detekt/baseline.xml")
+    autoCorrect = true
+    basePath = projectDir.absolutePath
 }
 
 subprojects {
