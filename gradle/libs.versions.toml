@@ -8,6 +8,7 @@ compose-boom = "2023.10.00"
 compose-compiler = "1.5.3"
 dagger = "2.48.1"
 datastore = "1.0.0"
+detekt = "1.23.4"
 kotlin = "1.9.10"
 ksp = "1.9.21-1.0.15"
 ktor = "2.3.5"
@@ -47,6 +48,7 @@ test-junit = { module = "junit:junit", version.ref = "junit" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
