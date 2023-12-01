@@ -13,8 +13,19 @@ plugins {
 }
 
 detekt {
-    toolVersion = "1.23.4"
-    buildUponDefaultConfig = true // preconfigure defaults
+    source.setFrom(
+        files(
+            fileTree(
+                "dir" to projectDir,
+                "includes" to listOf("**/*.kt"),
+                "excludes" to listOf("**/build/**", "**/resources/**")
+            )
+        )
+    )
+    config.setFrom("detekt/config.yml")
+    baseline = file("detekt/baseline.xml")
+    autoCorrect = true
+    basePath = projectDir.absolutePath
 }
 
 subprojects {

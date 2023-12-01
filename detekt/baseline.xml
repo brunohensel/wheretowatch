@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>EmptyClassBlock:ExampleInstrumentedTest.kt$ExampleInstrumentedTest${ }</ID>
+    <ID>MagicNumber:KtorModule.kt$KtorModule$30</ID>
+    <ID>MatchingDeclarationName:Scopes.kt$AppScope</ID>
+    <ID>NewLineAtEndOfFile:Annotations.kt$dev.bruno.wheretowatch.di.Annotations.kt</ID>
+    <ID>NewLineAtEndOfFile:AppComponent.kt$dev.bruno.wheretowatch.di.AppComponent.kt</ID>
+    <ID>NewLineAtEndOfFile:AppPreferences.kt$dev.bruno.wheretowatch.AppPreferences.kt</ID>
+    <ID>NewLineAtEndOfFile:CircuitModule.kt$dev.bruno.wheretowatch.di.CircuitModule.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$dev.bruno.wheretowatch.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:CountriesRepository.kt$dev.bruno.wheretowatch.services.country.CountriesRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:CountriesRequest.kt$dev.bruno.wheretowatch.network.api.country.CountriesRequest.kt</ID>
+    <ID>NewLineAtEndOfFile:CountriesSupplier.kt$dev.bruno.wheretowatch.services.country.CountriesSupplier.kt</ID>
+    <ID>NewLineAtEndOfFile:CountryDao.kt$dev.bruno.wheretowatch.services.country.CountryDao.kt</ID>
+    <ID>NewLineAtEndOfFile:CountryRemote.kt$dev.bruno.wheretowatch.services.country.CountryRemote.kt</ID>
+    <ID>NewLineAtEndOfFile:DatabaseModule.kt$dev.bruno.wheretowatch.db.DatabaseModule.kt</ID>
+    <ID>NewLineAtEndOfFile:DropDownCountries.kt$dev.bruno.wheretowatch.features.settings.DropDownCountries.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleInstrumentedTest.kt$dev.bruno.wheretowatch.ExampleInstrumentedTest.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$dev.bruno.wheretowatch.ExampleUnitTest.kt</ID>
+    <ID>NewLineAtEndOfFile:HomePresenter.kt$dev.bruno.wheretowatch.features.home.HomePresenter.kt</ID>
+    <ID>NewLineAtEndOfFile:HomeScreen.kt$dev.bruno.wheretowatch.features.home.HomeScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:KtorCountryRemote.kt$dev.bruno.wheretowatch.network.api.country.KtorCountryRemote.kt</ID>
+    <ID>NewLineAtEndOfFile:KtorModule.kt$dev.bruno.wheretowatch.network.KtorModule.kt</ID>
+    <ID>NewLineAtEndOfFile:KtorTrendingRemote.kt$dev.bruno.wheretowatch.network.api.trending.KtorTrendingRemote.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt$dev.bruno.wheretowatch.MainActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:Scopes.kt$dev.bruno.wheretowatch.di.Scopes.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsPresenter.kt$dev.bruno.wheretowatch.features.settings.SettingsPresenter.kt</ID>
+    <ID>NewLineAtEndOfFile:SettingsScreen.kt$dev.bruno.wheretowatch.features.settings.SettingsScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:SqlDelightCountryDao.kt$dev.bruno.wheretowatch.db.SqlDelightCountryDao.kt</ID>
+    <ID>NewLineAtEndOfFile:Theme.kt$dev.bruno.wheretowatch.ui.theme.Theme.kt</ID>
+    <ID>NewLineAtEndOfFile:TrendingItem.kt$dev.bruno.wheretowatch.services.model.TrendingItem.kt</ID>
+    <ID>NewLineAtEndOfFile:TrendingRemote.kt$dev.bruno.wheretowatch.services.trending.TrendingRemote.kt</ID>
+    <ID>NewLineAtEndOfFile:TrendingRequest.kt$dev.bruno.wheretowatch.network.api.trending.TrendingRequest.kt</ID>
+    <ID>NewLineAtEndOfFile:TrendingSupplier.kt$dev.bruno.wheretowatch.services.trending.TrendingSupplier.kt</ID>
+    <ID>NewLineAtEndOfFile:Type.kt$dev.bruno.wheretowatch.ui.theme.Type.kt</ID>
+    <ID>NewLineAtEndOfFile:WhereToWatchApp.kt$dev.bruno.wheretowatch.WhereToWatchApp.kt</ID>
+    <ID>NewLineAtEndOfFile:WhereToWatchComponentFactory.kt$dev.bruno.wheretowatch.di.WhereToWatchComponentFactory.kt</ID>
+    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+  </CurrentIssues>
+</SmellBaseline>
