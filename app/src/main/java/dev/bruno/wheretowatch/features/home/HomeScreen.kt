@@ -11,11 +11,13 @@ import com.slack.circuit.runtime.screen.Screen
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data object HomeScreen : Screen {
     data class State(
+        val trendingItems: ImmutableList<HomeTrendingItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
