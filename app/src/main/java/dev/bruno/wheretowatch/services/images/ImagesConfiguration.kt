@@ -1,13 +1,13 @@
 package dev.bruno.wheretowatch.services.images
 
 data class ImagesConfiguration(
-    val baseUrl: String = BASE_IMG_URL,
+    val baseUrl: String = BaseImgUrl,
     val backdropSizes: List<String> = defaultBackdropSizes,
     val logoSizes: List<String> = defaultLogoSizes,
     val posterSizes: List<String> = defaultPosterSizes,
 )
 
-private const val BASE_IMG_URL = "https://image.tmdb.org/t/p/"
+private const val BaseImgUrl = "https://image.tmdb.org/t/p/"
 
 private val defaultBackdropSizes = listOf(
     "w300",

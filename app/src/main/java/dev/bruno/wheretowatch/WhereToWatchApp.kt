@@ -14,7 +14,8 @@ class WhereToWatchApp : Application(), ImageLoaderFactory {
     val appComponent by lazy { AppComponent.create(this) }
     private val initializers by lazy { appComponent.initializers }
 
-    // TODO to check if the better approach would be to use ProcessLifecycleOwner from androidx.lifecycle:lifecycle-process:$lifecycle_version
+    // TODO to check if the better approach would be to use ProcessLifecycleOwner from
+    //  androidx.lifecycle:lifecycle-process:$lifecycle_version
     private val scope = MainScope()
     override fun onCreate() {
         super.onCreate()
