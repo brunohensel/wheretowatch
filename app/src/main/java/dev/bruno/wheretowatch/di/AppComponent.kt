@@ -5,6 +5,7 @@ import android.content.Context
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
+import dev.bruno.wheretowatch.Initializers
 import javax.inject.Provider
 
 @SingleIn(AppScope::class)
@@ -12,6 +13,7 @@ import javax.inject.Provider
 interface AppComponent {
 
     val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
+    val initializers: Set<@JvmSuppressWildcards Initializers>
 
     @Component.Factory
     interface Factory {
