@@ -24,7 +24,9 @@ data class TrendingDto(
     val overview: String,
     val popularity: Double,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String? = null,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
     @SerialName("release_date")
     val releaseDate: String? = null,
     val title: String? = null,

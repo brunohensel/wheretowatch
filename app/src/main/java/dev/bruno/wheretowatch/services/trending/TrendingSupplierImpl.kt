@@ -31,6 +31,7 @@ private fun List<TrendingDto>.asTrendingItems(): ImmutableList<TrendingItem> {
                 overview = dtoItem.overview,
                 popularity = dtoItem.popularity,
                 posterPath = dtoItem.posterPath,
+                backdropPath = dtoItem.backdropPath,
                 releaseDate = dtoItem.releaseDate ?: "",
                 title = dtoItem.title ?: "",
                 video = dtoItem.video ?: false,
