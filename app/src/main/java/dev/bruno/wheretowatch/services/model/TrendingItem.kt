@@ -14,7 +14,6 @@ data class TrendingItem(
     val posterPath: String?,
     val backdropPath: String?,
     val releaseDate: String,
-    val title: String,
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int
