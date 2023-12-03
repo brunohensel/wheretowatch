@@ -26,7 +26,8 @@ class TrendingFlowSource @Inject constructor(
                 originalLanguage = item.originalLanguage,
                 originalTitle = item.originalTitle,
                 popularity = item.popularity,
-                posterPath = item.posterPath,// need to be a full path with base url and size
+                backdropPath = item.backdropPath ?: "", // need to be a full path with base url and size
+                posterPath = item.posterPath ?: "", // need to be a full path with base url and size
                 voteAverage = item.voteAverage,
                 voteCount = item.voteCount,
             )
