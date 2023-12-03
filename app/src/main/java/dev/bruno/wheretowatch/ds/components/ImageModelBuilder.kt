@@ -1,5 +1,5 @@
 package dev.bruno.wheretowatch.ds.components
 
-interface ImageModelBuilder<T> {
-    val buildImgModel: (type: ImageType) ->  T
+interface ImageModelBuilder<out T : Any> {
+    val buildImgModel: (type: ImageType) -> T
 }
