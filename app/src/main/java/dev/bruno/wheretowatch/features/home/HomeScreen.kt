@@ -62,6 +62,7 @@ data object HomeScreen : Screen {
     }
 }
 
+private const val LandscapeRatio = 16/11f
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @CircuitInject(HomeScreen::class, AppScope::class)
 @Composable
@@ -143,7 +144,7 @@ fun HomeContent(
                                         modifier = Modifier
                                             .animateItemPlacement()
                                             .width(240.dp) // TODO make it dynamic
-                                            .aspectRatio(16 / 11f)
+                                            .aspectRatio(LandscapeRatio)
                                     )
                                 }
                             }
