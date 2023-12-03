@@ -21,6 +21,7 @@ data class TrendingDto(
     val originalLanguage: String,
     @SerialName("original_title")
     val originalTitle: String? = null,
+    val name: String? = null,
     val overview: String,
     val popularity: Double,
     @SerialName("poster_path")

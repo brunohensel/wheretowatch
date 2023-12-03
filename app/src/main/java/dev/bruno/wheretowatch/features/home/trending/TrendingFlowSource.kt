@@ -1,9 +1,8 @@
 package dev.bruno.wheretowatch.features.home.trending
 
+import dev.bruno.wheretowatch.features.home.HomeTrending
 import dev.bruno.wheretowatch.features.home.HomeTrendingItem
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +14,9 @@ class TrendingFlowSource @Inject constructor(
     private val trendingSupplier: TrendingSupplier,
 ) {
 
-    private val state = MutableStateFlow<ImmutableList<HomeTrendingItem>>(persistentListOf())
+    private val state = MutableStateFlow(HomeTrending())
 
-    val flow: Flow<ImmutableList<HomeTrendingItem>> = state.asStateFlow()
+    val flow: Flow<HomeTrending> = state.asStateFlow()
     suspend fun getTrending(window: TrendingSupplier.TrendWindow) {
         val trendingItem = trendingSupplier.get(window).map { item ->
             HomeTrendingItem(
@@ -32,6 +31,6 @@ class TrendingFlowSource @Inject constructor(
             )
         }.toImmutableList()
 
-        state.update { trendingItem }
+        state.update { it.copy(trendWindow = window, items = trendingItem) }
     }
 }

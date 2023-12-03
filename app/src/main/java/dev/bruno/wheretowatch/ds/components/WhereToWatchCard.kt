@@ -15,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import dev.bruno.wheretowatch.ds.components.ImageType.Backdrop
 import dev.bruno.wheretowatch.ds.components.ImageType.Poster
-import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
 
 @Composable
 fun WhereToWatchCard(
@@ -102,15 +101,13 @@ private fun BackdropCard(
     Card(
         onClick = onClick,
         modifier = modifier,
-        shape = MaterialTheme.shapes.extraLarge,
+        shape = MaterialTheme.shapes.medium,
     ) {
-        WhereToWatchTheme {
-            BackdropContent(
-                model = model,
-                title = title,
-                alignment = alignment,
-            )
-        }
+        BackdropContent(
+            model = model,
+            title = title,
+            alignment = alignment,
+        )
     }
 }
 
