@@ -8,7 +8,6 @@
         android:name=".WhereToWatchApp"
         android:allowBackup="true"
         android:appComponentFactory="dev.bruno.wheretowatch.di.WhereToWatchComponentFactory"
-        tools:replace="android:appComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhereToWatch"
+        tools:replace="android:appComponentFactory"
         tools:targetApi="34">
         <activity
             android:name=".MainActivity"

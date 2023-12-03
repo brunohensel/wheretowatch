@@ -1,8 +1,7 @@
 package dev.bruno.wheretowatch.services.images
 
 import coil.size.Dimension
-import dev.bruno.wheretowatch.services.images.ImageUrlResolver.Type.Backdrop
-import dev.bruno.wheretowatch.services.images.ImageUrlResolver.Type.Poster
+import dev.bruno.wheretowatch.ds.components.ImageType
 import javax.inject.Inject
 
 private val IMAGE_SIZE_PATTERN = "w(\\d+)$".toRegex()
@@ -11,12 +10,12 @@ class ImageUrlResolver @Inject constructor(
     private val imageConfigSupplier: ImageConfigSupplier,
 ) {
 
-    fun resolve(type: Type, path: String, width: Dimension): String {
+    fun resolve(type: ImageType, path: String, width: Dimension): String {
         if (width !is Dimension.Pixels) return ""
 
         return when (type) {
-            Backdrop -> resolveBackdropUrl(width, path)
-            Poster -> resolvePosterUrl(width, path)
+            ImageType.Backdrop -> resolveBackdropUrl(width, path)
+            ImageType.Poster -> resolvePosterUrl(width, path)
         }
     }
 
@@ -65,6 +64,4 @@ class ImageUrlResolver @Inject constructor(
     private fun extractWidthAsIntFrom(size: String): Int? {
         return IMAGE_SIZE_PATTERN.matchEntire(size)?.groups?.get(1)?.value?.toInt()
     }
-
-    enum class Type { Backdrop, Poster }
 }

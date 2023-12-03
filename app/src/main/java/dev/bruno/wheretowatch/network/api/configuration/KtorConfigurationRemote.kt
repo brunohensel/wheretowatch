@@ -32,7 +32,7 @@ class KtorConfigurationRemote @Inject constructor(
         return result
             .map { newConfig ->
                 ImagesConfiguration(
-                    baseUrl = newConfig.images.baseUrl,
+                    baseUrl = newConfig.images.secureBaseUrl,
                     backdropSizes = newConfig.images.backdropSizes,
                     logoSizes = newConfig.images.logoSizes,
                     posterSizes = newConfig.images.posterSizes,

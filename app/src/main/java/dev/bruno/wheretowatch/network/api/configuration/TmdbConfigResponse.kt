@@ -10,6 +10,8 @@ data class TmdbConfigResponse(val images: TmdbConfigDto)
 data class TmdbConfigDto(
     @SerialName("base_url")
     val baseUrl: String,
+    @SerialName("secure_base_url")
+    val secureBaseUrl: String,
     @SerialName("backdrop_sizes")
     val backdropSizes: List<String>,
     @SerialName("logo_sizes")
