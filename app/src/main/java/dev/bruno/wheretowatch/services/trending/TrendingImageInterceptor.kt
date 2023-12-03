@@ -8,6 +8,8 @@ import coil.size.Dimension
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.di.ApplicationContext
+import dev.bruno.wheretowatch.ds.components.ImageType.Backdrop
+import dev.bruno.wheretowatch.ds.components.ImageType.Poster
 import dev.bruno.wheretowatch.services.images.ImageUrlResolver
 import javax.inject.Inject
 
@@ -32,9 +34,14 @@ class TrendingImageInterceptor @Inject constructor(
     }
 
     private fun buildTrendUrl(model: TrendingImageModel, width: Dimension): String {
+        val path = when (model.type) {
+            Backdrop -> model.backdropPath
+            Poster -> model.posterPath
+        }
+
         return urlResolver.resolve(
             type = model.type,
-            path = model.path ?: "",
+            path = path ?: "",
             width = width
         )
     }

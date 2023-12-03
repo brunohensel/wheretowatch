@@ -1,7 +1,6 @@
 package dev.bruno.wheretowatch.features.home.trending
 
 import dev.bruno.wheretowatch.features.home.HomeTrendingItem
-import dev.bruno.wheretowatch.features.home.asImageModel
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -29,7 +28,7 @@ class TrendingFlowSource @Inject constructor(
                 popularity = item.popularity,
                 voteAverage = item.voteAverage,
                 voteCount = item.voteCount,
-                buildImgModel = asImageModel(item.backdropPath, item.posterPath)
+                buildImgModel = item.curried()
             )
         }.toImmutableList()
 
