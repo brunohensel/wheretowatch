@@ -22,6 +22,7 @@ fun WhereToWatchCard(
     model: ImageModelBuilder<Any>,
     type: ImageType,
     title: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
 ) {
@@ -31,13 +32,61 @@ fun WhereToWatchCard(
                 title = title,
                 model = model.buildImgModel(type),
                 modifier = modifier,
-                onClick = {},
+                onClick = onClick,
                 alignment = alignment,
-
-                )
+            )
         }
 
-        Poster -> TODO()
+        Poster -> {
+            PosterCard(
+                title = title,
+                model = model.buildImgModel(type),
+                modifier = modifier,
+                onClick = onClick,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PosterCard(
+    model: Any,
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+    ) {
+        PosterContent(
+            model = model,
+            title = title,
+        )
+    }
+}
+
+@Composable
+private fun PosterContent(
+    model: Any,
+    title: String,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.CenterStart),
+        )
+
+        AndroidAsyncImage(
+            model = model,
+            contentDescription = "Card of $title",
+            modifier = Modifier.matchParentSize(),
+            contentScale = ContentScale.Crop,
+        )
     }
 }
 
