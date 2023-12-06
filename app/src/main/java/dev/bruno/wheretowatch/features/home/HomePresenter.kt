@@ -29,15 +29,18 @@ class HomePresenter @AssistedInject constructor(
         val trendingItems by flowContents.trendingContent.collectAsRetainedState(HomeTrending())
         var trendingWindow by rememberRetained { mutableStateOf(trendingItems.trendWindow) }
         val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
+        val upComingItems by flowContents.upcomingContent.collectAsRetainedState(persistentListOf())
 
         LaunchedEffect(key1 = trendingWindow) {
             homeContentLists.getContent(HomeContentType.Trending(trendingWindow))
             homeContentLists.getContent(HomeContentType.Popular)
+            homeContentLists.getContent(HomeContentType.Upcoming)
         }
 
         return HomeScreen.State(
             trendingItems = trendingItems,
             popularItems = popularItems,
+            upComingItems = upComingItems,
         ) { event ->
             when (event) {
                 HomeScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)

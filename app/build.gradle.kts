@@ -91,6 +91,7 @@ dependencies {
     ksp(libs.circuit.codegen.ksp)
     kapt(libs.dagger.apt.compiler)
     implementation(libs.dagger.runtime)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.content.negotiation)

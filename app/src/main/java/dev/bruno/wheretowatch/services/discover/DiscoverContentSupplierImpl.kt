@@ -23,6 +23,7 @@ class DiscoverContentSupplierImpl @Inject constructor(
                     originalLanguage = dto.originalLanguage,
                     voteCount = dto.voteCount,
                     voteAverage = dto.voteAverage,
+                    releaseDate = dto.releaseDate,
                     posterPath = dto.posterPath,
                     backdropPath = dto.backdropPath,
                 )

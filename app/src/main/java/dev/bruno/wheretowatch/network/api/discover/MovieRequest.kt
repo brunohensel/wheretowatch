@@ -10,4 +10,8 @@ class MovieRequest(
     val region: String,
     @SerialName("sort_by")
     val sortBy: String,
+    @SerialName("release_date.gte")
+    val releaseGTE: String? = null,
+    @SerialName("release_date.lte")
+    val releaseLTE: String? = null,
 )
