@@ -1,5 +1,6 @@
 package dev.bruno.wheretowatch.services.discover
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,6 +17,7 @@ data class DiscoverContentDto(
     @SerialName("original_language") val originalLanguage: String,
     @SerialName("vote_count") val voteCount: Int,
     @SerialName("vote_average") val voteAverage: Float,
+    @Serializable(LocalDateSerializer::class) val releaseDate: LocalDate? = null,
     @SerialName("poster_path") val posterPath: String? = null,
     @SerialName("backdrop_path") val backdropPath: String? = null,
 )
