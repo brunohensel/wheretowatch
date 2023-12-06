@@ -57,6 +57,7 @@ data object HomeScreen : Screen {
     data class State(
         val trendingItems: HomeTrending,
         val popularItems: ImmutableList<HomeMovieItem>,
+        val upComingItems: ImmutableList<HomeMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -77,6 +78,7 @@ fun HomeContent(
 
     val trendingItems = state.trendingItems.items
     val popularItems = state.popularItems
+    val upComingItems = state.upComingItems
 
     Scaffold(
         modifier = modifier,
@@ -186,6 +188,54 @@ fun HomeContent(
                             ) {
                                 items(
                                     items = popularItems,
+                                    key = { it.id },
+                                ) { item ->
+                                    WhereToWatchCard(
+                                        model = item,
+                                        type = ImageType.Backdrop,
+                                        title = item.title,
+                                        onClick = { /*TODO*/ },
+                                        modifier = Modifier
+                                            .animateItemPlacement()
+                                            .width(240.dp) // TODO make it dynamic
+                                            .aspectRatio(LandscapeRatio)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                item {
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                item(key = "upcoming Items") {
+                    Column {
+                        Spacer(Modifier.height(8.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = modifier.padding(horizontal = 16.dp),
+                        ) {
+                            Text(
+                                text = "Upcoming Movie",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        if (upComingItems.isNotEmpty()) {
+                            val lazyListState = rememberLazyListState()
+                            LazyRow(
+                                state = lazyListState,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .clip(MaterialTheme.shapes.large),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(
+                                    items = upComingItems,
                                     key = { it.id },
                                 ) { item ->
                                     WhereToWatchCard(
