@@ -49,12 +49,14 @@ import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.DAY
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.WEEK
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data object HomeScreen : Screen {
     data class State(
         val trendingItems: HomeTrending,
+        val popularItems: ImmutableList<HomeMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -74,6 +76,7 @@ fun HomeContent(
 ) {
 
     val trendingItems = state.trendingItems.items
+    val popularItems = state.popularItems
 
     Scaffold(
         modifier = modifier,
@@ -142,6 +145,53 @@ fun HomeContent(
                                         model = item,
                                         type = ImageType.Backdrop,
                                         title = item.originalTitle,
+                                        onClick = { /*TODO*/ },
+                                        modifier = Modifier
+                                            .animateItemPlacement()
+                                            .width(240.dp) // TODO make it dynamic
+                                            .aspectRatio(LandscapeRatio)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                item(key = "popular Items") {
+                    Column {
+                        Spacer(Modifier.height(8.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = modifier.padding(horizontal = 16.dp),
+                        ) {
+                            Text(
+                                text = "Popular Movie",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        if (popularItems.isNotEmpty()) {
+                            val lazyListState = rememberLazyListState()
+                            LazyRow(
+                                state = lazyListState,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .clip(MaterialTheme.shapes.large),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(
+                                    items = popularItems,
+                                    key = { it.id },
+                                ) { item ->
+                                    WhereToWatchCard(
+                                        model = item,
+                                        type = ImageType.Backdrop,
+                                        title = item.title,
                                         onClick = { /*TODO*/ },
                                         modifier = Modifier
                                             .animateItemPlacement()

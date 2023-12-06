@@ -15,6 +15,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.settings.SettingsScreen
+import kotlinx.collections.immutable.persistentListOf
 
 class HomePresenter @AssistedInject constructor(
     private val homeContentLists: HomeContentLists,
@@ -25,15 +26,18 @@ class HomePresenter @AssistedInject constructor(
     override fun present(): HomeScreen.State {
 
         val flowContents = homeContentLists.contents
-        val trendingItems by flowContents.tendingContent.collectAsRetainedState(HomeTrending())
+        val trendingItems by flowContents.trendingContent.collectAsRetainedState(HomeTrending())
         var trendingWindow by rememberRetained { mutableStateOf(trendingItems.trendWindow) }
+        val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
 
         LaunchedEffect(key1 = trendingWindow) {
             homeContentLists.getContent(HomeContentType.Trending(trendingWindow))
+            homeContentLists.getContent(HomeContentType.Popular)
         }
 
         return HomeScreen.State(
             trendingItems = trendingItems,
+            popularItems = popularItems,
         ) { event ->
             when (event) {
                 HomeScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)
