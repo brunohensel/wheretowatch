@@ -37,6 +37,7 @@ class KtorDiscoverRemote @Inject constructor(
         return httpClient.get(res).body()
     }
 
+    @Suppress("MagicNumber")
     private suspend fun fetchUpComingMovies(): DiscoverContentResultDto {
         val localDate = Clock.System.todayIn(TimeZone.UTC)
         val startDate = localDate.plus(2, DateTimeUnit.DAY)
