@@ -26,7 +26,7 @@ class HomePresenter @AssistedInject constructor(
     override fun present(): HomeScreen.State {
 
         val flowContents = homeContentLists.contents
-        val trendingItems by flowContents.tendingContent.collectAsRetainedState(HomeTrending())
+        val trendingItems by flowContents.trendingContent.collectAsRetainedState(HomeTrending())
         var trendingWindow by rememberRetained { mutableStateOf(trendingItems.trendWindow) }
         val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
 

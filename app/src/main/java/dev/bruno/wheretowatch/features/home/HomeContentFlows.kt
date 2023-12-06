@@ -4,6 +4,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 class HomeContentFlows(
-    val tendingContent: Flow<HomeTrending>,
+    val trendingContent: Flow<HomeTrending>,
     val popularContent: Flow<ImmutableList<HomeMovieItem>>,
 )

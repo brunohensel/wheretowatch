@@ -14,7 +14,7 @@ class HomeContentListsImpl @Inject constructor(
 
     override val contents: HomeContentFlows
         get() = HomeContentFlows(
-            tendingContent = trendingSource.flow,
+            trendingContent = trendingSource.flow,
             popularContent = popularSource.flow,
         )
 
