@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class UpComingMovieFlowSource @Inject constructor(
+class UpcomingMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
     private val state = MutableStateFlow<ImmutableList<HomeMovieItem>>(persistentListOf())
     val flow: Flow<ImmutableList<HomeMovieItem>> = state.asStateFlow()
 
     suspend fun getUpComing() {
-        val popularItems = supplier.get(DiscoverCategory.UpComing).map { item ->
+        val popularItems = supplier.get(DiscoverCategory.Upcoming).map { item ->
             HomeMovieItem(
                 id = item.id,
                 title = item.title,

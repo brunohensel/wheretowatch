@@ -23,7 +23,7 @@ class KtorDiscoverRemote @Inject constructor(
     override suspend fun getContent(category: DiscoverCategory): DiscoverContentResultDto {
         return when (category) {
             DiscoverCategory.Popular -> fetchPopularMovies()
-            DiscoverCategory.UpComing -> fetchUpComingMovies()
+            DiscoverCategory.Upcoming -> fetchUpComingMovies()
         }
     }
 

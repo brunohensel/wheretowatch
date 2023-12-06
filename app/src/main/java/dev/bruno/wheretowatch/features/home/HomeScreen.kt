@@ -78,7 +78,7 @@ fun HomeContent(
 
     val trendingItems = state.trendingItems.items
     val popularItems = state.popularItems
-    val upComingItems = state.upComingItems
+    val upcomingItems = state.upComingItems
 
     Scaffold(
         modifier = modifier,
@@ -225,7 +225,7 @@ fun HomeContent(
                             )
                         }
 
-                        if (upComingItems.isNotEmpty()) {
+                        if (upcomingItems.isNotEmpty()) {
                             val lazyListState = rememberLazyListState()
                             LazyRow(
                                 state = lazyListState,
@@ -235,7 +235,7 @@ fun HomeContent(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
-                                    items = upComingItems,
+                                    items = upcomingItems,
                                     key = { it.id },
                                 ) { item ->
                                     WhereToWatchCard(
