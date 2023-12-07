@@ -23,6 +23,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,11 +33,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -50,6 +57,7 @@ import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.DAY
 import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.WEEK
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -68,7 +76,8 @@ data object HomeScreen : Screen {
     }
 }
 
-private const val LandscapeRatio = 16/11f
+private const val LandscapeRatio = 16 / 11f
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @CircuitInject(HomeScreen::class, AppScope::class)
 @Composable
@@ -103,6 +112,50 @@ fun HomeContent(
                         )
                     }
             ) {
+
+                item {
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                item(key = "popular Items") {
+                    Spacer(Modifier.height(8.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier.padding(horizontal = 16.dp),
+                    ) {
+                        Text(
+                            text = "Popular Movies",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+
+                    if (popularItems.isNotEmpty()) {
+                        val pagerState = rememberPagerState(pageCount = { popularItems.size })
+                        HorizontalHomeMoviePager(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .clip(MaterialTheme.shapes.large),
+                            items = popularItems,
+                            pagerState = pagerState,
+                            aspectRatio = LandscapeRatio,
+                        )
+
+                        val coroutineScope = rememberCoroutineScope()
+                        HomeMoviePagerIndicator(
+                            pagerState = pagerState,
+                            modifier = Modifier
+                                .height(24.dp)
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter),
+                            horizontalArrangement = Arrangement.Start,
+                            onClick = { page ->
+                                coroutineScope.launch { pagerState.scrollToPage(page) }
+                            }
+                        )
+                    }
+                }
 
                 item {
                     Spacer(Modifier.height(8.dp))
@@ -149,53 +202,6 @@ fun HomeContent(
                                         model = item,
                                         type = ImageType.Backdrop,
                                         title = item.originalTitle,
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .animateItemPlacement()
-                                            .width(240.dp) // TODO make it dynamic
-                                            .aspectRatio(LandscapeRatio)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                item {
-                    Spacer(Modifier.height(8.dp))
-                }
-
-                item(key = "popular Items") {
-                    Column {
-                        Spacer(Modifier.height(8.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = modifier.padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = "Popular Movie",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
-
-                        if (popularItems.isNotEmpty()) {
-                            val lazyListState = rememberLazyListState()
-                            LazyRow(
-                                state = lazyListState,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .clip(MaterialTheme.shapes.large),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = popularItems,
-                                    key = { it.id },
-                                ) { item ->
-                                    WhereToWatchCard(
-                                        model = item,
-                                        type = ImageType.Backdrop,
-                                        title = item.title,
                                         onClick = { /*TODO*/ },
                                         modifier = Modifier
                                             .animateItemPlacement()
@@ -365,3 +371,25 @@ private fun getText(window: TrendWindow): String {
         WEEK -> "This week"
     }
 }
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun Modifier.wormTransition(
+    pagerState: PagerState
+) =
+    drawBehind {
+        val distance = size.width + 10.dp.roundToPx()
+        val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
+        val wormOffset = (scrollPosition % 1) * 2
+
+        val xPos = scrollPosition.toInt() * distance
+        val head = xPos + distance * 0f.coerceAtLeast(wormOffset - 1)
+        val tail = xPos + size.width + 1f.coerceAtMost(wormOffset) * distance
+
+        val worm = RoundRect(
+            head, 0f, tail, size.height,
+            CornerRadius(50f)
+        )
+
+        val path = Path().apply { addRoundRect(worm) }
+        drawPath(path = path, color = Color.White)
+    }
