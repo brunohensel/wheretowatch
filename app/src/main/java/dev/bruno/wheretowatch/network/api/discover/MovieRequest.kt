@@ -10,6 +10,8 @@ class MovieRequest(
     val region: String,
     @SerialName("sort_by")
     val sortBy: String,
+    @SerialName("vote_count.gte")
+    val voteCountGTE: Int? = null,
     @SerialName("release_date.gte")
     val releaseGTE: String? = null,
     @SerialName("release_date.lte")
