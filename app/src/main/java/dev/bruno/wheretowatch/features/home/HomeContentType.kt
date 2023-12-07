@@ -6,4 +6,5 @@ sealed interface HomeContentType {
     data class Trending(val window: TrendingSupplier.TrendWindow) : HomeContentType
     data object Popular : HomeContentType
     data object Upcoming : HomeContentType
+    data object TopRated : HomeContentType
 }
