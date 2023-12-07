@@ -58,6 +58,7 @@ data object HomeScreen : Screen {
         val trendingItems: HomeTrending,
         val popularItems: ImmutableList<HomeMovieItem>,
         val upComingItems: ImmutableList<HomeMovieItem>,
+        val topRatedItems: ImmutableList<HomeMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -79,6 +80,7 @@ fun HomeContent(
     val trendingItems = state.trendingItems.items
     val popularItems = state.popularItems
     val upcomingItems = state.upComingItems
+    val topRatedItems = state.topRatedItems
 
     Scaffold(
         modifier = modifier,
@@ -206,7 +208,6 @@ fun HomeContent(
                     }
                 }
 
-
                 item {
                     Spacer(Modifier.height(8.dp))
                 }
@@ -236,6 +237,53 @@ fun HomeContent(
                             ) {
                                 items(
                                     items = upcomingItems,
+                                    key = { it.id },
+                                ) { item ->
+                                    WhereToWatchCard(
+                                        model = item,
+                                        type = ImageType.Backdrop,
+                                        title = item.title,
+                                        onClick = { /*TODO*/ },
+                                        modifier = Modifier
+                                            .animateItemPlacement()
+                                            .width(240.dp) // TODO make it dynamic
+                                            .aspectRatio(LandscapeRatio)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                item(key = "top rated Items") {
+                    Column {
+                        Spacer(Modifier.height(8.dp))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = modifier.padding(horizontal = 16.dp),
+                        ) {
+                            Text(
+                                text = "Top rated Movies",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        if (topRatedItems.isNotEmpty()) {
+                            val lazyListState = rememberLazyListState()
+                            LazyRow(
+                                state = lazyListState,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .clip(MaterialTheme.shapes.large),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(
+                                    items = topRatedItems,
                                     key = { it.id },
                                 ) { item ->
                                     WhereToWatchCard(
