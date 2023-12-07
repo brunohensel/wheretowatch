@@ -24,6 +24,7 @@ class KtorDiscoverRemote @Inject constructor(
         return when (category) {
             DiscoverCategory.Popular -> fetchPopularMovies()
             DiscoverCategory.Upcoming -> fetchUpComingMovies()
+            DiscoverCategory.TopRated -> TODO()
         }
     }
 

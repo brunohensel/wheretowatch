@@ -26,6 +26,7 @@ class HomeContentListsImpl @Inject constructor(
             is HomeContentType.Trending -> trendingSource.getTrending(contentType.window)
             HomeContentType.Popular -> popularSource.getPopular()
             HomeContentType.Upcoming -> upcomingSource.getUpComing()
+            HomeContentType.TopRated -> TODO()
         }
     }
 }
