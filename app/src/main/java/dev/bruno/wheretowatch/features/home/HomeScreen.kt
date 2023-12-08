@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,11 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -288,25 +283,3 @@ private fun getText(window: TrendWindow): String {
         TrendWindow.WEEK -> "This week"
     }
 }
-
-@OptIn(ExperimentalFoundationApi::class)
-private fun Modifier.wormTransition(
-    pagerState: PagerState
-) =
-    drawBehind {
-        val distance = size.width + 10.dp.roundToPx()
-        val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
-        val wormOffset = (scrollPosition % 1) * 2
-
-        val xPos = scrollPosition.toInt() * distance
-        val head = xPos + distance * 0f.coerceAtLeast(wormOffset - 1)
-        val tail = xPos + size.width + 1f.coerceAtMost(wormOffset) * distance
-
-        val worm = RoundRect(
-            head, 0f, tail, size.height,
-            CornerRadius(50f)
-        )
-
-        val path = Path().apply { addRoundRect(worm) }
-        drawPath(path = path, color = Color.White)
-    }
