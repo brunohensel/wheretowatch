@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -39,7 +40,9 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
+import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.home.HomeScreen.Event
 import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.discover.TrendWindow
@@ -137,10 +140,9 @@ fun HomeContent(
                 }
 
                 item(key = "trending Items") {
-                    HorizontalBackdropCarousel(
+                    HorizontalCarousel(
                         items = trendingItems,
                         headerTitle = "Trending Movies",
-                        aspectRatio = LandscapeRatio,
                         rightSideContent = {
                             TrendingToggle(
                                 trendWindow = state.trendingItems.trendWindow,
@@ -150,25 +152,56 @@ fun HomeContent(
                                     .width(IntrinsicSize.Max),
                             )
                         },
-                        onClick = {},
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Backdrop,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(240.dp) // TODO make it dynamic
+                                    .aspectRatio(LandscapeRatio)
+                            )
+                        },
                     )
                 }
 
                 item(key = "upcoming Items") {
-                    HorizontalBackdropCarousel(
+                    HorizontalCarousel(
                         items = upcomingItems,
                         headerTitle = "Upcoming Movies",
-                        aspectRatio = LandscapeRatio,
-                        onClick = {},
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Backdrop,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(240.dp) // TODO make it dynamic
+                                    .aspectRatio(LandscapeRatio)
+                            )
+                        },
                     )
                 }
 
                 item(key = "top rated Items") {
-                    HorizontalBackdropCarousel(
+                    HorizontalCarousel(
                         items = topRatedItems,
                         headerTitle = "Top rated Movies",
-                        aspectRatio = LandscapeRatio,
-                        onClick = {},
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Backdrop,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(240.dp) // TODO make it dynamic
+                                    .aspectRatio(LandscapeRatio)
+                            )
+                        },
                     )
                 }
 

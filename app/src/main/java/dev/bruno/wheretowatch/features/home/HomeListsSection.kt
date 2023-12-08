@@ -1,14 +1,11 @@
 package dev.bruno.wheretowatch.features.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,17 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import dev.bruno.wheretowatch.ds.components.ImageType
-import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HorizontalBackdropCarousel(
+fun HorizontalCarousel(
     items: ImmutableList<HomeMovieItem>,
     headerTitle: String,
-    aspectRatio: Float,
-    onClick: (id: Int) -> Unit,
+    carouselItemContent: @Composable (HomeMovieItem) -> Unit,
     modifier: Modifier = Modifier,
     rightSideContent: (@Composable () -> Unit)? = null,
 ) {
@@ -56,16 +49,7 @@ fun HorizontalBackdropCarousel(
                     items = items,
                     key = { it.id },
                 ) { item ->
-                    WhereToWatchCard(
-                        model = item,
-                        type = ImageType.Backdrop,
-                        title = item.title,
-                        onClick = { onClick(item.id) },
-                        modifier = Modifier
-                            .animateItemPlacement()
-                            .width(240.dp) // TODO make it dynamic
-                            .aspectRatio(aspectRatio)
-                    )
+                    carouselItemContent(item)
                 }
             }
         }
