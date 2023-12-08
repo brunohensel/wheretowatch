@@ -5,22 +5,24 @@ import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+
+typealias PopularMap = Map<MovieGenre, ImmutableList<HomeMovieItem>>
 
 class PopularMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
+    private val popularMap = ConcurrentHashMap<MovieGenre, ImmutableList<HomeMovieItem>>()
+    private val state = MutableStateFlow<PopularMap>(mapOf())
+    val flow: Flow<PopularMap> = state.asStateFlow()
 
-    private val state = MutableStateFlow<ImmutableList<HomeMovieItem>>(persistentListOf())
-    val flow: Flow<ImmutableList<HomeMovieItem>> = state.asStateFlow()
-
-    suspend fun getPopular(genre: MovieGenre = MovieGenre.NONE) {
+    suspend fun getPopular(genre: MovieGenre = MovieGenre.ALL) {
         val popularItems = supplier.get(DiscoverCategory.Popular(genre)).map { item ->
             HomeMovieItem(
                 id = item.id,
@@ -33,6 +35,11 @@ class PopularMovieFlowSource @Inject constructor(
             )
         }.toImmutableList()
 
-        state.update { popularItems }
+        if (!popularMap.containsKey(genre)) {
+            // Maybe it is redundant to call `putIfAbsent` at this point
+            popularMap.putIfAbsent(genre, popularItems)
+        }
+
+        state.update { popularMap }
     }
 }

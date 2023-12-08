@@ -10,7 +10,7 @@ sealed interface DiscoverCategory {
 enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
 
 enum class MovieGenre(val key: String) {
-    NONE("none"),
+    ALL("none"),
     ACTION("Action"),
     ADVENTURE("Adventure"),
     ANIMATION("Animation"),
