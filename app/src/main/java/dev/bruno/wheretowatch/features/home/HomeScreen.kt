@@ -113,10 +113,6 @@ fun HomeContent(
                     }
             ) {
 
-                item {
-                    Spacer(Modifier.height(8.dp))
-                }
-
                 item(key = "popular Items") {
                     Spacer(Modifier.height(8.dp))
 
@@ -155,10 +151,6 @@ fun HomeContent(
                             }
                         )
                     }
-                }
-
-                item {
-                    Spacer(Modifier.height(8.dp))
                 }
 
                 item(key = "trending Items") {
@@ -214,98 +206,26 @@ fun HomeContent(
                     }
                 }
 
-                item {
-                    Spacer(Modifier.height(8.dp))
-                }
-
                 item(key = "upcoming Items") {
-                    Column {
-                        Spacer(Modifier.height(8.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = modifier.padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = "Upcoming Movie",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
-
-                        if (upcomingItems.isNotEmpty()) {
-                            val lazyListState = rememberLazyListState()
-                            LazyRow(
-                                state = lazyListState,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .clip(MaterialTheme.shapes.large),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = upcomingItems,
-                                    key = { it.id },
-                                ) { item ->
-                                    WhereToWatchCard(
-                                        model = item,
-                                        type = ImageType.Backdrop,
-                                        title = item.title,
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .animateItemPlacement()
-                                            .width(240.dp) // TODO make it dynamic
-                                            .aspectRatio(LandscapeRatio)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                item {
-                    Spacer(Modifier.height(8.dp))
+                    HorizontalBackdropCarousel(
+                        items = upcomingItems,
+                        headerTitle = "Upcoming Movie",
+                        aspectRatio = LandscapeRatio,
+                        onClick = {},
+                    )
                 }
 
                 item(key = "top rated Items") {
-                    Column {
-                        Spacer(Modifier.height(8.dp))
+                    HorizontalBackdropCarousel(
+                        items = topRatedItems,
+                        headerTitle = "Top rated Movies",
+                        aspectRatio = LandscapeRatio,
+                        onClick = {},
+                    )
+                }
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = modifier.padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = "Top rated Movies",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
-
-                        if (topRatedItems.isNotEmpty()) {
-                            val lazyListState = rememberLazyListState()
-                            LazyRow(
-                                state = lazyListState,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .clip(MaterialTheme.shapes.large),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = topRatedItems,
-                                    key = { it.id },
-                                ) { item ->
-                                    WhereToWatchCard(
-                                        model = item,
-                                        type = ImageType.Backdrop,
-                                        title = item.title,
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .animateItemPlacement()
-                                            .width(240.dp) // TODO make it dynamic
-                                            .aspectRatio(LandscapeRatio)
-                                    )
-                                }
-                            }
-                        }
-                    }
+                item {
+                    Spacer(Modifier.height(8.dp))
                 }
             }
         }
