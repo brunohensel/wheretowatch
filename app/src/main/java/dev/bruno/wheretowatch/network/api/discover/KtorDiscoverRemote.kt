@@ -36,6 +36,7 @@ class KtorDiscoverRemote @Inject constructor(
             page = 1,
             language = "en-US", // TODO get it from preferences
             region = "DE", // TODO get it from preferences
+            // We send `null` to fetch popular movies without any genre constraint
             genre = if (genre == MovieGenre.ALL) null else genre.key,
             sortBy = "popularity.desc",
         )
