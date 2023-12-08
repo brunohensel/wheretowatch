@@ -57,6 +57,7 @@ data object HomeScreen : Screen {
         val popularItems: ImmutableList<HomeMovieItem>,
         val upComingItems: ImmutableList<HomeMovieItem>,
         val topRatedItems: ImmutableList<HomeMovieItem>,
+        val actionItems: ImmutableList<HomeMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -81,6 +82,7 @@ fun HomeContent(
     val popularItems = state.popularItems
     val upcomingItems = state.upComingItems
     val topRatedItems = state.topRatedItems
+    val actionItems = state.actionItems
 
     Scaffold(
         modifier = modifier,
@@ -164,6 +166,25 @@ fun HomeContent(
                     HorizontalCarousel(
                         items = topRatedItems,
                         headerTitle = "Top rated Movies",
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Poster,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(150.dp) // TODO make it dynamic
+                                    .aspectRatio(PortraitRatio)
+                            )
+                        },
+                    )
+                }
+
+                item(key = "action Items") {
+                    HorizontalCarousel(
+                        items = actionItems,
+                        headerTitle = "Action Movies",
                         carouselItemContent = { item ->
                             WhereToWatchCard(
                                 model = item,

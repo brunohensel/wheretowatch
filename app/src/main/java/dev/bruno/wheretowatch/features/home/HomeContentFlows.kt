@@ -8,4 +8,5 @@ class HomeContentFlows(
     val popularContent: Flow<ImmutableList<HomeMovieItem>>,
     val upcomingContent: Flow<ImmutableList<HomeMovieItem>>,
     val topRatedContent: Flow<ImmutableList<HomeMovieItem>>,
+    val actionContent: Flow<ImmutableList<HomeMovieItem>>,
 )

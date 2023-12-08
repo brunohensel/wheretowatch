@@ -26,6 +26,7 @@ class HomeContentListsImpl @Inject constructor(
         get() = HomeContentFlows(
             trendingContent = trendingSource.flow,
             popularContent = popularSource.flow.toContentFlow(withGenre= MovieGenre.ALL),
+            actionContent = popularSource.flow.toContentFlow(withGenre= MovieGenre.ACTION),
             upcomingContent = upcomingSource.flow,
             topRatedContent = topRatedSource.flow,
         )
@@ -42,6 +43,7 @@ class HomeContentListsImpl @Inject constructor(
             HomeContentType.Popular -> popularSource.getPopular()
             HomeContentType.Upcoming -> upcomingSource.getUpComing()
             HomeContentType.TopRated -> topRatedSource.getTopRated()
+            HomeContentType.Action -> popularSource.getPopular(MovieGenre.ACTION)
         }
     }
 }
