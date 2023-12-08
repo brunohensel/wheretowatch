@@ -67,6 +67,7 @@ data object HomeScreen : Screen {
 }
 
 private const val LandscapeRatio = 16 / 11f
+private const val PortraitRatio = 2 / 3f
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @CircuitInject(HomeScreen::class, AppScope::class)
@@ -147,13 +148,13 @@ fun HomeContent(
                         carouselItemContent = { item ->
                             WhereToWatchCard(
                                 model = item,
-                                type = ImageType.Backdrop,
+                                type = ImageType.Poster,
                                 title = item.title,
                                 onClick = { },
                                 modifier = Modifier
                                     .animateItemPlacement()
-                                    .width(240.dp) // TODO make it dynamic
-                                    .aspectRatio(LandscapeRatio)
+                                    .width(150.dp) // TODO make it dynamic
+                                    .aspectRatio(PortraitRatio)
                             )
                         },
                     )
@@ -166,13 +167,13 @@ fun HomeContent(
                         carouselItemContent = { item ->
                             WhereToWatchCard(
                                 model = item,
-                                type = ImageType.Backdrop,
+                                type = ImageType.Poster,
                                 title = item.title,
                                 onClick = { },
                                 modifier = Modifier
                                     .animateItemPlacement()
-                                    .width(240.dp) // TODO make it dynamic
-                                    .aspectRatio(LandscapeRatio)
+                                    .width(150.dp) // TODO make it dynamic
+                                    .aspectRatio(PortraitRatio)
                             )
                         },
                     )
@@ -199,7 +200,7 @@ fun HomeContent(
                                 onClick = { },
                                 modifier = Modifier
                                     .animateItemPlacement()
-                                    .width(240.dp) // TODO make it dynamic
+                                    .width(260.dp) // TODO make it dynamic
                                     .aspectRatio(LandscapeRatio)
                             )
                         },

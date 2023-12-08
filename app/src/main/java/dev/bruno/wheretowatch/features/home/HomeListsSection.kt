@@ -43,7 +43,7 @@ fun HorizontalCarousel(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .clip(MaterialTheme.shapes.large),
+                    .clip(MaterialTheme.shapes.medium),
             ) {
                 items(
                     items = items,
