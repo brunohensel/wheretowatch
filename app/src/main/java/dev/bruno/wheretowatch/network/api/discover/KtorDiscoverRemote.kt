@@ -5,6 +5,7 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentResultDto
 import dev.bruno.wheretowatch.services.discover.DiscoverMovieRemote
+import dev.bruno.wheretowatch.services.discover.MovieGenre
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.get
@@ -23,18 +24,20 @@ class KtorDiscoverRemote @Inject constructor(
 
     override suspend fun getContent(category: DiscoverCategory): DiscoverContentResultDto {
         return when (category) {
-            DiscoverCategory.Popular -> fetchPopularMovies()
             DiscoverCategory.Upcoming -> fetchUpComingMovies()
             DiscoverCategory.TopRated -> fetchTopRatedMovies()
+            is DiscoverCategory.Popular -> fetchPopularMovies(category.genre)
             is DiscoverCategory.Trending -> fetchTrendingMovies(category.trendWindow.key)
         }
     }
 
-    private suspend fun fetchPopularMovies(): DiscoverContentResultDto {
+    private suspend fun fetchPopularMovies(genre: MovieGenre): DiscoverContentResultDto {
         val res = MovieRequest(
             page = 1,
             language = "en-US", // TODO get it from preferences
             region = "DE", // TODO get it from preferences
+            // We send `null` to fetch popular movies without any genre constraint
+            genre = if (genre == MovieGenre.ALL) null else genre.key,
             sortBy = "popularity.desc",
         )
         return httpClient.get(res).body()
