@@ -33,7 +33,10 @@ class HomePresenter @AssistedInject constructor(
         val upComingItems by flowContents.upcomingContent.collectAsRetainedState(persistentListOf())
         val topRatedItems by flowContents.topRatedContent.collectAsRetainedState(persistentListOf())
 
+        // TODO get content concurrently?
         LaunchedEffect(key1 = trendingWindow) {
+            //TODO put this inside of its own LaunchEffect since it will trigger other requests
+            // when changed
             homeContentLists.getContent(HomeContentType.Trending(trendingWindow))
             homeContentLists.getContent(HomeContentType.Popular)
             homeContentLists.getContent(HomeContentType.Action)
