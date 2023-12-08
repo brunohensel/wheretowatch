@@ -5,13 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -20,9 +18,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,9 +39,8 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
-import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
+import dev.bruno.wheretowatch.features.home.HomeScreen.Event
 import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
@@ -143,62 +137,27 @@ fun HomeContent(
                 }
 
                 item(key = "trending Items") {
-                    Column {
-                        Spacer(Modifier.height(8.dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = modifier.padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = "Trending",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-
-                            Spacer(Modifier.weight(1f))
-
+                    HorizontalBackdropCarousel(
+                        items = trendingItems,
+                        headerTitle = "Trending Movies",
+                        aspectRatio = LandscapeRatio,
+                        rightSideContent = {
                             TrendingToggle(
                                 trendWindow = state.trendingItems.trendWindow,
-                                onChange = { state.onEvent(HomeScreen.Event.ChangeTrendWindow(it)) },
+                                onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
                                 choices = TrendWindow.entries,
                                 modifier = Modifier
                                     .width(IntrinsicSize.Max),
                             )
-                        }
-
-                        if (trendingItems.isNotEmpty()) {
-                            val lazyListState = rememberLazyListState()
-                            LazyRow(
-                                state = lazyListState,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .clip(MaterialTheme.shapes.large),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = trendingItems,
-                                    key = { it.id },
-                                ) { item ->
-                                    WhereToWatchCard(
-                                        model = item,
-                                        type = ImageType.Backdrop,
-                                        title = item.originalTitle,
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .animateItemPlacement()
-                                            .width(240.dp) // TODO make it dynamic
-                                            .aspectRatio(LandscapeRatio)
-                                    )
-                                }
-                            }
-                        }
-                    }
+                        },
+                        onClick = {},
+                    )
                 }
 
                 item(key = "upcoming Items") {
                     HorizontalBackdropCarousel(
                         items = upcomingItems,
-                        headerTitle = "Upcoming Movie",
+                        headerTitle = "Upcoming Movies",
                         aspectRatio = LandscapeRatio,
                         onClick = {},
                     )
