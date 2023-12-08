@@ -25,15 +25,15 @@ class HomeContentListsImpl @Inject constructor(
     override val contents: HomeContentFlows
         get() = HomeContentFlows(
             trendingContent = trendingSource.flow,
-            popularContent = popularSource.flow.asGenreContent(MovieGenre.ALL),
+            popularContent = popularSource.flow.toContentFlow(withGenre= MovieGenre.ALL),
             upcomingContent = upcomingSource.flow,
             topRatedContent = topRatedSource.flow,
         )
 
-    private fun Flow<PopularMap>.asGenreContent(
-        genre: MovieGenre
+    private fun Flow<PopularMap>.toContentFlow(
+        withGenre: MovieGenre
     ): Flow<ImmutableList<HomeMovieItem>> {
-        return this.map { it.getOrDefault(genre, persistentListOf()) }
+        return this.map { it.getOrDefault(withGenre, persistentListOf()) }
     }
 
     override suspend fun getContent(contentType: HomeContentType) {
