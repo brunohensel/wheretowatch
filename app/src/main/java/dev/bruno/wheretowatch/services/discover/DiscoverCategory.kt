@@ -1,7 +1,7 @@
 package dev.bruno.wheretowatch.services.discover
 
 sealed interface DiscoverCategory {
-    data object Popular : DiscoverCategory
+    data class Popular(val genre: MovieGenre) : DiscoverCategory
     data object Upcoming : DiscoverCategory
     data object TopRated : DiscoverCategory
     data class Trending(val trendWindow: TrendWindow) : DiscoverCategory
@@ -10,6 +10,7 @@ sealed interface DiscoverCategory {
 enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
 
 enum class MovieGenre(val key: String) {
+    NONE("none"),
     ACTION("Action"),
     ADVENTURE("Adventure"),
     ANIMATION("Animation"),
