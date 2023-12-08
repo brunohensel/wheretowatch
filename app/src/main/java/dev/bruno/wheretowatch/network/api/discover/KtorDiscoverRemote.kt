@@ -26,6 +26,7 @@ class KtorDiscoverRemote @Inject constructor(
             DiscoverCategory.Popular -> fetchPopularMovies()
             DiscoverCategory.Upcoming -> fetchUpComingMovies()
             DiscoverCategory.TopRated -> fetchTopRatedMovies()
+            is DiscoverCategory.Trending -> fetchTrendingMovies(category.trendWindow.key)
         }
     }
 
@@ -73,5 +74,21 @@ class KtorDiscoverRemote @Inject constructor(
         )
 
         return httpClient.get(res).body()
+    }
+
+    private suspend fun fetchTrendingMovies(trendWindow: String): DiscoverContentResultDto {
+        require(trendWindow == "day" || trendWindow == "week") {
+            "Wrong time window! Expected: day or week. Received: $trendWindow"
+        }
+
+        val parentRes = TrendingRequest(language = "en-US", region = "DE")
+        val resource = TrendingRequest
+            .TrendType
+            .TimeWindow(
+                parent = TrendingRequest.TrendType(parentRes, "movie"),
+                timeWindow = trendWindow
+            )
+
+        return httpClient.get(resource).body()
     }
 }

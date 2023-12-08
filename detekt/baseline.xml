@@ -30,10 +30,8 @@
     <ID>NewLineAtEndOfFile:SettingsScreen.kt$dev.bruno.wheretowatch.features.settings.SettingsScreen.kt</ID>
     <ID>NewLineAtEndOfFile:SqlDelightCountryDao.kt$dev.bruno.wheretowatch.db.SqlDelightCountryDao.kt</ID>
     <ID>NewLineAtEndOfFile:Theme.kt$dev.bruno.wheretowatch.ui.theme.Theme.kt</ID>
-    <ID>NewLineAtEndOfFile:TrendingItem.kt$dev.bruno.wheretowatch.services.model.TrendingItem.kt</ID>
     <ID>NewLineAtEndOfFile:TrendingRemote.kt$dev.bruno.wheretowatch.services.trending.TrendingRemote.kt</ID>
-    <ID>NewLineAtEndOfFile:TrendingRequest.kt$dev.bruno.wheretowatch.network.api.trending.TrendingRequest.kt</ID>
-    <ID>NewLineAtEndOfFile:TrendingSupplier.kt$dev.bruno.wheretowatch.services.trending.TrendingSupplier.kt</ID>
+    <ID>NewLineAtEndOfFile:TrendingRequest.kt$dev.bruno.wheretowatch.network.api.discover.TrendingRequest.kt</ID>
     <ID>NewLineAtEndOfFile:Type.kt$dev.bruno.wheretowatch.ui.theme.Type.kt</ID>
     <ID>NewLineAtEndOfFile:WhereToWatchApp.kt$dev.bruno.wheretowatch.WhereToWatchApp.kt</ID>
     <ID>NewLineAtEndOfFile:WhereToWatchComponentFactory.kt$dev.bruno.wheretowatch.di.WhereToWatchComponentFactory.kt</ID>

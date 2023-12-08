@@ -53,9 +53,7 @@ import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
-import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow
-import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.DAY
-import dev.bruno.wheretowatch.services.trending.TrendingSupplier.TrendWindow.WEEK
+import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -281,14 +279,13 @@ private fun TrendingToggle(
             }
         }
     }
-
 }
 
 // TODO extract to resources
 private fun getText(window: TrendWindow): String {
     return when (window) {
-        DAY -> "Today"
-        WEEK -> "This week"
+        TrendWindow.DAY -> "Today"
+        TrendWindow.WEEK -> "This week"
     }
 }
 
