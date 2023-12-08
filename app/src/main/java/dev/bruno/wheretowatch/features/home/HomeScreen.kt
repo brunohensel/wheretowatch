@@ -139,33 +139,6 @@ fun HomeContent(
                     }
                 }
 
-                item(key = "trending Items") {
-                    HorizontalCarousel(
-                        items = trendingItems,
-                        headerTitle = "Trending Movies",
-                        rightSideContent = {
-                            TrendingToggle(
-                                trendWindow = state.trendingItems.trendWindow,
-                                onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
-                                choices = TrendWindow.entries,
-                                modifier = Modifier
-                                    .width(IntrinsicSize.Max),
-                            )
-                        },
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Backdrop,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(240.dp) // TODO make it dynamic
-                                    .aspectRatio(LandscapeRatio)
-                            )
-                        },
-                    )
-                }
 
                 item(key = "upcoming Items") {
                     HorizontalCarousel(
@@ -190,6 +163,34 @@ fun HomeContent(
                     HorizontalCarousel(
                         items = topRatedItems,
                         headerTitle = "Top rated Movies",
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Backdrop,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(240.dp) // TODO make it dynamic
+                                    .aspectRatio(LandscapeRatio)
+                            )
+                        },
+                    )
+                }
+
+                item(key = "trending Items") {
+                    HorizontalCarousel(
+                        items = trendingItems,
+                        headerTitle = "Trending Movies",
+                        rightSideContent = {
+                            TrendingToggle(
+                                trendWindow = state.trendingItems.trendWindow,
+                                onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
+                                choices = TrendWindow.entries,
+                                modifier = Modifier
+                                    .width(IntrinsicSize.Max),
+                            )
+                        },
                         carouselItemContent = { item ->
                             WhereToWatchCard(
                                 model = item,
