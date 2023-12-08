@@ -109,15 +109,11 @@ fun HomeContent(
                 item(key = "popular Items") {
                     Spacer(Modifier.height(8.dp))
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = modifier.padding(horizontal = 16.dp),
-                    ) {
-                        Text(
-                            text = "Popular Movies",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
+                    HomeListHeader(
+                        headerTitle = "Popular Movies",
+                        modifier = Modifier,
+                        alignment = Alignment.CenterVertically,
+                    )
 
                     if (popularItems.isNotEmpty()) {
                         val pagerState = rememberPagerState(pageCount = { popularItems.size })
