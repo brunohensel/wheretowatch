@@ -9,4 +9,5 @@ sealed interface HomeContentType {
     data object Horror : HomeContentType
     data object Upcoming : HomeContentType
     data object TopRated : HomeContentType
+    data object Netflix: HomeContentType
 }

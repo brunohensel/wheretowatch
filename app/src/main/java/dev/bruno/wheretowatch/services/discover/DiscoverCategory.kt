@@ -5,6 +5,7 @@ sealed interface DiscoverCategory {
     data object Upcoming : DiscoverCategory
     data object TopRated : DiscoverCategory
     data class Trending(val trendWindow: TrendWindow) : DiscoverCategory
+    data class Streaming(val provider: StreamerProvider) : DiscoverCategory
 }
 
 enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
@@ -31,4 +32,12 @@ enum class MovieGenre(val id: String) {
     THRILLER("53"),
     WAR("10752"),
     WESTERN("37"),
+}
+
+// TODO fetch it from watch/providers/movie to get provider's Logo
+enum class StreamerProvider(val id: String) {
+    NETFLIX(id = "8"),
+    AMAZON_PRIME(id = "9"),
+    DISNEY_PLUS(id = "337"),
+    APPLE_TV_PLUS(id = "350"),
 }

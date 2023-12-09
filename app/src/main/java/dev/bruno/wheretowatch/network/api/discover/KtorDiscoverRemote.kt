@@ -28,6 +28,7 @@ class KtorDiscoverRemote @Inject constructor(
             DiscoverCategory.TopRated -> fetchTopRatedMovies()
             is DiscoverCategory.Popular -> fetchPopularMovies(category.genre)
             is DiscoverCategory.Trending -> fetchTrendingMovies(category.trendWindow.key)
+            is DiscoverCategory.Streaming -> fetchStreamProviderMovies(category.provider.id)
         }
     }
 
@@ -93,5 +94,19 @@ class KtorDiscoverRemote @Inject constructor(
             )
 
         return httpClient.get(resource).body()
+    }
+
+    private suspend fun fetchStreamProviderMovies(providerId: String): DiscoverContentResultDto {
+        val res = MovieRequest(
+            page = 1,
+            language = "en-US", // TODO get it from preferences
+            region = "DE", // TODO get it from preferences
+            watchRegion = "DE",
+            streamProviderId = providerId,
+            sortBy = "popularity.desc",
+            voteCountGTE = 400,
+        )
+
+        return httpClient.get(res).body()
     }
 }

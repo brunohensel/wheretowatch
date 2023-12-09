@@ -33,6 +33,7 @@ class HomePresenter @AssistedInject constructor(
         val horrorItems by flowContents.horrorContent.collectAsRetainedState(persistentListOf())
         val upComingItems by flowContents.upcomingContent.collectAsRetainedState(persistentListOf())
         val topRatedItems by flowContents.topRatedContent.collectAsRetainedState(persistentListOf())
+        val netflixItems by flowContents.netflixContent.collectAsRetainedState(persistentListOf())
 
         // TODO get content concurrently?
         LaunchedEffect(key1 = trendingWindow) {
@@ -44,6 +45,7 @@ class HomePresenter @AssistedInject constructor(
             homeContentLists.getContent(HomeContentType.Horror)
             homeContentLists.getContent(HomeContentType.Upcoming)
             homeContentLists.getContent(HomeContentType.TopRated)
+            homeContentLists.getContent(HomeContentType.Netflix)
         }
 
         return HomeScreen.State(
@@ -53,6 +55,7 @@ class HomePresenter @AssistedInject constructor(
             topRatedItems = topRatedItems,
             actionItems = actionItems,
             horrorItems = horrorItems,
+            netflixItems = netflixItems,
         ) { event ->
             when (event) {
                 HomeScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)
