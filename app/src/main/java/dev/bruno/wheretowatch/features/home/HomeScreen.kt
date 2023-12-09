@@ -222,9 +222,10 @@ fun HomeContent(
                 }
 
                 item(key = "trending Items") {
-                    HorizontalCarousel(
+                    HorizontalParallaxCarousel(
                         items = trendingItems,
                         headerTitle = "Trending Movies",
+                        aspectRatio = LandscapeRatio,
                         rightSideContent = {
                             TrendingToggle(
                                 trendWindow = state.trendingItems.trendWindow,
@@ -232,18 +233,6 @@ fun HomeContent(
                                 choices = TrendWindow.entries,
                                 modifier = Modifier
                                     .width(IntrinsicSize.Max),
-                            )
-                        },
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Backdrop,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(260.dp) // TODO make it dynamic
-                                    .aspectRatio(LandscapeRatio)
                             )
                         },
                     )

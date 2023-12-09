@@ -58,8 +58,8 @@ fun LazyItemScope.HorizontalHomeMoviePager(
                     // We animate the alpha, between 50% and 100%
                     val fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     alpha = (1 - 1f - pageOffset.coerceIn(
-                        0f,
-                        1f
+                        minimumValue = 0f,
+                        maximumValue = 1f
                     )) * 0.5f + fraction * 1f
                 }
                 .animateItemPlacement()
