@@ -40,5 +40,4 @@ enum class StreamerProvider(val id: String) {
     AMAZON_PRIME(id = "9"),
     DISNEY_PLUS(id = "337"),
     APPLE_TV_PLUS(id = "350"),
-    WOW(id = "30"),
 }
