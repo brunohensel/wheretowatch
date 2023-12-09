@@ -59,6 +59,7 @@ data object HomeScreen : Screen {
         val topRatedItems: ImmutableList<HomeMovieItem>,
         val actionItems: ImmutableList<HomeMovieItem>,
         val horrorItems: ImmutableList<HomeMovieItem>,
+        val netflixItems: ImmutableList<HomeMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -85,6 +86,7 @@ fun HomeContent(
     val topRatedItems = state.topRatedItems
     val actionItems = state.actionItems
     val horrorItems = state.horrorItems
+    val netflixItems = state.netflixItems
 
     Scaffold(
         modifier = modifier,
@@ -233,6 +235,25 @@ fun HomeContent(
                                 choices = TrendWindow.entries,
                                 modifier = Modifier
                                     .width(IntrinsicSize.Max),
+                            )
+                        },
+                    )
+                }
+
+                item(key = "netflix Items") {
+                    HorizontalCarousel(
+                        items = netflixItems,
+                        headerTitle = "On Netflix",
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Poster,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(150.dp) // TODO make it dynamic
+                                    .aspectRatio(PortraitRatio)
                             )
                         },
                     )
