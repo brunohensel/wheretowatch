@@ -10,6 +10,10 @@ class MovieRequest(
     val region: String,
     @SerialName("sort_by")
     val sortBy: String,
+    @SerialName("watch_region")
+    val watchRegion: String? = null,
+    @SerialName("with_watch_providers")
+    val streamProviderId: String? = null,
     @SerialName("with_genres")
     val genre: String? = null,
     @SerialName("vote_count.gte")
