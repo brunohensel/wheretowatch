@@ -10,7 +10,6 @@ data class DiscoverContent(
     val popularity: Float,
     val genresIds: List<Int>,
     val originalTitle: String,
-    val originalLanguage: String,
     val voteCount: Int,
     val voteAverage: Float,
     val releaseDate: LocalDate?,

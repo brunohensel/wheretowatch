@@ -2,13 +2,11 @@ package dev.bruno.wheretowatch.db
 
 import com.squareup.anvil.annotations.ContributesBinding
 import dagger.Reusable
-import dev.bruno.wheretowatch.GetPopularMovies
-import dev.bruno.wheretowatch.MovieEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.discover.AllPopularDao
+import dev.bruno.wheretowatch.services.model.Movie
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,35 +15,54 @@ import javax.inject.Inject
 class SqlDelightPopularDao @Inject constructor(
     private val db: WhereToWatchDatabase,
 ) : AllPopularDao {
-    override suspend fun getPopularEntity(): List<GetPopularMovies> {
-        return db.popularMovieEntityQueries.getPopularMovies().executeAsList()
+    override suspend fun getPopularMovies(): List<Movie> {
+        return db.popularMovieEntityQueries
+            .getPopularMovies(
+                mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
+                           voteCount, voteAverage, releaseDate, posterPath, backdropPath ->
+                    Movie(
+                        id = id,
+                        title = title,
+                        overview = overview,
+                        originalTitle = originalTitle,
+                        popularity = popularity.toFloat(),
+                        voteCount = voteCount.toInt(),
+                        voteAverage = voteAverage,
+                        genresIds = genres.split(",").map { it.trim().toInt() },
+                        releaseDate = releaseDate,
+                        posterPath = posterPath,
+                        backdropPath = backdropPath,
+                    )
+                }
+            )
+            .executeAsList()
     }
 
-    override suspend fun insertPopularEntity(entities: List<MovieEntity>) = coroutineScope {
+    override suspend fun insertPopularMovies(movies: List<Movie>) {
         withContext(Dispatchers.Default) {
             db.movieEntityQueries
                 .transaction {
-                    for (entity in entities) {
+                    for (movie in movies) {
                         db.movieEntityQueries.insertMovie(
-                            id = entity.id,
-                            title = entity.title,
-                            popularity = entity.popularity,
-                            genres = entity.genres,
-                            originalTitle = entity.originalTitle,
-                            originalLanguage = entity.originalLanguage,
-                            voteCount = entity.voteCount,
-                            voteAverage = entity.voteAverage,
-                            releaseDate = entity.releaseDate,
-                            posterPath = entity.posterPath,
-                            backdropPath = entity.backdropPath,
+                            id = movie.id,
+                            title = movie.title,
+                            overview = movie.overview,
+                            popularity = movie.popularity,
+                            genres = movie.genresIds.joinToString(),
+                            originalTitle = movie.originalTitle,
+                            voteCount = movie.voteCount.toLong(),
+                            voteAverage = movie.voteAverage,
+                            releaseDate = movie.releaseDate,
+                            posterPath = movie.posterPath,
+                            backdropPath = movie.backdropPath,
                         )
                     }
                 }
 
             db.popularMovieEntityQueries
                 .transaction {
-                    for (entity in entities) {
-                        db.popularMovieEntityQueries.insertPopularMovie(entity.id)
+                    for (movie in movies) {
+                        db.popularMovieEntityQueries.insertPopularMovie(movie.id)
                     }
                 }
         }
