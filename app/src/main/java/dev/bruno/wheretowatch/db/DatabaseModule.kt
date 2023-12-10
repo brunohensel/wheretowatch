@@ -11,6 +11,7 @@ import dagger.Provides
 import dev.bruno.wheretowatch.MovieEntity
 import dev.bruno.wheretowatch.PopularMovieEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
+import dev.bruno.wheretowatch.db.columnadapters.GenresAdapter
 import dev.bruno.wheretowatch.db.columnadapters.LocalDateAdapter
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.di.ApplicationContext
@@ -41,6 +42,8 @@ object DatabaseModule {
                 popularityAdapter = FloatColumnAdapter,
                 voteAverageAdapter = FloatColumnAdapter,
                 releaseDateAdapter = LocalDateAdapter,
+                genresAdapter = GenresAdapter,
+                voteCountAdapter = IntColumnAdapter,
             ),
             popularMovieEntityAdapter = PopularMovieEntity.Adapter(
                 popularIdAdapter = IntColumnAdapter,
