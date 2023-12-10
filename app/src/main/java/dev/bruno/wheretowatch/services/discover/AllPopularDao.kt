@@ -1,9 +1,8 @@
 package dev.bruno.wheretowatch.services.discover
 
-import dev.bruno.wheretowatch.GetPopularMovies
-import dev.bruno.wheretowatch.MovieEntity
+import dev.bruno.wheretowatch.services.model.Movie
 
 interface AllPopularDao {
-    suspend fun getPopularEntity(): List<GetPopularMovies>
-    suspend fun insertPopularEntity(entities: List<MovieEntity>)
+    suspend fun getPopularMovies(): List<Movie>
+    suspend fun insertPopularMovies(movies: List<Movie>)
 }

@@ -3,6 +3,7 @@ package dev.bruno.wheretowatch.services.discover
 import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.model.DiscoverContent
+import dev.bruno.wheretowatch.services.model.Movie
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
@@ -14,19 +15,18 @@ class DiscoverContentSupplierImpl @Inject constructor(
 ) : DiscoverContentSupplier {
     override suspend fun get(category: DiscoverCategory): ImmutableList<DiscoverContent> {
         if (category == DiscoverCategory.Popular(MovieGenre.ALL)) {
-            return popularContentStore.getPopularContent(category).results.intoDiscoverContent()
+            return popularContentStore.getPopularContent(category).intoDiscoverContent()
         }
-        return discoverMovieRemote.getContent(category).results.intoDiscoverContent()
+        return discoverMovieRemote.getContent(category).intoDiscoverContent()
     }
 
-    private fun List<DiscoverContentDto>.intoDiscoverContent() = map { dto ->
+    private fun List<Movie>.intoDiscoverContent() = map { dto ->
         DiscoverContent(
             id = dto.id,
             title = dto.title,
             popularity = dto.popularity,
             genresIds = dto.genresIds,
             originalTitle = dto.originalTitle,
-            originalLanguage = dto.originalLanguage,
             voteCount = dto.voteCount,
             voteAverage = dto.voteAverage,
             releaseDate = dto.releaseDate,
