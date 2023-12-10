@@ -99,6 +99,7 @@ dependencies {
     implementation(libs.ktor.client.resources)
     implementation(libs.ktor.serialization.json)
     implementation(libs.sqldelight.androidDriver)
+    implementation(libs.sqldelight.primitiveAdapters)
 
     testImplementation(libs.test.junit)
     debugImplementation(libs.androidx.compose.ui.tooling)

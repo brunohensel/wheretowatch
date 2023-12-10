@@ -1,0 +1,55 @@
+CREATE TABLE IF NOT EXISTS  movieEntity(
+id INTEGER AS kotlin.Int PRIMARY KEY NOT NULL,
+title TEXT NOT NULL ,
+popularity REAL AS kotlin.Float NOT NULL ,
+genres TEXT NOT NULL ,
+originalTitle TEXT NOT NULL ,
+originalLanguage TEXT NOT NULL ,
+voteCount INTEGER NOT NULL ,
+voteAverage REAL AS kotlin.Float NOT NULL ,
+releaseDate TEXT AS kotlinx.datetime.LocalDate,
+posterPath TEXT,
+backdropPath TEXT
+);
+
+insertMovie:
+INSERT INTO movieEntity(
+id,
+title,
+popularity,
+genres,
+originalTitle,
+originalLanguage,
+voteCount,
+voteAverage,
+releaseDate,
+posterPath,
+backdropPath
+) VALUES (
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?
+);
+
+updateMovie:
+UPDATE movieEntity SET
+id = :id,
+title = :title,
+popularity = :popularity,
+genres = :genres,
+originalTitle = :originalTitle,
+originalLanguage = :originalLanguage,
+voteCount = :voteCount,
+voteAverage = :voteAverage,
+releaseDate = :releaseData,
+posterPath = :posterPath,
+backdropPath = :backdropPath
+WHERE id = id;

@@ -10,23 +10,28 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DiscoverContentSupplierImpl @Inject constructor(
     private val discoverMovieRemote: DiscoverMovieRemote,
+    private val popularContentStore: DiscoverPopularContentStore,
 ) : DiscoverContentSupplier {
     override suspend fun get(category: DiscoverCategory): ImmutableList<DiscoverContent> {
-        return discoverMovieRemote.getContent(category).results
-            .map { dto ->
-                DiscoverContent(
-                    id = dto.id,
-                    title = dto.title,
-                    popularity = dto.popularity,
-                    genresIds = dto.genresIds,
-                    originalTitle = dto.originalTitle,
-                    originalLanguage = dto.originalLanguage,
-                    voteCount = dto.voteCount,
-                    voteAverage = dto.voteAverage,
-                    releaseDate = dto.releaseDate,
-                    posterPath = dto.posterPath,
-                    backdropPath = dto.backdropPath,
-                )
-            }.toImmutableList()
+        if (category == DiscoverCategory.Popular(MovieGenre.ALL)) {
+            return popularContentStore.getPopularContent(category).results.intoDiscoverContent()
+        }
+        return discoverMovieRemote.getContent(category).results.intoDiscoverContent()
     }
+
+    private fun List<DiscoverContentDto>.intoDiscoverContent() = map { dto ->
+        DiscoverContent(
+            id = dto.id,
+            title = dto.title,
+            popularity = dto.popularity,
+            genresIds = dto.genresIds,
+            originalTitle = dto.originalTitle,
+            originalLanguage = dto.originalLanguage,
+            voteCount = dto.voteCount,
+            voteAverage = dto.voteAverage,
+            releaseDate = dto.releaseDate,
+            posterPath = dto.posterPath,
+            backdropPath = dto.backdropPath,
+        )
+    }.toImmutableList()
 }

@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS popularMovieEntity(
+key INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+popularId INTEGER AS kotlin.Int NOT NULL,
+FOREIGN KEY (popularId) REFERENCES movieEntity(id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS indexPopularShowId ON popularMovieEntity(popularId);
+
+getPopularMovies:
+SELECT * FROM popularMovieEntity
+INNER JOIN movieEntity ON id = popularMovieEntity.popularId
+;
+
+insertPopularMovie:
+INSERT OR IGNORE INTO popularMovieEntity(
+popularId
+) VALUES (
+?
+);
+
+updatePopularMovie:
+UPDATE popularMovieEntity SET
+popularId = :popularId
+WHERE key = :key
+;
