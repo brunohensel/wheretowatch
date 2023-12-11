@@ -14,7 +14,7 @@ class DiscoverContentSupplierImpl @Inject constructor(
     private val popularContentStore: DiscoverPopularContentStore,
 ) : DiscoverContentSupplier {
     override suspend fun get(category: DiscoverCategory): ImmutableList<DiscoverContent> {
-        if (category == DiscoverCategory.Popular(MovieGenre.ALL)) {
+        if (category is DiscoverCategory.Popular) {
             return popularContentStore.getPopularContent(category).intoDiscoverContent()
         }
         return discoverMovieRemote.getContent(category).intoDiscoverContent()

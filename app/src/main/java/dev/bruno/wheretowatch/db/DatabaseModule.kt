@@ -8,6 +8,8 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import dev.bruno.wheretowatch.GenreEntity
+import dev.bruno.wheretowatch.MovieAndGenre
 import dev.bruno.wheretowatch.MovieEntity
 import dev.bruno.wheretowatch.PopularMovieEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
@@ -45,9 +47,16 @@ object DatabaseModule {
                 genresAdapter = GenresAdapter,
                 voteCountAdapter = IntColumnAdapter,
             ),
+            genreEntityAdapter = GenreEntity.Adapter(
+                idAdapter = IntColumnAdapter,
+            ),
             popularMovieEntityAdapter = PopularMovieEntity.Adapter(
                 popularIdAdapter = IntColumnAdapter,
-            )
+            ),
+            movieAndGenreAdapter = MovieAndGenre.Adapter(
+                genreIdAdapter = IntColumnAdapter,
+                movieIdAdapter = IntColumnAdapter,
+            ),
         )
     }
 }

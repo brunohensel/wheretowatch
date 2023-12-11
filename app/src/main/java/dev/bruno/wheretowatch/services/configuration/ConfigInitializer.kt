@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.network.api.configuration
+package dev.bruno.wheretowatch.services.configuration
 
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.Initializers

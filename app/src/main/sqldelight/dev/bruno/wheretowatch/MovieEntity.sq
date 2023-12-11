@@ -14,7 +14,7 @@ backdropPath TEXT
 );
 
 insertMovie:
-INSERT INTO movieEntity(
+INSERT OR IGNORE INTO movieEntity(
 id,
 title,
 overview,
