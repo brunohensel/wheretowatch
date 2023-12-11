@@ -11,6 +11,13 @@ SELECT * FROM popularMovieEntity
 INNER JOIN movieEntity ON id = popularMovieEntity.popularId
 ;
 
+getPopularGenre:
+SELECT * FROM popularMovieEntity
+INNER JOIN movieEntity ON id = popularMovieEntity.popularId
+INNER JOIN movieAndGenre ON movieId = movieEntity.id
+WHERE movieAndGenre.genreId = :genreId
+;
+
 insertPopularMovie:
 INSERT OR IGNORE INTO popularMovieEntity(
 popularId

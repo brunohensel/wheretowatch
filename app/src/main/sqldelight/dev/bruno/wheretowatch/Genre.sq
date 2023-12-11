@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS genreEntity(
+id INTEGER AS kotlin.Int PRIMARY KEY NOT NULL,
+name TEXT NOT NULL
+);
+
+getGenresCount:
+SELECT count(*) FROM genreEntity
+;
+
+insertGenre:
+INSERT OR REPLACE INTO genreEntity(
+id,
+name
+) VALUES (
+?,
+?
+)
+;

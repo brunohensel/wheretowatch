@@ -7,15 +7,12 @@ class DiscoverPopularContentStore @Inject constructor(
     private val discoverMovieRemote: DiscoverMovieRemote,
     private val allPopularDao: AllPopularDao,
 ) {
-    suspend fun getPopularContent(category: DiscoverCategory): List<Movie> {
-        return if (category == DiscoverCategory.Popular(MovieGenre.ALL)) {
-            val movies = allPopularDao.getPopularMovies()
-            movies.ifEmpty {
-                discoverMovieRemote.getContent(category)
-                    .also { movies -> allPopularDao.insertPopularMovies(movies) }
-            }
-        } else {
-            discoverMovieRemote.getContent(category)
+    suspend fun getPopularContent(category: DiscoverCategory.Popular): List<Movie> {
+        val movies = allPopularDao.getPopularMovies(category.genre)
+        return movies.ifEmpty {
+            discoverMovieRemote
+                .getContent(category)
+                .also { movies -> allPopularDao.insert(movies) }
         }
     }
 }

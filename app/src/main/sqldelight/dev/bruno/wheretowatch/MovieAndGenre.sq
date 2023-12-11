@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS movieAndGenre(
+genreId INTEGER AS kotlin.Int NOT NULL,
+movieId INTEGER AS kotlin.Int NOT NULL,
+FOREIGN KEY (movieId) REFERENCES movieEntity(id),
+FOREIGN KEY (genreId) REFERENCES genreEntity(id)
+);
+
+insertMovieGenre:
+INSERT INTO movieAndGenre(
+genreId, movieId
+) VALUES ?
+;
+

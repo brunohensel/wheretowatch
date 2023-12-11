@@ -5,17 +5,25 @@ import dagger.Reusable
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.discover.AllPopularDao
+import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.model.Movie
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Reusable
 @ContributesBinding(AppScope::class)
 class SqlDelightPopularDao @Inject constructor(
     private val db: WhereToWatchDatabase,
+    private val useCase: MovieInsertUseCase,
 ) : AllPopularDao {
-    override suspend fun getPopularMovies(): List<Movie> {
+    override suspend fun getPopularMovies(genre: MovieGenre): List<Movie> {
+        return if (genre == MovieGenre.ALL) {
+            getAllPopularMovies()
+        } else {
+            getFilteredById(genre.id.toInt())
+        }
+    }
+
+    private fun getAllPopularMovies(): List<Movie> {
         return db.popularMovieEntityQueries
             .getPopularMovies(
                 mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
@@ -25,46 +33,51 @@ class SqlDelightPopularDao @Inject constructor(
                         title = title,
                         overview = overview,
                         originalTitle = originalTitle,
-                        popularity = popularity.toFloat(),
-                        voteCount = voteCount.toInt(),
+                        popularity = popularity,
+                        voteCount = voteCount,
                         voteAverage = voteAverage,
-                        genresIds = genres.split(",").map { it.trim().toInt() },
+                        genresIds = genres,
                         releaseDate = releaseDate,
                         posterPath = posterPath,
                         backdropPath = backdropPath,
                     )
                 }
-            )
-            .executeAsList()
+            ).executeAsList()
     }
 
-    override suspend fun insertPopularMovies(movies: List<Movie>) {
-        withContext(Dispatchers.Default) {
-            db.movieEntityQueries
-                .transaction {
-                    for (movie in movies) {
-                        db.movieEntityQueries.insertMovie(
-                            id = movie.id,
-                            title = movie.title,
-                            overview = movie.overview,
-                            popularity = movie.popularity,
-                            genres = movie.genresIds.joinToString(),
-                            originalTitle = movie.originalTitle,
-                            voteCount = movie.voteCount.toLong(),
-                            voteAverage = movie.voteAverage,
-                            releaseDate = movie.releaseDate,
-                            posterPath = movie.posterPath,
-                            backdropPath = movie.backdropPath,
-                        )
-                    }
-                }
+    private fun getFilteredById(genreId: Int): List<Movie> {
+        return db.popularMovieEntityQueries
+            .getPopularGenre(
+                genreId = genreId,
+                mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
+                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, genreId,
+                           movieId ->
 
-            db.popularMovieEntityQueries
-                .transaction {
-                    for (movie in movies) {
-                        db.popularMovieEntityQueries.insertPopularMovie(movie.id)
-                    }
+                    Movie(
+                        id = id,
+                        title = title,
+                        overview = overview,
+                        originalTitle = originalTitle,
+                        popularity = popularity,
+                        voteCount = voteCount,
+                        voteAverage = voteAverage,
+                        genresIds = genres,
+                        releaseDate = releaseDate,
+                        posterPath = posterPath,
+                        backdropPath = backdropPath,
+                    )
                 }
-        }
+            ).executeAsList()
+    }
+
+    override suspend fun insert(movies: List<Movie>) {
+        useCase.insert(movies)
+
+        db.popularMovieEntityQueries
+            .transaction {
+                for (movie in movies) {
+                    db.popularMovieEntityQueries.insertPopularMovie(movie.id)
+                }
+            }
     }
 }

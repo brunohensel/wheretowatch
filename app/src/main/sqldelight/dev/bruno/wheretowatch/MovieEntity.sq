@@ -1,19 +1,20 @@
+
 CREATE TABLE IF NOT EXISTS  movieEntity(
 id INTEGER AS kotlin.Int PRIMARY KEY NOT NULL,
 title TEXT NOT NULL,
 overview TEXT NOT NULL,
-popularity REAL AS kotlin.Float NOT NULL ,
-genres TEXT NOT NULL ,
-originalTitle TEXT NOT NULL ,
-voteCount INTEGER NOT NULL ,
-voteAverage REAL AS kotlin.Float NOT NULL ,
+popularity REAL AS kotlin.Float NOT NULL,
+genres TEXT AS kotlin.collections.List<kotlin.Int> NOT NULL,
+originalTitle TEXT NOT NULL,
+voteCount INTEGER AS kotlin.Int NOT NULL,
+voteAverage REAL AS kotlin.Float NOT NULL,
 releaseDate TEXT AS kotlinx.datetime.LocalDate,
 posterPath TEXT,
 backdropPath TEXT
 );
 
 insertMovie:
-INSERT INTO movieEntity(
+INSERT OR IGNORE INTO movieEntity(
 id,
 title,
 overview,
