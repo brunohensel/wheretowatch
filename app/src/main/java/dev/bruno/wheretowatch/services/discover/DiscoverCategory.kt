@@ -12,7 +12,7 @@ enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
 
 //TODO fetch it from genre/movie/list and store?
 enum class MovieGenre(val id: String) {
-    ALL("none"),
+    ALL("-1"),
     ACTION("28"),
     ADVENTURE("12"),
     ANIMATION("16"),
