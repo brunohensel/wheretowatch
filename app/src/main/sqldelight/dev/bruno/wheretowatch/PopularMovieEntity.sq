@@ -9,6 +9,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS indexPopularShowId ON popularMovieEntity(popul
 getPopularMovies:
 SELECT * FROM popularMovieEntity
 INNER JOIN movieEntity ON id = popularMovieEntity.popularId
+ORDER BY movieEntity.popularity DESC
+LIMIT 20
 ;
 
 getPopularGenre:
