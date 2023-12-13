@@ -9,10 +9,13 @@ class DiscoverPopularContentStore @Inject constructor(
 ) {
     suspend fun getPopularContent(category: DiscoverCategory.Popular): List<Movie> {
         val movies = allPopularDao.getPopularMovies(category.genre)
-        return movies.ifEmpty {
+        //TODO add a more robust logic when add pagination
+        return if (movies.size < 20) {
             discoverMovieRemote
                 .getContent(category)
-                .also { movies -> allPopularDao.insert(movies) }
+                .also { allPopularDao.insert(it) }
+        } else {
+            movies
         }
     }
 }
