@@ -95,6 +95,12 @@ fun HomeContent(
                 title = "Where to watch",
                 onClick = { state.onEvent(OpenSettings) }
             )
+        },
+        bottomBar = {
+            HomeBottomNavigationBar(
+                selectedTab = HomeScreen,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     ) { paddingValues ->
         Box {
