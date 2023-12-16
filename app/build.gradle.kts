@@ -16,6 +16,10 @@ val apiKeyFile: File = rootProject.file("apikey.properties")
 val apiKeyProperties = Properties()
 apiKeyProperties.load(FileInputStream(apiKeyFile))
 
+val signingKeyFile: File = rootProject.file("signing.properties")
+val signingProperties = Properties()
+signingProperties.load(FileInputStream(signingKeyFile))
+
 android {
     namespace = "dev.bruno.wheretowatch"
     compileSdk = 34
@@ -32,12 +36,31 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField(type = "String", name = "API_KEY", value = apiKeyProperties.getProperty("API_KEY"))
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = apiKeyProperties.getProperty("API_KEY")
+        )
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file("release/app-release.jks")
+            storePassword = signingProperties.getProperty("RELEASE_STORE_PASS")
+            keyAlias = "wheretowatch"
+            keyPassword = signingProperties.getProperty("RELEASE_KEY_PASS")
+        }
     }
 
     buildTypes {
+        debug {
+            versionNameSuffix = "-dev"
+            applicationIdSuffix = ".debug"
+        }
         release {
-            isMinifyEnabled = false
+            signingConfig = signingConfigs["release"]
+            isShrinkResources = true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -62,6 +85,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    lint {
+        baseline = file("lint-baseline.xml")
     }
 }
 
