@@ -11,4 +11,3 @@ INSERT OR IGNORE INTO movieAndGenre(
 genreId, movieId
 ) VALUES ?
 ;
-
