@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.slack.circuit.runtime.screen.Screen
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen
 import dev.bruno.wheretowatch.features.settings.SettingsScreen
 import kotlinx.parcelize.Parcelize
 
@@ -53,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 @Composable
 fun HomeBottomBar(
     modifier: Modifier = Modifier,
-    tabs: List<HomeNavigationTabItems> = HomeNavigationTabItems.entries,
+    tabs: List<HomeNavigationTabItems>,
     currentScreen: Screen,
     onSelected: (Screen) -> Unit,
 ) {
@@ -299,7 +300,7 @@ enum class HomeNavigationTabItems(
     val icon: ImageVector,
 ) {
     HOME(
-        screen = HomeScreen,
+        screen = DiscoverScreen,
         title = "Movies",
         icon = Icons.Outlined.Movie,
     ),

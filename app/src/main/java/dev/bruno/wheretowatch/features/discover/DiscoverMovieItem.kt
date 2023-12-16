@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.runtime.Immutable
 import dev.bruno.wheretowatch.ds.components.ImageModelBuilder
@@ -6,7 +6,7 @@ import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.services.discover.DiscoveryImageModel
 
 @Immutable
-data class HomeMovieItem(
+data class DiscoverMovieItem(
     val id: Int,
     val title: String,
     val popularity: Float,

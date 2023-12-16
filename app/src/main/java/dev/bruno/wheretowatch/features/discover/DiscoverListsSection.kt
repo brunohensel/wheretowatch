@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -31,9 +31,9 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HorizontalCarousel(
-    items: ImmutableList<HomeMovieItem>,
+    items: ImmutableList<DiscoverMovieItem>,
     headerTitle: String,
-    carouselItemContent: @Composable (HomeMovieItem) -> Unit,
+    carouselItemContent: @Composable (DiscoverMovieItem) -> Unit,
     modifier: Modifier = Modifier,
     rightSideContent: (@Composable () -> Unit)? = null,
 ) {
@@ -70,7 +70,7 @@ fun HorizontalCarousel(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HorizontalParallaxCarousel(
-    items: ImmutableList<HomeMovieItem>,
+    items: ImmutableList<DiscoverMovieItem>,
     headerTitle: String,
     aspectRatio: Float,
     modifier: Modifier = Modifier,

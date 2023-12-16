@@ -19,8 +19,8 @@
     <ID>NewLineAtEndOfFile:DropDownCountries.kt$dev.bruno.wheretowatch.features.settings.DropDownCountries.kt</ID>
     <ID>NewLineAtEndOfFile:ExampleInstrumentedTest.kt$dev.bruno.wheretowatch.ExampleInstrumentedTest.kt</ID>
     <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$dev.bruno.wheretowatch.ExampleUnitTest.kt</ID>
-    <ID>NewLineAtEndOfFile:HomePresenter.kt$dev.bruno.wheretowatch.features.home.HomePresenter.kt</ID>
-    <ID>NewLineAtEndOfFile:HomeScreen.kt$dev.bruno.wheretowatch.features.home.HomeScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:HomePresenter.kt$dev.bruno.wheretowatch.features.discover.HomePresenter.kt</ID>
+    <ID>NewLineAtEndOfFile:HomeScreen.kt$dev.bruno.wheretowatch.features.discover.HomeScreen.kt</ID>
     <ID>NewLineAtEndOfFile:KtorCountryRemote.kt$dev.bruno.wheretowatch.network.api.country.KtorCountryRemote.kt</ID>
     <ID>NewLineAtEndOfFile:KtorModule.kt$dev.bruno.wheretowatch.network.KtorModule.kt</ID>
     <ID>NewLineAtEndOfFile:KtorTrendingRemote.kt$dev.bruno.wheretowatch.network.api.trending.KtorTrendingRemote.kt</ID>

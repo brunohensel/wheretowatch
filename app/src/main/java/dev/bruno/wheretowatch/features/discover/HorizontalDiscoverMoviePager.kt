@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -28,7 +28,7 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyItemScope.HorizontalHomeMoviePager(
-    items: ImmutableList<HomeMovieItem>,
+    items: ImmutableList<DiscoverMovieItem>,
     pagerState: PagerState,
     aspectRatio: Float,
     modifier: Modifier = Modifier,
