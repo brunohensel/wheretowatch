@@ -1,7 +1,7 @@
 package dev.bruno.wheretowatch.features.discover.movies
 
-import dev.bruno.wheretowatch.features.discover.HomeMovieItem
-import dev.bruno.wheretowatch.features.discover.HomeTrending
+import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
+import dev.bruno.wheretowatch.features.discover.DiscoverTrending
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.TrendWindow
@@ -15,12 +15,12 @@ import javax.inject.Inject
 class TrendingMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val state = MutableStateFlow(HomeTrending())
-    val flow: Flow<HomeTrending> = state.asStateFlow()
+    private val state = MutableStateFlow(DiscoverTrending())
+    val flow: Flow<DiscoverTrending> = state.asStateFlow()
 
     suspend fun getTrending(window: TrendWindow) {
         val trendingItem = supplier.get(DiscoverCategory.Trending(window)).map { item ->
-            HomeMovieItem(
+            DiscoverMovieItem(
                 id = item.id,
                 title = item.title,
                 originalTitle = item.originalTitle,
@@ -31,6 +31,6 @@ class TrendingMovieFlowSource @Inject constructor(
             )
         }.toImmutableList()
 
-        state.update { HomeTrending(trendWindow = window, items = trendingItem) }
+        state.update { DiscoverTrending(trendWindow = window, items = trendingItem) }
     }
 }

@@ -1,6 +1,6 @@
 package dev.bruno.wheretowatch.features.discover.movies
 
-import dev.bruno.wheretowatch.features.discover.HomeMovieItem
+import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.MovieGenre
@@ -13,18 +13,18 @@ import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
-typealias PopularMap = Map<MovieGenre, ImmutableList<HomeMovieItem>>
+typealias PopularMap = Map<MovieGenre, ImmutableList<DiscoverMovieItem>>
 
 class PopularMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val popularMap = ConcurrentHashMap<MovieGenre, ImmutableList<HomeMovieItem>>()
+    private val popularMap = ConcurrentHashMap<MovieGenre, ImmutableList<DiscoverMovieItem>>()
     private val state = MutableStateFlow<PopularMap>(mapOf())
     val flow: Flow<PopularMap> = state.asStateFlow()
 
     suspend fun getPopular(genre: MovieGenre = MovieGenre.ALL) {
         val popularItems = supplier.get(DiscoverCategory.Popular(genre)).map { item ->
-            HomeMovieItem(
+            DiscoverMovieItem(
                 id = item.id,
                 title = item.title,
                 originalTitle = item.originalTitle,

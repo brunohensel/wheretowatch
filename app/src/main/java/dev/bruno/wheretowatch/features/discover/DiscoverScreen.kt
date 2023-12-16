@@ -53,13 +53,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data object DiscoverScreen : Screen {
     data class State(
-        val trendingItems: HomeTrending,
-        val popularItems: ImmutableList<HomeMovieItem>,
-        val upComingItems: ImmutableList<HomeMovieItem>,
-        val topRatedItems: ImmutableList<HomeMovieItem>,
-        val actionItems: ImmutableList<HomeMovieItem>,
-        val horrorItems: ImmutableList<HomeMovieItem>,
-        val netflixItems: ImmutableList<HomeMovieItem>,
+        val trendingItems: DiscoverTrending,
+        val popularItems: ImmutableList<DiscoverMovieItem>,
+        val upComingItems: ImmutableList<DiscoverMovieItem>,
+        val topRatedItems: ImmutableList<DiscoverMovieItem>,
+        val actionItems: ImmutableList<DiscoverMovieItem>,
+        val horrorItems: ImmutableList<DiscoverMovieItem>,
+        val netflixItems: ImmutableList<DiscoverMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -75,7 +75,7 @@ private const val PortraitRatio = 2 / 3f
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @CircuitInject(DiscoverScreen::class, AppScope::class)
 @Composable
-fun HomeContent(
+fun DiscoverContent(
     state: DiscoverScreen.State,
     modifier: Modifier = Modifier,
 ) {

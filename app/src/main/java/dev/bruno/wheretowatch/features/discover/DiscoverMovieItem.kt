@@ -6,7 +6,7 @@ import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.services.discover.DiscoveryImageModel
 
 @Immutable
-data class HomeMovieItem(
+data class DiscoverMovieItem(
     val id: Int,
     val title: String,
     val popularity: Float,

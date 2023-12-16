@@ -16,16 +16,16 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class HomeContentListsImpl @Inject constructor(
+class DiscoverContentListsImpl @Inject constructor(
     private val trendingSource: TrendingMovieFlowSource,
     private val popularSource: PopularMovieFlowSource,
     private val upcomingSource: UpcomingMovieFlowSource,
     private val streamSource: StreamProviderMovieFlowSource,
     private val topRatedSource: TopRatedFlowSource
-) : HomePresenter.HomeContentLists {
+) : DiscoverPresenter.HomeContentLists {
 
-    override val contents: HomeContentFlows
-        get() = HomeContentFlows(
+    override val contents: DiscoverContentFlows
+        get() = DiscoverContentFlows(
             trendingContent = trendingSource.flow,
             popularContent = popularSource.flow.toContentFlow(key = MovieGenre.ALL),
             actionContent = popularSource.flow.toContentFlow(key = MovieGenre.ACTION),
@@ -37,19 +37,19 @@ class HomeContentListsImpl @Inject constructor(
 
     private fun <T, K> Flow<T>.toContentFlow(
         key: K,
-    ): Flow<ImmutableList<HomeMovieItem>> where T : Map<K, ImmutableList<HomeMovieItem>> {
+    ): Flow<ImmutableList<DiscoverMovieItem>> where T : Map<K, ImmutableList<DiscoverMovieItem>> {
         return this.map { it.getOrDefault(key, persistentListOf()) }
     }
 
-    override suspend fun getContent(contentType: HomeContentType) {
+    override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-            is HomeContentType.Trending -> trendingSource.getTrending(contentType.window)
-            HomeContentType.Popular -> popularSource.getPopular()
-            HomeContentType.Upcoming -> upcomingSource.getUpComing()
-            HomeContentType.TopRated -> topRatedSource.getTopRated()
-            HomeContentType.Action -> popularSource.getPopular(MovieGenre.ACTION)
-            HomeContentType.Horror -> popularSource.getPopular(MovieGenre.HORROR)
-            HomeContentType.Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
+            is DiscoverContentType.Trending -> trendingSource.getTrending(contentType.window)
+            DiscoverContentType.Popular -> popularSource.getPopular()
+            DiscoverContentType.Upcoming -> upcomingSource.getUpComing()
+            DiscoverContentType.TopRated -> topRatedSource.getTopRated()
+            DiscoverContentType.Action -> popularSource.getPopular(MovieGenre.ACTION)
+            DiscoverContentType.Horror -> popularSource.getPopular(MovieGenre.HORROR)
+            DiscoverContentType.Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
         }
     }
 }

@@ -28,7 +28,7 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyItemScope.HorizontalHomeMoviePager(
-    items: ImmutableList<HomeMovieItem>,
+    items: ImmutableList<DiscoverMovieItem>,
     pagerState: PagerState,
     aspectRatio: Float,
     modifier: Modifier = Modifier,

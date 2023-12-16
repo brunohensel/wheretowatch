@@ -25,8 +25,6 @@ import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.backstack.isAtRoot
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.runtime.Navigator
-import dev.bruno.wheretowatch.features.discover.HomeBottomBar
-import dev.bruno.wheretowatch.features.discover.HomeNavigationTabItems
 import kotlin.math.roundToInt
 
 private val BottomNavHeight = 56.dp

@@ -17,7 +17,7 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.settings.SettingsScreen
 import kotlinx.collections.immutable.persistentListOf
 
-class HomePresenter @AssistedInject constructor(
+class DiscoverPresenter @AssistedInject constructor(
     private val homeContentLists: HomeContentLists,
     @Assisted private val navigator: Navigator,
 ) : Presenter<DiscoverScreen.State> {
@@ -26,7 +26,7 @@ class HomePresenter @AssistedInject constructor(
     override fun present(): DiscoverScreen.State {
 
         val flowContents = homeContentLists.contents
-        val trendingItems by flowContents.trendingContent.collectAsRetainedState(HomeTrending())
+        val trendingItems by flowContents.trendingContent.collectAsRetainedState(DiscoverTrending())
         var trendingWindow by rememberRetained { mutableStateOf(trendingItems.trendWindow) }
         val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
         val actionItems by flowContents.actionContent.collectAsRetainedState(persistentListOf())
@@ -39,13 +39,13 @@ class HomePresenter @AssistedInject constructor(
         LaunchedEffect(key1 = trendingWindow) {
             //TODO put this inside of its own LaunchEffect since it will trigger other requests
             // when changed
-            homeContentLists.getContent(HomeContentType.Trending(trendingWindow))
-            homeContentLists.getContent(HomeContentType.Popular)
-            homeContentLists.getContent(HomeContentType.Action)
-            homeContentLists.getContent(HomeContentType.Horror)
-            homeContentLists.getContent(HomeContentType.Upcoming)
-            homeContentLists.getContent(HomeContentType.TopRated)
-            homeContentLists.getContent(HomeContentType.Netflix)
+            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
+            homeContentLists.getContent(DiscoverContentType.Popular)
+            homeContentLists.getContent(DiscoverContentType.Action)
+            homeContentLists.getContent(DiscoverContentType.Horror)
+            homeContentLists.getContent(DiscoverContentType.Upcoming)
+            homeContentLists.getContent(DiscoverContentType.TopRated)
+            homeContentLists.getContent(DiscoverContentType.Netflix)
         }
 
         return DiscoverScreen.State(
@@ -65,13 +65,13 @@ class HomePresenter @AssistedInject constructor(
     }
 
     interface HomeContentLists {
-        val contents: HomeContentFlows
-        suspend fun getContent(contentType: HomeContentType)
+        val contents: DiscoverContentFlows
+        suspend fun getContent(contentType: DiscoverContentType)
     }
 
     @CircuitInject(DiscoverScreen::class, AppScope::class)
     @AssistedFactory
     interface Factory {
-        fun create(navigator: Navigator): HomePresenter
+        fun create(navigator: Navigator): DiscoverPresenter
     }
 }

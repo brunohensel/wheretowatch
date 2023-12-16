@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
-data class HomeTrending(
+data class DiscoverTrending(
     val trendWindow: TrendWindow = TrendWindow.DAY,
-    val items: ImmutableList<HomeMovieItem> = persistentListOf(),
+    val items: ImmutableList<DiscoverMovieItem> = persistentListOf(),
 )

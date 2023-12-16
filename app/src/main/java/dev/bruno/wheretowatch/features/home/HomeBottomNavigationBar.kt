@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.discover
+package dev.bruno.wheretowatch.features.home
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.animateColorAsState
@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.slack.circuit.runtime.screen.Screen
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen
 import dev.bruno.wheretowatch.features.settings.SettingsScreen
 import kotlinx.parcelize.Parcelize
 

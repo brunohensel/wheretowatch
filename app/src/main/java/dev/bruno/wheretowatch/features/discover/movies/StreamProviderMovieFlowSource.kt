@@ -1,6 +1,6 @@
 package dev.bruno.wheretowatch.features.discover.movies
 
-import dev.bruno.wheretowatch.features.discover.HomeMovieItem
+import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
@@ -13,18 +13,18 @@ import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
-typealias StreamMovieMap = Map<StreamerProvider, ImmutableList<HomeMovieItem>>
+typealias StreamMovieMap = Map<StreamerProvider, ImmutableList<DiscoverMovieItem>>
 
 class StreamProviderMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val providerMovie = ConcurrentHashMap<StreamerProvider, ImmutableList<HomeMovieItem>>()
+    private val providerMovie = ConcurrentHashMap<StreamerProvider, ImmutableList<DiscoverMovieItem>>()
     private val state = MutableStateFlow<StreamMovieMap>(mapOf())
     val flow: Flow<StreamMovieMap> = state.asStateFlow()
 
     suspend fun fetchProviderMovies(provider: StreamerProvider) {
         val streamItems = supplier.get(DiscoverCategory.Streaming(provider)).map { item ->
-            HomeMovieItem(
+            DiscoverMovieItem(
                 id = item.id,
                 title = item.title,
                 originalTitle = item.originalTitle,
