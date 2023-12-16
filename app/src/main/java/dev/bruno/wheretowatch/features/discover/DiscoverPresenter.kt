@@ -58,7 +58,6 @@ class DiscoverPresenter @AssistedInject constructor(
             netflixItems = netflixItems,
         ) { event ->
             when (event) {
-                DiscoverScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)
                 is DiscoverScreen.Event.ChangeTrendWindow -> trendingWindow = event.value
             }
         }

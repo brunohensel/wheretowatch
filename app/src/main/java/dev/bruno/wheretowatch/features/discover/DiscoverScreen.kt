@@ -44,7 +44,6 @@ import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
-import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -64,7 +63,6 @@ data object DiscoverScreen : Screen {
     ) : CircuitUiState
 
     sealed interface Event : CircuitUiEvent {
-        data object OpenSettings : Event
         data class ChangeTrendWindow(val value: TrendWindow) : Event
     }
 }
@@ -93,7 +91,6 @@ fun DiscoverContent(
         topBar = {
             MainScreenTopBar(
                 title = "Where to watch",
-                onClick = { state.onEvent(OpenSettings) }
             )
         },
     ) { paddingValues ->
