@@ -141,7 +141,7 @@ fun HomeContent(
                         .offset {
                             IntOffset(
                                 x = 0,
-                                y = -(bottomBarOffsetHeightPx.floatValue * 1.2f).roundToInt()
+                                y = -(bottomBarOffsetHeightPx.floatValue * 0.5f).roundToInt()
                             )
                         }
                         .fillMaxWidth(),
