@@ -299,7 +299,7 @@ enum class HomeNavigationTabItems(
     val icon: ImageVector,
 ) {
     HOME(
-        screen = HomeScreen,
+        screen = DiscoverScreen,
         title = "Movies",
         icon = Icons.Outlined.Movie,
     ),

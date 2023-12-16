@@ -22,7 +22,7 @@ import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.LIGHT
 import dev.bruno.wheretowatch.di.ActivityKey
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
-import dev.bruno.wheretowatch.features.discover.HomeScreen
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen
 import dev.bruno.wheretowatch.features.home.Home
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class MainActivity @Inject constructor(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        val backstack = rememberSaveableBackStack { push(HomeScreen) }
+                        val backstack = rememberSaveableBackStack { push(DiscoverScreen) }
                         val circuitNav = rememberCircuitNavigator(backstack = backstack)
                         Home(navigator = circuitNav, backstack = backstack)
                     }

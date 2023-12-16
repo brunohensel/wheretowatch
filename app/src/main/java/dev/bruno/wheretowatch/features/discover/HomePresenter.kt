@@ -20,10 +20,10 @@ import kotlinx.collections.immutable.persistentListOf
 class HomePresenter @AssistedInject constructor(
     private val homeContentLists: HomeContentLists,
     @Assisted private val navigator: Navigator,
-) : Presenter<HomeScreen.State> {
+) : Presenter<DiscoverScreen.State> {
 
     @Composable
-    override fun present(): HomeScreen.State {
+    override fun present(): DiscoverScreen.State {
 
         val flowContents = homeContentLists.contents
         val trendingItems by flowContents.trendingContent.collectAsRetainedState(HomeTrending())
@@ -48,7 +48,7 @@ class HomePresenter @AssistedInject constructor(
             homeContentLists.getContent(HomeContentType.Netflix)
         }
 
-        return HomeScreen.State(
+        return DiscoverScreen.State(
             trendingItems = trendingItems,
             popularItems = popularItems,
             upComingItems = upComingItems,
@@ -58,8 +58,8 @@ class HomePresenter @AssistedInject constructor(
             netflixItems = netflixItems,
         ) { event ->
             when (event) {
-                HomeScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)
-                is HomeScreen.Event.ChangeTrendWindow -> trendingWindow = event.value
+                DiscoverScreen.Event.OpenSettings -> navigator.goTo(SettingsScreen)
+                is DiscoverScreen.Event.ChangeTrendWindow -> trendingWindow = event.value
             }
         }
     }
@@ -69,7 +69,7 @@ class HomePresenter @AssistedInject constructor(
         suspend fun getContent(contentType: HomeContentType)
     }
 
-    @CircuitInject(HomeScreen::class, AppScope::class)
+    @CircuitInject(DiscoverScreen::class, AppScope::class)
     @AssistedFactory
     interface Factory {
         fun create(navigator: Navigator): HomePresenter

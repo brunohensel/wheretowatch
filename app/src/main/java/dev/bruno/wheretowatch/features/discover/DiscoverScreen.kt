@@ -43,15 +43,15 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
-import dev.bruno.wheretowatch.features.discover.HomeScreen.Event
-import dev.bruno.wheretowatch.features.discover.HomeScreen.Event.OpenSettings
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object HomeScreen : Screen {
+data object DiscoverScreen : Screen {
     data class State(
         val trendingItems: HomeTrending,
         val popularItems: ImmutableList<HomeMovieItem>,
@@ -73,10 +73,10 @@ private const val LandscapeRatio = 16 / 11f
 private const val PortraitRatio = 2 / 3f
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@CircuitInject(HomeScreen::class, AppScope::class)
+@CircuitInject(DiscoverScreen::class, AppScope::class)
 @Composable
 fun HomeContent(
-    state: HomeScreen.State,
+    state: DiscoverScreen.State,
     modifier: Modifier = Modifier,
 ) {
 
