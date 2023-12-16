@@ -77,10 +77,11 @@ fun HomeBottomBar(
                 val selected = currentScreen == tab.screen
                 val tint by animateColorAsState(
                     if (selected) {
-                        MaterialTheme.colorScheme.onBackground
+                        MaterialTheme.colorScheme.onSurface
                     } else {
-                        MaterialTheme.colorScheme.background
-                    }, label = "tint animation"
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = .3f)
+                    },
+                    label = "tint animation",
                 )
 
                 HomeBottomBarItem(
