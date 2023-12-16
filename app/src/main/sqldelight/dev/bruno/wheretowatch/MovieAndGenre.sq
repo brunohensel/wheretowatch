@@ -3,7 +3,7 @@ genreId INTEGER AS kotlin.Int NOT NULL,
 movieId INTEGER AS kotlin.Int NOT NULL,
 FOREIGN KEY (movieId) REFERENCES movieEntity(id),
 FOREIGN KEY (genreId) REFERENCES genreEntity(id),
-UNIQUE(genreId, movieId) ON CONFLICT IGNORE
+UNIQUE(genreId, movieId) ON CONFLICT REPLACE
 );
 
 insertMovieGenre:
