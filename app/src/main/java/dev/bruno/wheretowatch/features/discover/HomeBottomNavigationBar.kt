@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.animateColorAsState

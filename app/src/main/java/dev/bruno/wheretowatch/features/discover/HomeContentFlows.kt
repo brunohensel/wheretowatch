@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow

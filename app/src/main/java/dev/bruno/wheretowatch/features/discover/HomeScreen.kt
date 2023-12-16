@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -51,8 +51,8 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
-import dev.bruno.wheretowatch.features.home.HomeScreen.Event
-import dev.bruno.wheretowatch.features.home.HomeScreen.Event.OpenSettings
+import dev.bruno.wheretowatch.features.discover.HomeScreen.Event
+import dev.bruno.wheretowatch.features.discover.HomeScreen.Event.OpenSettings
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch

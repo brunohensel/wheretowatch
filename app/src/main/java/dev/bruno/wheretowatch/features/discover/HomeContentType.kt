@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 

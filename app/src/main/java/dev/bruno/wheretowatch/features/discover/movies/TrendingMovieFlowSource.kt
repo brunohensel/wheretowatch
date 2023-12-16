@@ -1,7 +1,7 @@
-package dev.bruno.wheretowatch.features.home.movies
+package dev.bruno.wheretowatch.features.discover.movies
 
-import dev.bruno.wheretowatch.features.home.HomeMovieItem
-import dev.bruno.wheretowatch.features.home.HomeTrending
+import dev.bruno.wheretowatch.features.discover.HomeMovieItem
+import dev.bruno.wheretowatch.features.discover.HomeTrending
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.TrendWindow

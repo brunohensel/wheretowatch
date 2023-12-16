@@ -1,4 +1,4 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.runtime.Immutable
 import dev.bruno.wheretowatch.ds.components.ImageModelBuilder

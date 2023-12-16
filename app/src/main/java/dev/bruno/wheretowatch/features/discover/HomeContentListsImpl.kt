@@ -1,12 +1,12 @@
-package dev.bruno.wheretowatch.features.home
+package dev.bruno.wheretowatch.features.discover
 
 import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.features.home.movies.PopularMovieFlowSource
-import dev.bruno.wheretowatch.features.home.movies.StreamProviderMovieFlowSource
-import dev.bruno.wheretowatch.features.home.movies.TopRatedFlowSource
-import dev.bruno.wheretowatch.features.home.movies.TrendingMovieFlowSource
-import dev.bruno.wheretowatch.features.home.movies.UpcomingMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.PopularMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.TopRatedFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieFlowSource
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.ImmutableList

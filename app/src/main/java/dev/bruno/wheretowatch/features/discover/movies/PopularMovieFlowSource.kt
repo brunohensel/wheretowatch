@@ -1,9 +1,9 @@
-package dev.bruno.wheretowatch.features.home.movies
+package dev.bruno.wheretowatch.features.discover.movies
 
-import dev.bruno.wheretowatch.features.home.HomeMovieItem
+import dev.bruno.wheretowatch.features.discover.HomeMovieItem
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
-import dev.bruno.wheretowatch.services.discover.StreamerProvider
+import dev.bruno.wheretowatch.services.discover.MovieGenre
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -13,17 +13,17 @@ import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
-typealias StreamMovieMap = Map<StreamerProvider, ImmutableList<HomeMovieItem>>
+typealias PopularMap = Map<MovieGenre, ImmutableList<HomeMovieItem>>
 
-class StreamProviderMovieFlowSource @Inject constructor(
+class PopularMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val providerMovie = ConcurrentHashMap<StreamerProvider, ImmutableList<HomeMovieItem>>()
-    private val state = MutableStateFlow<StreamMovieMap>(mapOf())
-    val flow: Flow<StreamMovieMap> = state.asStateFlow()
+    private val popularMap = ConcurrentHashMap<MovieGenre, ImmutableList<HomeMovieItem>>()
+    private val state = MutableStateFlow<PopularMap>(mapOf())
+    val flow: Flow<PopularMap> = state.asStateFlow()
 
-    suspend fun fetchProviderMovies(provider: StreamerProvider) {
-        val streamItems = supplier.get(DiscoverCategory.Streaming(provider)).map { item ->
+    suspend fun getPopular(genre: MovieGenre = MovieGenre.ALL) {
+        val popularItems = supplier.get(DiscoverCategory.Popular(genre)).map { item ->
             HomeMovieItem(
                 id = item.id,
                 title = item.title,
@@ -35,11 +35,11 @@ class StreamProviderMovieFlowSource @Inject constructor(
             )
         }.toImmutableList()
 
-        if (!providerMovie.containsKey(provider)) {
+        if (!popularMap.containsKey(genre)) {
             // Maybe it is redundant to call `putIfAbsent` at this point
-            providerMovie.putIfAbsent(provider, streamItems)
+            popularMap.putIfAbsent(genre, popularItems)
         }
 
-        state.update { providerMovie }
+        state.update { popularMap }
     }
 }
