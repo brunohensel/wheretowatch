@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -28,20 +27,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -57,7 +49,6 @@ import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import kotlin.math.roundToInt
 
 @Parcelize
 data object HomeScreen : Screen {
@@ -97,57 +88,14 @@ fun HomeContent(
     val horrorItems = state.horrorItems
     val netflixItems = state.netflixItems
 
-    val bottomBarHeightPx = with(LocalDensity.current) { BottomNavHeight.roundToPx().toFloat() }
-    val bottomBarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
-
-    val bottomBarScrollConnection: NestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newOffset = bottomBarOffsetHeightPx.floatValue + delta
-                bottomBarOffsetHeightPx.floatValue = newOffset.coerceIn(
-                    minimumValue = -bottomBarHeightPx,
-                    maximumValue = 0f
-                )
-                // We're basically watching scroll without taking it
-                return Offset.Zero
-            }
-        }
-    }
-
     Scaffold(
-        modifier = modifier.nestedScroll(bottomBarScrollConnection),
+        modifier = modifier,
         topBar = {
             MainScreenTopBar(
                 title = "Where to watch",
                 onClick = { state.onEvent(OpenSettings) }
             )
         },
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .offset {
-                        IntOffset(
-                            x = 0,
-                            y = -bottomBarOffsetHeightPx.floatValue.roundToInt()
-                        )
-                    }
-            ) {
-                HomeBottomBar(
-                    currentScreen = HomeScreen,
-                    onSelected = { },
-                    modifier = Modifier
-                        .height(BottomNavHeight)
-                        .offset {
-                            IntOffset(
-                                x = 0,
-                                y = -(bottomBarOffsetHeightPx.floatValue * 0.5f).roundToInt()
-                            )
-                        }
-                        .fillMaxWidth(),
-                )
-            }
-        }
     ) { paddingValues ->
         Box {
             LazyColumn(

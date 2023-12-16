@@ -53,7 +53,7 @@ import kotlinx.parcelize.Parcelize
 @Composable
 fun HomeBottomBar(
     modifier: Modifier = Modifier,
-    tabs: List<HomeNavigationTabItems> = HomeNavigationTabItems.entries,
+    tabs: List<HomeNavigationTabItems>,
     currentScreen: Screen,
     onSelected: (Screen) -> Unit,
 ) {

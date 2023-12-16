@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
-import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.AUTO
@@ -24,6 +23,7 @@ import dev.bruno.wheretowatch.di.ActivityKey
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
 import dev.bruno.wheretowatch.features.discover.HomeScreen
+import dev.bruno.wheretowatch.features.home.Home
 import javax.inject.Inject
 
 @ContributesMultibinding(scope = AppScope::class, boundType = Activity::class)
@@ -43,15 +43,15 @@ class MainActivity @Inject constructor(
                 DARK -> true
             }
 
-            WhereToWatchTheme(darkTheme = applyDarkTheme) {
-                CircuitCompositionLocals(circuit = circuit) {
+            CircuitCompositionLocals(circuit = circuit) {
+                WhereToWatchTheme(darkTheme = applyDarkTheme) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
                         val backstack = rememberSaveableBackStack { push(HomeScreen) }
                         val circuitNav = rememberCircuitNavigator(backstack = backstack)
-                        NavigableCircuitContent(navigator = circuitNav, backstack)
+                        Home(navigator = circuitNav, backstack = backstack)
                     }
                 }
             }
