@@ -97,9 +97,12 @@ fun HomeContent(
             )
         },
         bottomBar = {
-            HomeBottomNavigationBar(
-                selectedTab = HomeScreen,
-                modifier = Modifier.fillMaxWidth(),
+            HomeBottomBar(
+                currentScreen = HomeScreen,
+                onSelected = { },
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth(),
             )
         }
     ) { paddingValues ->
