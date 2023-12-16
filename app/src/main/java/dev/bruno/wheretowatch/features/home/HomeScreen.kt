@@ -138,6 +138,12 @@ fun HomeContent(
                     onSelected = { },
                     modifier = Modifier
                         .height(BottomNavHeight)
+                        .offset {
+                            IntOffset(
+                                x = 0,
+                                y = -(bottomBarOffsetHeightPx.floatValue * 1.2f).roundToInt()
+                            )
+                        }
                         .fillMaxWidth(),
                 )
             }

@@ -131,7 +131,7 @@ fun HorizontalParallaxCarousel(
 
 // Get it from https://chrisbanes.me/posts/parallax-effect-compose/
 @Stable
-private class ParallaxAlignment(
+class ParallaxAlignment(
     private val horizontalBias: () -> Float = { 0f },
     private val verticalBias: () -> Float = { 0f },
 ) : Alignment {
