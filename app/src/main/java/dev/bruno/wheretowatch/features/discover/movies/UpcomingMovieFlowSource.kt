@@ -11,7 +11,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class UpcomingMovieFlowSource @Inject constructor(
@@ -19,22 +18,6 @@ class UpcomingMovieFlowSource @Inject constructor(
 ) {
     private val state = MutableStateFlow<ImmutableList<DiscoverMovieItem>>(persistentListOf())
     val flow: Flow<ImmutableList<DiscoverMovieItem>> = state.asStateFlow()
-
-    suspend fun getUpComing() {
-        val popularItems = supplier.get(DiscoverCategory.Upcoming).map { item ->
-            DiscoverMovieItem(
-                id = item.id,
-                title = item.title,
-                originalTitle = item.originalTitle,
-                popularity = item.popularity,
-                voteAverage = item.voteAverage,
-                voteCount = item.voteCount,
-                buildImgModel = item.curried()
-            )
-        }.toImmutableList()
-
-        state.update { popularItems }
-    }
 
     suspend fun getUpComingV2(): DiscoverContent {
         val items = supplier.get(DiscoverCategory.Upcoming).map { item ->

@@ -10,7 +10,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class TrendingMovieFlowSource @Inject constructor(
@@ -18,22 +17,6 @@ class TrendingMovieFlowSource @Inject constructor(
 ) {
     private val state = MutableStateFlow(DiscoverTrending())
     val flow: Flow<DiscoverTrending> = state.asStateFlow()
-
-    suspend fun getTrending(window: TrendWindow) {
-        val trendingItem = supplier.get(DiscoverCategory.Trending(window)).map { item ->
-            DiscoverMovieItem(
-                id = item.id,
-                title = item.title,
-                originalTitle = item.originalTitle,
-                popularity = item.popularity,
-                voteAverage = item.voteAverage,
-                voteCount = item.voteCount,
-                buildImgModel = item.curried()
-            )
-        }.toImmutableList()
-
-        state.update { DiscoverTrending(trendWindow = window, items = trendingItem) }
-    }
 
     suspend fun get(window: TrendWindow): DiscoverContent {
         val trendingItem = supplier.get(DiscoverCategory.Trending(window)).map { item ->

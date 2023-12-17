@@ -11,8 +11,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 typealias MovieCollectionMap = Map<MovieCollection, ImmutableList<DiscoverMovieItem>>
@@ -20,31 +18,9 @@ typealias MovieCollectionMap = Map<MovieCollection, ImmutableList<DiscoverMovieI
 class CollectionMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val collectionMap =
-        ConcurrentHashMap<MovieCollection, ImmutableList<DiscoverMovieItem>>()
+
     private val state = MutableStateFlow<MovieCollectionMap>(mapOf())
     val flow: Flow<MovieCollectionMap> = state.asStateFlow()
-
-    suspend fun getCollection(collection: MovieCollection) {
-        val collectionItem = supplier.get(DiscoverCategory.Collection(collection)).map { item ->
-            DiscoverMovieItem(
-                id = item.id,
-                title = item.title,
-                originalTitle = item.originalTitle,
-                popularity = item.popularity,
-                voteAverage = item.voteAverage,
-                voteCount = item.voteCount,
-                buildImgModel = item.curried()
-            )
-        }.toImmutableList()
-
-        if (!collectionMap.containsKey(collection)) {
-            // Maybe it is redundant to call `putIfAbsent` at this point
-            collectionMap.putIfAbsent(collection, collectionItem)
-        }
-
-        state.update { collectionMap }
-    }
 
     suspend fun get(collection: MovieCollection): DiscoverContent {
         val items = supplier.get(DiscoverCategory.Collection(collection)).map { item ->
