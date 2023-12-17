@@ -1,5 +1,7 @@
 package dev.bruno.wheretowatch.features.discover.movies
 
+import dev.bruno.wheretowatch.features.discover.ContentList
+import dev.bruno.wheretowatch.features.discover.DiscoverContent
 import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
@@ -18,7 +20,8 @@ typealias StreamMovieMap = Map<StreamerProvider, ImmutableList<DiscoverMovieItem
 class StreamProviderMovieFlowSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val providerMovie = ConcurrentHashMap<StreamerProvider, ImmutableList<DiscoverMovieItem>>()
+    private val providerMovie =
+        ConcurrentHashMap<StreamerProvider, ImmutableList<DiscoverMovieItem>>()
     private val state = MutableStateFlow<StreamMovieMap>(mapOf())
     val flow: Flow<StreamMovieMap> = state.asStateFlow()
 
@@ -41,5 +44,21 @@ class StreamProviderMovieFlowSource @Inject constructor(
         }
 
         state.update { providerMovie }
+    }
+
+    suspend fun fetchProvider(provider: StreamerProvider): DiscoverContent {
+        val items = supplier.get(DiscoverCategory.Streaming(provider)).map { item ->
+            DiscoverMovieItem(
+                id = item.id,
+                title = item.title,
+                originalTitle = item.originalTitle,
+                popularity = item.popularity,
+                voteAverage = item.voteAverage,
+                voteCount = item.voteCount,
+                buildImgModel = item.curried()
+            )
+        }.toImmutableList()
+
+        return ContentList(items)
     }
 }
