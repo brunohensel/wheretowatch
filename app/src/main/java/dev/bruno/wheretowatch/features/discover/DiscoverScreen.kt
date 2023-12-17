@@ -59,6 +59,7 @@ data object DiscoverScreen : Screen {
         val actionItems: ImmutableList<DiscoverMovieItem>,
         val horrorItems: ImmutableList<DiscoverMovieItem>,
         val netflixItems: ImmutableList<DiscoverMovieItem>,
+        val warItems: ImmutableList<DiscoverMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -85,6 +86,7 @@ fun DiscoverContent(
     val actionItems = state.actionItems
     val horrorItems = state.horrorItems
     val netflixItems = state.netflixItems
+    val warItems = state.warItems
 
     Scaffold(
         modifier = modifier,
@@ -241,6 +243,25 @@ fun DiscoverContent(
                     HorizontalCarousel(
                         items = netflixItems,
                         headerTitle = "On Netflix",
+                        carouselItemContent = { item ->
+                            WhereToWatchCard(
+                                model = item,
+                                type = ImageType.Poster,
+                                title = item.title,
+                                onClick = { },
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .width(150.dp) // TODO make it dynamic
+                                    .aspectRatio(PortraitRatio)
+                            )
+                        },
+                    )
+                }
+
+                item(key = "war Items") {
+                    HorizontalCarousel(
+                        items = warItems,
+                        headerTitle = "War Movies",
                         carouselItemContent = { item ->
                             WhereToWatchCard(
                                 model = item,

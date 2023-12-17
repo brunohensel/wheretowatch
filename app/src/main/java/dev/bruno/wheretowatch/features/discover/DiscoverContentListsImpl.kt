@@ -30,6 +30,7 @@ class DiscoverContentListsImpl @Inject constructor(
             popularContent = popularSource.flow.toContentFlow(key = MovieGenre.ALL),
             actionContent = popularSource.flow.toContentFlow(key = MovieGenre.ACTION),
             horrorContent = popularSource.flow.toContentFlow(key = MovieGenre.HORROR),
+            warContent = popularSource.flow.toContentFlow(key = MovieGenre.WAR),
             netflixContent = streamSource.flow.toContentFlow(key = StreamerProvider.NETFLIX),
             upcomingContent = upcomingSource.flow,
             topRatedContent = topRatedSource.flow,
@@ -50,6 +51,7 @@ class DiscoverContentListsImpl @Inject constructor(
             DiscoverContentType.Action -> popularSource.getPopular(MovieGenre.ACTION)
             DiscoverContentType.Horror -> popularSource.getPopular(MovieGenre.HORROR)
             DiscoverContentType.Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
+            DiscoverContentType.War -> popularSource.getPopular(MovieGenre.WAR)
         }
     }
 }

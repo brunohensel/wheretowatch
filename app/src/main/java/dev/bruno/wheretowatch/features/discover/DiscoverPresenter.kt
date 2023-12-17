@@ -33,6 +33,7 @@ class DiscoverPresenter @AssistedInject constructor(
         val upComingItems by flowContents.upcomingContent.collectAsRetainedState(persistentListOf())
         val topRatedItems by flowContents.topRatedContent.collectAsRetainedState(persistentListOf())
         val netflixItems by flowContents.netflixContent.collectAsRetainedState(persistentListOf())
+        val warItems by flowContents.warContent.collectAsRetainedState(persistentListOf())
 
         // TODO get content concurrently?
         LaunchedEffect(key1 = trendingWindow) {
@@ -44,6 +45,7 @@ class DiscoverPresenter @AssistedInject constructor(
             homeContentLists.getContent(DiscoverContentType.Horror)
             homeContentLists.getContent(DiscoverContentType.Upcoming)
             homeContentLists.getContent(DiscoverContentType.TopRated)
+            homeContentLists.getContent(DiscoverContentType.War)
             homeContentLists.getContent(DiscoverContentType.Netflix)
         }
 
@@ -55,6 +57,7 @@ class DiscoverPresenter @AssistedInject constructor(
             actionItems = actionItems,
             horrorItems = horrorItems,
             netflixItems = netflixItems,
+            warItems = warItems,
         ) { event ->
             when (event) {
                 is DiscoverScreen.Event.ChangeTrendWindow -> trendingWindow = event.value

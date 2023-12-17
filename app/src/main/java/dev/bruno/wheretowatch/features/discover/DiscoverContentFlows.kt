@@ -11,4 +11,5 @@ class DiscoverContentFlows(
     val actionContent: Flow<ImmutableList<DiscoverMovieItem>>,
     val horrorContent: Flow<ImmutableList<DiscoverMovieItem>>,
     val netflixContent: Flow<ImmutableList<DiscoverMovieItem>>,
+    val warContent: Flow<ImmutableList<DiscoverMovieItem>>,
 )
