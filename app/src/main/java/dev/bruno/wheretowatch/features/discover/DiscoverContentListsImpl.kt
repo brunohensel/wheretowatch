@@ -57,11 +57,11 @@ class DiscoverContentListsImpl @Inject constructor(
             }
 
             Popular -> popularSource.get().updateMapState(DiscoverSections.Popular)
-            Upcoming -> upcomingSource.getUpComingV2().updateMapState(DiscoverSections.Upcoming)
-            TopRated -> topRatedSource.getTopRatedV2().updateMapState(DiscoverSections.TopRated)
+            Upcoming -> upcomingSource.get().updateMapState(DiscoverSections.Upcoming)
+            TopRated -> topRatedSource.get().updateMapState(DiscoverSections.TopRated)
             Action -> popularSource.get(MovieGenre.ACTION).updateMapState(DiscoverSections.Action)
             Horror -> popularSource.get(MovieGenre.HORROR).updateMapState(DiscoverSections.Horror)
-            Netflix -> streamSource.fetchProvider(StreamerProvider.NETFLIX).updateMapState(DiscoverSections.Netflix)
+            Netflix -> streamSource.get(StreamerProvider.NETFLIX).updateMapState(DiscoverSections.Netflix)
             War -> popularSource.get(MovieGenre.WAR).updateMapState(DiscoverSections.War)
             HarryPotterCollection -> collectionSource.get(HARRY_POTTER).updateMapState(DiscoverSections.HarryPotter)
         }

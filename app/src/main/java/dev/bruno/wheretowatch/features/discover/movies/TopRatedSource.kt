@@ -11,7 +11,7 @@ import javax.inject.Inject
 class TopRatedSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    suspend fun getTopRatedV2(): DiscoverContent {
+    suspend fun get(): DiscoverContent {
         val items = supplier.get(DiscoverCategory.TopRated).map { item ->
             DiscoverMovieItem(
                 id = item.id,

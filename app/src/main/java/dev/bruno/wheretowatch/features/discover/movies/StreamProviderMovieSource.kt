@@ -13,7 +13,7 @@ class StreamProviderMovieSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
 
-    suspend fun fetchProvider(provider: StreamerProvider): DiscoverContent {
+    suspend fun get(provider: StreamerProvider): DiscoverContent {
         val items = supplier.get(DiscoverCategory.Streaming(provider)).map { item ->
             DiscoverMovieItem(
                 id = item.id,
