@@ -5,22 +5,16 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContent
 import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-class UpcomingMovieFlowSource @Inject constructor(
+class StreamProviderMovieSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val state = MutableStateFlow<ImmutableList<DiscoverMovieItem>>(persistentListOf())
-    val flow: Flow<ImmutableList<DiscoverMovieItem>> = state.asStateFlow()
 
-    suspend fun getUpComingV2(): DiscoverContent {
-        val items = supplier.get(DiscoverCategory.Upcoming).map { item ->
+    suspend fun fetchProvider(provider: StreamerProvider): DiscoverContent {
+        val items = supplier.get(DiscoverCategory.Streaming(provider)).map { item ->
             DiscoverMovieItem(
                 id = item.id,
                 title = item.title,

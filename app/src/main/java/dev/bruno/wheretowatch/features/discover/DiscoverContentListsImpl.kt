@@ -11,12 +11,12 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Trending
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
-import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.PopularMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.TopRatedFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.PopularMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.TopRatedSource
+import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
@@ -29,12 +29,12 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DiscoverContentListsImpl @Inject constructor(
-    private val trendingSource: TrendingMovieFlowSource,
-    private val popularSource: PopularMovieFlowSource,
-    private val upcomingSource: UpcomingMovieFlowSource,
-    private val streamSource: StreamProviderMovieFlowSource,
-    private val topRatedSource: TopRatedFlowSource,
-    private val collectionSource: CollectionMovieFlowSource,
+    private val trendingSource: TrendingMovieSource,
+    private val popularSource: PopularMovieSource,
+    private val upcomingSource: UpcomingMovieSource,
+    private val streamSource: StreamProviderMovieSource,
+    private val topRatedSource: TopRatedSource,
+    private val collectionSource: CollectionMovieSource,
 ) : DiscoverPresenter.HomeContentLists {
 
     private val feedMap = ConcurrentHashMap<DiscoverSections, DiscoverContent>()
