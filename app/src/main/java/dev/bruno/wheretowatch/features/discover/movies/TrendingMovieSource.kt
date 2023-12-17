@@ -1,25 +1,19 @@
 package dev.bruno.wheretowatch.features.discover.movies
 
+import dev.bruno.wheretowatch.features.discover.DiscoverContent
 import dev.bruno.wheretowatch.features.discover.DiscoverMovieItem
+import dev.bruno.wheretowatch.features.discover.DiscoverTrending
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class UpcomingMovieFlowSource @Inject constructor(
+class TrendingMovieSource @Inject constructor(
     private val supplier: DiscoverContentSupplier,
 ) {
-    private val state = MutableStateFlow<ImmutableList<DiscoverMovieItem>>(persistentListOf())
-    val flow: Flow<ImmutableList<DiscoverMovieItem>> = state.asStateFlow()
-
-    suspend fun getUpComing() {
-        val popularItems = supplier.get(DiscoverCategory.Upcoming).map { item ->
+    suspend fun get(window: TrendWindow): DiscoverContent {
+        val trendingItem = supplier.get(DiscoverCategory.Trending(window)).map { item ->
             DiscoverMovieItem(
                 id = item.id,
                 title = item.title,
@@ -31,6 +25,6 @@ class UpcomingMovieFlowSource @Inject constructor(
             )
         }.toImmutableList()
 
-        state.update { popularItems }
+        return DiscoverTrending(trendWindow = window, items = trendingItem)
     }
 }

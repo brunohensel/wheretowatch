@@ -8,5 +8,5 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 data class DiscoverTrending(
     val trendWindow: TrendWindow = TrendWindow.DAY,
-    val items: ImmutableList<DiscoverMovieItem> = persistentListOf(),
-)
+    override val items: ImmutableList<DiscoverMovieItem> = persistentListOf(),
+) : DiscoverContent

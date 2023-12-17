@@ -11,61 +11,84 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Trending
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
-import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.PopularMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.TopRatedFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieFlowSource
-import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieFlowSource
+import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.PopularMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.TopRatedSource
+import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieSource
+import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DiscoverContentListsImpl @Inject constructor(
-    private val trendingSource: TrendingMovieFlowSource,
-    private val popularSource: PopularMovieFlowSource,
-    private val upcomingSource: UpcomingMovieFlowSource,
-    private val streamSource: StreamProviderMovieFlowSource,
-    private val topRatedSource: TopRatedFlowSource,
-    private val collectionSource: CollectionMovieFlowSource,
+    private val trendingSource: TrendingMovieSource,
+    private val popularSource: PopularMovieSource,
+    private val upcomingSource: UpcomingMovieSource,
+    private val streamSource: StreamProviderMovieSource,
+    private val topRatedSource: TopRatedSource,
+    private val collectionSource: CollectionMovieSource,
 ) : DiscoverPresenter.HomeContentLists {
 
-    override val contents: DiscoverContentFlows
-        get() = DiscoverContentFlows(
-            trendingContent = trendingSource.flow,
-            popularContent = popularSource.flow.toContentFlow(key = MovieGenre.ALL),
-            actionContent = popularSource.flow.toContentFlow(key = MovieGenre.ACTION),
-            horrorContent = popularSource.flow.toContentFlow(key = MovieGenre.HORROR),
-            warContent = popularSource.flow.toContentFlow(key = MovieGenre.WAR),
-            netflixContent = streamSource.flow.toContentFlow(key = StreamerProvider.NETFLIX),
-            harryPotterContent = collectionSource.flow.toContentFlow(key = HARRY_POTTER),
-            upcomingContent = upcomingSource.flow,
-            topRatedContent = topRatedSource.flow,
-        )
+    private val feedMap = ConcurrentHashMap<DiscoverSections, DiscoverContent>()
+    private val feedState = MutableStateFlow(DiscoverFeed(mapOf()))
 
-    private fun <T, K> Flow<T>.toContentFlow(
-        key: K,
-    ): Flow<ImmutableList<DiscoverMovieItem>> where T : Map<K, ImmutableList<DiscoverMovieItem>> {
-        return this.map { it.getOrDefault(key, persistentListOf()) }
-    }
+    override val feedFlow: Flow<DiscoverFeed>
+        get() = feedState.asStateFlow()
 
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-            is Trending -> trendingSource.getTrending(contentType.window)
-            Popular -> popularSource.getPopular()
-            Upcoming -> upcomingSource.getUpComing()
-            TopRated -> topRatedSource.getTopRated()
-            Action -> popularSource.getPopular(MovieGenre.ACTION)
-            Horror -> popularSource.getPopular(MovieGenre.HORROR)
-            Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
-            War -> popularSource.getPopular(MovieGenre.WAR)
-            HarryPotterCollection -> collectionSource.getCollection(HARRY_POTTER)
+            is Trending -> {
+                val sourceContent = trendingSource.get(contentType.window)
+                val stateContent = feedMap[DiscoverSections.Trending] as? DiscoverTrending
+
+                if (stateContent?.trendWindow != contentType.window) {
+                    feedMap[DiscoverSections.Trending] =
+                        DiscoverTrending(contentType.window, sourceContent.items)
+                }
+                updateSorted()
+            }
+
+            Popular -> popularSource.get()
+                .update(section = DiscoverSections.Popular)
+
+            Upcoming -> upcomingSource.get()
+                .update(section = DiscoverSections.Upcoming)
+
+            TopRated -> topRatedSource.get()
+                .update(section = DiscoverSections.TopRated)
+
+            Action -> popularSource.get(MovieGenre.ACTION)
+                .update(section = DiscoverSections.Action)
+
+            Horror -> popularSource.get(MovieGenre.HORROR)
+                .update(section = DiscoverSections.Horror)
+
+            Netflix -> streamSource.get(StreamerProvider.NETFLIX)
+                .update(section = DiscoverSections.Netflix)
+
+            War -> popularSource.get(MovieGenre.WAR)
+                .update(section = DiscoverSections.War)
+
+            HarryPotterCollection -> collectionSource.get(HARRY_POTTER)
+                .update(section = DiscoverSections.HarryPotter)
         }
+    }
+
+    private fun DiscoverContent.update(section: DiscoverSections) {
+        feedMap.putIfAbsent(section, this)
+        updateSorted()
+    }
+
+    private fun updateSorted() {
+        val sortedMap = feedMap.toSortedMap(compareBy { it.order })
+        feedState.update { it.copy(section = sortedMap) }
     }
 }
