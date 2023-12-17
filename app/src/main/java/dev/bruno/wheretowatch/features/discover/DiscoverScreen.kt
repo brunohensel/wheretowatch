@@ -46,6 +46,7 @@ import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -61,6 +62,7 @@ data object DiscoverScreen : Screen {
         val netflixItems: ImmutableList<DiscoverMovieItem>,
         val warItems: ImmutableList<DiscoverMovieItem>,
         val harryPotterItems: ImmutableList<DiscoverMovieItem>,
+        val discoverFeed: DiscoverFeed,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -80,15 +82,16 @@ fun DiscoverContent(
     modifier: Modifier = Modifier,
 ) {
 
-    val trendingItems = state.trendingItems.items
-    val popularItems = state.popularItems
-    val upcomingItems = state.upComingItems
-    val topRatedItems = state.topRatedItems
-    val actionItems = state.actionItems
-    val horrorItems = state.horrorItems
-    val netflixItems = state.netflixItems
-    val warItems = state.warItems
-    val harryPotterItems = state.harryPotterItems
+//    val trendingItems = state.trendingItems.items
+//    val popularItems = state.popularItems
+//    val upcomingItems = state.upComingItems
+//    val topRatedItems = state.topRatedItems
+//    val actionItems = state.actionItems
+//    val horrorItems = state.horrorItems
+//    val netflixItems = state.netflixItems
+//    val warItems = state.warItems
+//    val harryPotterItems = state.harryPotterItems
+    val feed = state.discoverFeed
 
     Scaffold(
         modifier = modifier,
@@ -111,181 +114,225 @@ fun DiscoverContent(
                     }
             ) {
 
-                item(key = "popular Items") {
-                    Spacer(Modifier.height(8.dp))
+                for ((key, content) in feed.section) {
+                    when (key) {
+                        DiscoverSections.Popular -> {
+                            item(key = "popular Items") {
+                                if (content.items.isNotEmpty()) {
+                                    Spacer(Modifier.height(8.dp))
 
-                    HomeListHeader(
-                        headerTitle = "Popular Movies",
-                        modifier = Modifier,
-                        alignment = Alignment.CenterVertically,
-                    )
+                                    HomeListHeader(
+                                        headerTitle = "Popular Movies",
+                                        modifier = Modifier,
+                                        alignment = Alignment.CenterVertically,
+                                    )
 
-                    if (popularItems.isNotEmpty()) {
-                        val pagerState = rememberPagerState(pageCount = { popularItems.size })
-                        HorizontalHomeMoviePager(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .clip(MaterialTheme.shapes.large),
-                            items = popularItems,
-                            pagerState = pagerState,
-                            aspectRatio = LandscapeRatio,
-                        )
+                                    val pagerState =
+                                        rememberPagerState(pageCount = { content.items.size })
+                                    HorizontalHomeMoviePager(
+                                        modifier = Modifier
+                                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                                            .clip(MaterialTheme.shapes.large),
+                                        items = content.items,
+                                        pagerState = pagerState,
+                                        aspectRatio = LandscapeRatio,
+                                    )
 
-                        val coroutineScope = rememberCoroutineScope()
-                        HomeMoviePagerIndicator(
-                            pagerState = pagerState,
-                            modifier = Modifier
-                                .height(24.dp)
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth()
-                                .align(Alignment.BottomCenter),
-                            horizontalArrangement = Arrangement.Start,
-                            onClick = { page ->
-                                coroutineScope.launch { pagerState.scrollToPage(page) }
+                                    val coroutineScope = rememberCoroutineScope()
+                                    HomeMoviePagerIndicator(
+                                        pagerState = pagerState,
+                                        modifier = Modifier
+                                            .height(24.dp)
+                                            .padding(horizontal = 16.dp)
+                                            .fillMaxWidth()
+                                            .align(Alignment.BottomCenter),
+                                        horizontalArrangement = Arrangement.Start,
+                                        onClick = { page ->
+                                            coroutineScope.launch { pagerState.scrollToPage(page) }
+                                        }
+                                    )
+                                }
                             }
-                        )
+                        }
+
+                        DiscoverSections.Trending -> {
+                            val trendContent = content as DiscoverTrending
+                            item(key = "trending Items") {
+                                HorizontalParallaxCarousel(
+                                    items = trendContent.items,
+                                    headerTitle = "Trending Movies",
+                                    aspectRatio = LandscapeRatio,
+                                    rightSideContent = {
+                                        TrendingToggle(
+                                            trendWindow = trendContent.trendWindow,
+                                            onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
+                                            choices = TrendWindow.entries,
+                                            modifier = Modifier
+                                                .width(IntrinsicSize.Max),
+                                        )
+                                    },
+                                )
+                            }
+                        }
+
+                        DiscoverSections.HarryPotter -> {
+                            item(key = "Harry Potter Items") {
+                                HorizontalParallaxCarousel(
+                                    items = content.items,
+                                    headerTitle = "Harry Potter Collection",
+                                    aspectRatio = LandscapeRatio,
+                                )
+                            }
+                        }
+
+                        else -> {
+                            item(key = "$key") {
+                                HorizontalCarousel(
+                                    items = feed.section[key]?.items ?: persistentListOf(),
+                                    headerTitle = "$key",
+                                    carouselItemContent = { item ->
+                                        WhereToWatchCard(
+                                            model = item,
+                                            type = ImageType.Poster,
+                                            title = item.title,
+                                            onClick = { },
+                                            modifier = Modifier
+                                                .animateItemPlacement()
+                                                .width(150.dp) // TODO make it dynamic
+                                                .aspectRatio(PortraitRatio)
+                                        )
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
 
 
-                item(key = "upcoming Items") {
-                    HorizontalCarousel(
-                        items = upcomingItems,
-                        headerTitle = "Upcoming Movies",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "top rated Items") {
-                    HorizontalCarousel(
-                        items = topRatedItems,
-                        headerTitle = "Top rated Movies",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "action Items") {
-                    HorizontalCarousel(
-                        items = actionItems,
-                        headerTitle = "Action Movies",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "horror Items") {
-                    HorizontalCarousel(
-                        items = horrorItems,
-                        headerTitle = "Horror Movies",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "trending Items") {
-                    HorizontalParallaxCarousel(
-                        items = trendingItems,
-                        headerTitle = "Trending Movies",
-                        aspectRatio = LandscapeRatio,
-                        rightSideContent = {
-                            TrendingToggle(
-                                trendWindow = state.trendingItems.trendWindow,
-                                onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
-                                choices = TrendWindow.entries,
-                                modifier = Modifier
-                                    .width(IntrinsicSize.Max),
-                            )
-                        },
-                    )
-                }
-
-                item(key = "netflix Items") {
-                    HorizontalCarousel(
-                        items = netflixItems,
-                        headerTitle = "On Netflix",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "war Items") {
-                    HorizontalCarousel(
-                        items = warItems,
-                        headerTitle = "War Movies",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
-                    )
-                }
-
-                item(key = "Harry Potter Items") {
-                    HorizontalParallaxCarousel(
-                        items = harryPotterItems,
-                        headerTitle = "Harry Potter Collection",
-                        aspectRatio = LandscapeRatio,
-                    )
-                }
+//
+//                item(key = "upcoming Items") {
+//                    HorizontalCarousel(
+//                        items = upcomingItems,
+//                        headerTitle = "Upcoming Movies",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//                item(key = "top rated Items") {
+//                    HorizontalCarousel(
+//                        items = topRatedItems,
+//                        headerTitle = "Top rated Movies",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//                item(key = "action Items") {
+//                    HorizontalCarousel(
+//                        items = actionItems,
+//                        headerTitle = "Action Movies",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//                item(key = "horror Items") {
+//                    HorizontalCarousel(
+//                        items = horrorItems,
+//                        headerTitle = "Horror Movies",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//
+//
+//                item(key = "netflix Items") {
+//                    HorizontalCarousel(
+//                        items = netflixItems,
+//                        headerTitle = "On Netflix",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//                item(key = "war Items") {
+//                    HorizontalCarousel(
+//                        items = warItems,
+//                        headerTitle = "War Movies",
+//                        carouselItemContent = { item ->
+//                            WhereToWatchCard(
+//                                model = item,
+//                                type = ImageType.Poster,
+//                                title = item.title,
+//                                onClick = { },
+//                                modifier = Modifier
+//                                    .animateItemPlacement()
+//                                    .width(150.dp) // TODO make it dynamic
+//                                    .aspectRatio(PortraitRatio)
+//                            )
+//                        },
+//                    )
+//                }
+//
+//                item(key = "Harry Potter Items") {
+//                    HorizontalParallaxCarousel(
+//                        items = harryPotterItems,
+//                        headerTitle = "Harry Potter Collection",
+//                        aspectRatio = LandscapeRatio,
+//                    )
+//                }
 
                 item {
                     Spacer(Modifier.height(8.dp))
