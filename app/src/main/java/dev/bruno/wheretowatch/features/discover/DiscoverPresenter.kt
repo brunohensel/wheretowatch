@@ -14,7 +14,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.features.settings.SettingsScreen
 import kotlinx.collections.immutable.persistentListOf
 
 class DiscoverPresenter @AssistedInject constructor(
