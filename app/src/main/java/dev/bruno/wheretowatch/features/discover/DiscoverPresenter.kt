@@ -15,7 +15,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.discover.TrendWindow
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 
 class DiscoverPresenter @AssistedInject constructor(
@@ -26,17 +25,7 @@ class DiscoverPresenter @AssistedInject constructor(
     @Composable
     override fun present(): DiscoverScreen.State {
 
-        val flowContents = homeContentLists.contents
-        val trendingItems by flowContents.trendingContent.collectAsRetainedState(DiscoverTrending())
         var trendingWindow by rememberRetained { mutableStateOf(TrendWindow.DAY) }
-        val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
-        val actionItems by flowContents.actionContent.collectAsRetainedState(persistentListOf())
-        val horrorItems by flowContents.horrorContent.collectAsRetainedState(persistentListOf())
-        val upComingItems by flowContents.upcomingContent.collectAsRetainedState(persistentListOf())
-        val topRatedItems by flowContents.topRatedContent.collectAsRetainedState(persistentListOf())
-        val netflixItems by flowContents.netflixContent.collectAsRetainedState(persistentListOf())
-        val warItems by flowContents.warContent.collectAsRetainedState(persistentListOf())
-        val hPotterItems by flowContents.harryPotterContent.collectAsRetainedState(persistentListOf())
         val discoverFeed by homeContentLists.feedFlow.collectAsRetainedState(initial = DiscoverFeed())
 
         LaunchedEffect(key1 = trendingWindow) {
@@ -55,15 +44,6 @@ class DiscoverPresenter @AssistedInject constructor(
         }
 
         return DiscoverScreen.State(
-            trendingItems = trendingItems,
-            popularItems = popularItems,
-            upComingItems = upComingItems,
-            topRatedItems = topRatedItems,
-            actionItems = actionItems,
-            horrorItems = horrorItems,
-            netflixItems = netflixItems,
-            harryPotterItems = hPotterItems,
-            warItems = warItems,
             discoverFeed = discoverFeed,
         ) { event ->
             when (event) {
@@ -73,7 +53,6 @@ class DiscoverPresenter @AssistedInject constructor(
     }
 
     interface HomeContentLists {
-        val contents: DiscoverContentFlows
         val feedFlow: Flow<DiscoverFeed>
         suspend fun getContent(contentType: DiscoverContentType)
     }

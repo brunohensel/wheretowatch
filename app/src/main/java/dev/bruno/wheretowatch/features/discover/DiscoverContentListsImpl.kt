@@ -20,12 +20,9 @@ import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieFlowSource
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -46,36 +43,8 @@ class DiscoverContentListsImpl @Inject constructor(
     override val feedFlow: Flow<DiscoverFeed>
         get() = feedState.asStateFlow()
 
-    override val contents: DiscoverContentFlows
-        get() = DiscoverContentFlows(
-            trendingContent = trendingSource.flow,
-            popularContent = popularSource.flow.toContentFlow(key = MovieGenre.ALL),
-            actionContent = popularSource.flow.toContentFlow(key = MovieGenre.ACTION),
-            horrorContent = popularSource.flow.toContentFlow(key = MovieGenre.HORROR),
-            warContent = popularSource.flow.toContentFlow(key = MovieGenre.WAR),
-            netflixContent = streamSource.flow.toContentFlow(key = StreamerProvider.NETFLIX),
-            harryPotterContent = collectionSource.flow.toContentFlow(key = HARRY_POTTER),
-            upcomingContent = upcomingSource.flow,
-            topRatedContent = topRatedSource.flow,
-        )
-
-    private fun <T, K> Flow<T>.toContentFlow(
-        key: K,
-    ): Flow<ImmutableList<DiscoverMovieItem>> where T : Map<K, ImmutableList<DiscoverMovieItem>> {
-        return this.map { it.getOrDefault(key, persistentListOf()) }
-    }
-
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-//            is Trending -> trendingSource.getTrending(contentType.window)
-//            Popular -> popularSource.getPopular()
-//            Upcoming -> upcomingSource.getUpComing()
-//            TopRated -> topRatedSource.getTopRated()
-//            Action -> popularSource.getPopular(MovieGenre.ACTION)
-//            Horror -> popularSource.getPopular(MovieGenre.HORROR)
-//            Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
-//            War -> popularSource.getPopular(MovieGenre.WAR)
-//            HarryPotterCollection -> collectionSource.getCollection(HARRY_POTTER)
             is Trending -> {
                 val sourceContent = trendingSource.get(contentType.window)
                 val stateContent = feedMap[DiscoverSections.Trending] as? DiscoverTrending

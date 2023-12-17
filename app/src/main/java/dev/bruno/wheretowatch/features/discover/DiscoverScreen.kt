@@ -45,7 +45,6 @@ import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
 import dev.bruno.wheretowatch.services.discover.TrendWindow
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -53,15 +52,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data object DiscoverScreen : Screen {
     data class State(
-        val trendingItems: DiscoverTrending,
-        val popularItems: ImmutableList<DiscoverMovieItem>,
-        val upComingItems: ImmutableList<DiscoverMovieItem>,
-        val topRatedItems: ImmutableList<DiscoverMovieItem>,
-        val actionItems: ImmutableList<DiscoverMovieItem>,
-        val horrorItems: ImmutableList<DiscoverMovieItem>,
-        val netflixItems: ImmutableList<DiscoverMovieItem>,
-        val warItems: ImmutableList<DiscoverMovieItem>,
-        val harryPotterItems: ImmutableList<DiscoverMovieItem>,
         val discoverFeed: DiscoverFeed,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
@@ -82,15 +72,6 @@ fun DiscoverContent(
     modifier: Modifier = Modifier,
 ) {
 
-//    val trendingItems = state.trendingItems.items
-//    val popularItems = state.popularItems
-//    val upcomingItems = state.upComingItems
-//    val topRatedItems = state.topRatedItems
-//    val actionItems = state.actionItems
-//    val horrorItems = state.horrorItems
-//    val netflixItems = state.netflixItems
-//    val warItems = state.warItems
-//    val harryPotterItems = state.harryPotterItems
     val feed = state.discoverFeed
 
     Scaffold(
