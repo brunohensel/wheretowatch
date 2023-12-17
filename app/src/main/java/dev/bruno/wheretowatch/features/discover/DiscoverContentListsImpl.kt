@@ -23,7 +23,11 @@ import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -35,6 +39,12 @@ class DiscoverContentListsImpl @Inject constructor(
     private val topRatedSource: TopRatedFlowSource,
     private val collectionSource: CollectionMovieFlowSource,
 ) : DiscoverPresenter.HomeContentLists {
+
+    private val feedMap = ConcurrentHashMap<DiscoverSections, DiscoverContent>()
+    private val feedState = MutableStateFlow(DiscoverFeed(mapOf()))
+
+    override val feedFlow: Flow<DiscoverFeed>
+        get() = feedState.asStateFlow()
 
     override val contents: DiscoverContentFlows
         get() = DiscoverContentFlows(
@@ -57,15 +67,39 @@ class DiscoverContentListsImpl @Inject constructor(
 
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-            is Trending -> trendingSource.getTrending(contentType.window)
-            Popular -> popularSource.getPopular()
-            Upcoming -> upcomingSource.getUpComing()
-            TopRated -> topRatedSource.getTopRated()
-            Action -> popularSource.getPopular(MovieGenre.ACTION)
-            Horror -> popularSource.getPopular(MovieGenre.HORROR)
-            Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
-            War -> popularSource.getPopular(MovieGenre.WAR)
-            HarryPotterCollection -> collectionSource.getCollection(HARRY_POTTER)
+//            is Trending -> trendingSource.getTrending(contentType.window)
+//            Popular -> popularSource.getPopular()
+//            Upcoming -> upcomingSource.getUpComing()
+//            TopRated -> topRatedSource.getTopRated()
+//            Action -> popularSource.getPopular(MovieGenre.ACTION)
+//            Horror -> popularSource.getPopular(MovieGenre.HORROR)
+//            Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
+//            War -> popularSource.getPopular(MovieGenre.WAR)
+//            HarryPotterCollection -> collectionSource.getCollection(HARRY_POTTER)
+            is Trending -> {
+                val sourceContent = trendingSource.get(contentType.window)
+                val stateContent = feedMap[DiscoverSections.Trending] as? DiscoverTrending
+
+                if (stateContent?.trendWindow != contentType.window) {
+                    feedMap[DiscoverSections.Trending] =
+                        DiscoverTrending(contentType.window, sourceContent.items)
+                }
+                feedState.update { it.copy(section = feedMap.toMap()) }
+            }
+
+            Popular -> popularSource.get().updateMapState(DiscoverSections.Popular)
+            Upcoming -> upcomingSource.getUpComingV2().updateMapState(DiscoverSections.Upcoming)
+            TopRated -> topRatedSource.getTopRatedV2().updateMapState(DiscoverSections.TopRated)
+            Action -> popularSource.get(MovieGenre.ACTION).updateMapState(DiscoverSections.Action)
+            Horror -> popularSource.get(MovieGenre.HORROR).updateMapState(DiscoverSections.Horror)
+            Netflix -> streamSource.fetchProvider(StreamerProvider.NETFLIX).updateMapState(DiscoverSections.Netflix)
+            War -> popularSource.get(MovieGenre.WAR).updateMapState(DiscoverSections.War)
+            HarryPotterCollection -> collectionSource.get(HARRY_POTTER).updateMapState(DiscoverSections.HarryPotter)
         }
+    }
+
+    private fun DiscoverContent.updateMapState(sections: DiscoverSections) {
+        feedMap.putIfAbsent(sections, this)
+        feedState.update { it.copy(section = feedMap.toMap()) }
     }
 }
