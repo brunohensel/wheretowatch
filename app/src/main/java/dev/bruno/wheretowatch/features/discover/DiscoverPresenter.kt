@@ -14,7 +14,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.Flow
 
 class DiscoverPresenter @AssistedInject constructor(
     private val homeContentLists: HomeContentLists,
@@ -26,7 +28,7 @@ class DiscoverPresenter @AssistedInject constructor(
 
         val flowContents = homeContentLists.contents
         val trendingItems by flowContents.trendingContent.collectAsRetainedState(DiscoverTrending())
-        var trendingWindow by rememberRetained { mutableStateOf(trendingItems.trendWindow) }
+        var trendingWindow by rememberRetained { mutableStateOf(TrendWindow.DAY) }
         val popularItems by flowContents.popularContent.collectAsRetainedState(persistentListOf())
         val actionItems by flowContents.actionContent.collectAsRetainedState(persistentListOf())
         val horrorItems by flowContents.horrorContent.collectAsRetainedState(persistentListOf())
@@ -35,12 +37,13 @@ class DiscoverPresenter @AssistedInject constructor(
         val netflixItems by flowContents.netflixContent.collectAsRetainedState(persistentListOf())
         val warItems by flowContents.warContent.collectAsRetainedState(persistentListOf())
         val hPotterItems by flowContents.harryPotterContent.collectAsRetainedState(persistentListOf())
+        val discoverFeed by homeContentLists.feedFlow.collectAsRetainedState(initial = DiscoverFeed())
 
-        // TODO get content concurrently?
         LaunchedEffect(key1 = trendingWindow) {
-            //TODO put this inside of its own LaunchEffect since it will trigger other requests
-            // when changed
             homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
+        }
+        // TODO get content concurrently?
+        LaunchedEffect(key1 = Unit) {
             homeContentLists.getContent(DiscoverContentType.Popular)
             homeContentLists.getContent(DiscoverContentType.Action)
             homeContentLists.getContent(DiscoverContentType.Horror)
@@ -61,6 +64,7 @@ class DiscoverPresenter @AssistedInject constructor(
             netflixItems = netflixItems,
             harryPotterItems = hPotterItems,
             warItems = warItems,
+            discoverFeed = discoverFeed,
         ) { event ->
             when (event) {
                 is DiscoverScreen.Event.ChangeTrendWindow -> trendingWindow = event.value
@@ -70,6 +74,7 @@ class DiscoverPresenter @AssistedInject constructor(
 
     interface HomeContentLists {
         val contents: DiscoverContentFlows
+        val feedFlow: Flow<DiscoverFeed>
         suspend fun getContent(contentType: DiscoverContentType)
     }
 
