@@ -27,7 +27,7 @@ class SqlDelightPopularDao @Inject constructor(
         return db.popularMovieEntityQueries
             .getPopularMovies(
                 mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
-                           voteCount, voteAverage, releaseDate, posterPath, backdropPath ->
+                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, collectionId ->
                     Movie(
                         id = id,
                         title = title,
@@ -40,6 +40,7 @@ class SqlDelightPopularDao @Inject constructor(
                         releaseDate = releaseDate,
                         posterPath = posterPath,
                         backdropPath = backdropPath,
+                        collectionId = collectionId
                     )
                 }
             ).executeAsList()
@@ -50,8 +51,8 @@ class SqlDelightPopularDao @Inject constructor(
             .getPopularGenre(
                 genreId = genreId,
                 mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
-                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, genreId,
-                           movieId ->
+                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, collectionId,
+                           _genreId, movieId ->
 
                     Movie(
                         id = id,
@@ -65,6 +66,7 @@ class SqlDelightPopularDao @Inject constructor(
                         releaseDate = releaseDate,
                         posterPath = posterPath,
                         backdropPath = backdropPath,
+                        collectionId = collectionId,
                     )
                 }
             ).executeAsList()

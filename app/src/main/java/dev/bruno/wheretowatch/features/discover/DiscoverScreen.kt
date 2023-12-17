@@ -60,6 +60,7 @@ data object DiscoverScreen : Screen {
         val horrorItems: ImmutableList<DiscoverMovieItem>,
         val netflixItems: ImmutableList<DiscoverMovieItem>,
         val warItems: ImmutableList<DiscoverMovieItem>,
+        val harryPotterItems: ImmutableList<DiscoverMovieItem>,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
 
@@ -87,6 +88,7 @@ fun DiscoverContent(
     val horrorItems = state.horrorItems
     val netflixItems = state.netflixItems
     val warItems = state.warItems
+    val harryPotterItems = state.harryPotterItems
 
     Scaffold(
         modifier = modifier,
@@ -274,6 +276,14 @@ fun DiscoverContent(
                                     .aspectRatio(PortraitRatio)
                             )
                         },
+                    )
+                }
+
+                item(key = "Harry Potter Items") {
+                    HorizontalParallaxCarousel(
+                        items = harryPotterItems,
+                        headerTitle = "Harry Potter Collection",
+                        aspectRatio = LandscapeRatio,
                     )
                 }
 

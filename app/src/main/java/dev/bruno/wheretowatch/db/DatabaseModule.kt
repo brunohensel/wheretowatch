@@ -46,6 +46,7 @@ object DatabaseModule {
                 releaseDateAdapter = LocalDateAdapter,
                 genresAdapter = GenresAdapter,
                 voteCountAdapter = IntColumnAdapter,
+                collectionIdAdapter = IntColumnAdapter,
             ),
             genreEntityAdapter = GenreEntity.Adapter(
                 idAdapter = IntColumnAdapter,

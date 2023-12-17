@@ -10,11 +10,12 @@ voteCount INTEGER AS kotlin.Int NOT NULL,
 voteAverage REAL AS kotlin.Float NOT NULL,
 releaseDate TEXT AS kotlinx.datetime.LocalDate,
 posterPath TEXT,
-backdropPath TEXT
+backdropPath TEXT,
+collectionId INTEGER AS kotlin.Int
 );
 
 insertMovie:
-INSERT OR IGNORE INTO movieEntity(
+INSERT OR REPLACE INTO movieEntity(
 id,
 title,
 overview,
@@ -25,8 +26,10 @@ voteCount,
 voteAverage,
 releaseDate,
 posterPath,
-backdropPath
+backdropPath,
+collectionId
 ) VALUES (
+?,
 ?,
 ?,
 ?,
@@ -39,6 +42,16 @@ backdropPath
 ?,
 ?
 );
+getMovie:
+SELECT * FROM movieEntity
+WHERE movieEntity.id = :movieId
+;
+
+getMovieCollection:
+SELECT * FROM movieEntity
+WHERE collectionId = :collectionId
+ORDER BY movieEntity.releaseDate ASC
+;
 
 updateMovie:
 UPDATE movieEntity SET
@@ -52,5 +65,6 @@ voteCount = :voteCount,
 voteAverage = :voteAverage,
 releaseDate = :releaseData,
 posterPath = :posterPath,
-backdropPath = :backdropPath
+backdropPath = :backdropPath,
+collectionId = :collectionId
 WHERE id = id;
