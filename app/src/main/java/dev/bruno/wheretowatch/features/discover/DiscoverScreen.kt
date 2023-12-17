@@ -248,8 +248,6 @@ private fun TrendingToggle(
     }
 }
 
-private val BottomNavHeight = 56.dp
-
 // TODO extract to resources
 private fun getText(window: TrendWindow): String {
     return when (window) {
