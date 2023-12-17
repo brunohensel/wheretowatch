@@ -14,4 +14,5 @@ data class Movie(
     val releaseDate: LocalDate? = null,
     val posterPath: String? = null,
     val backdropPath: String? = null,
+    val collectionId: Int? = null,
 )

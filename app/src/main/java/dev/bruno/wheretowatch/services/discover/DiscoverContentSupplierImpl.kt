@@ -11,13 +11,14 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DiscoverContentSupplierImpl @Inject constructor(
     private val discoverMovieRemote: DiscoverMovieRemote,
-    private val popularContentStore: DiscoverPopularContentStore,
+    private val discoverContentStore: DiscoverContentStore,
 ) : DiscoverContentSupplier {
     override suspend fun get(category: DiscoverCategory): ImmutableList<DiscoverContent> {
-        if (category is DiscoverCategory.Popular) {
-            return popularContentStore.getPopularContent(category).intoDiscoverContent()
-        }
-        return discoverMovieRemote.getContent(category).intoDiscoverContent()
+        return when (category) {
+            is DiscoverCategory.Collection -> discoverContentStore.getCollectionContent(category.collection)
+            is DiscoverCategory.Popular -> discoverContentStore.getPopularContent(category)
+            else -> discoverMovieRemote.getContent(category)
+        }.intoDiscoverContent()
     }
 
     private fun List<Movie>.intoDiscoverContent() = map { dto ->

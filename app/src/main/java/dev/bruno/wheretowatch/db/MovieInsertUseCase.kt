@@ -34,6 +34,7 @@ class MovieInsertUseCase @Inject constructor(
                             releaseDate = movie.releaseDate,
                             posterPath = movie.posterPath,
                             backdropPath = movie.backdropPath,
+                            collectionId = movie.collectionId,
                         )
                     }
                 }

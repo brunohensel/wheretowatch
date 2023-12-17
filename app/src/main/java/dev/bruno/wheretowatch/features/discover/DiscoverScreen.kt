@@ -280,21 +280,10 @@ fun DiscoverContent(
                 }
 
                 item(key = "Harry Potter Items") {
-                    HorizontalCarousel(
+                    HorizontalParallaxCarousel(
                         items = harryPotterItems,
                         headerTitle = "Harry Potter Collection",
-                        carouselItemContent = { item ->
-                            WhereToWatchCard(
-                                model = item,
-                                type = ImageType.Poster,
-                                title = item.title,
-                                onClick = { },
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .width(150.dp) // TODO make it dynamic
-                                    .aspectRatio(PortraitRatio)
-                            )
-                        },
+                        aspectRatio = LandscapeRatio,
                     )
                 }
 
