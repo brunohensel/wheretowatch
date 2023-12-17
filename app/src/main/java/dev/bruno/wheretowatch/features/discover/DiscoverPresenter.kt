@@ -34,6 +34,7 @@ class DiscoverPresenter @AssistedInject constructor(
         val topRatedItems by flowContents.topRatedContent.collectAsRetainedState(persistentListOf())
         val netflixItems by flowContents.netflixContent.collectAsRetainedState(persistentListOf())
         val warItems by flowContents.warContent.collectAsRetainedState(persistentListOf())
+        val hPotterItems by flowContents.harryPotterContent.collectAsRetainedState(persistentListOf())
 
         // TODO get content concurrently?
         LaunchedEffect(key1 = trendingWindow) {
@@ -47,6 +48,7 @@ class DiscoverPresenter @AssistedInject constructor(
             homeContentLists.getContent(DiscoverContentType.TopRated)
             homeContentLists.getContent(DiscoverContentType.War)
             homeContentLists.getContent(DiscoverContentType.Netflix)
+            homeContentLists.getContent(DiscoverContentType.HarryPotterCollection)
         }
 
         return DiscoverScreen.State(
@@ -57,6 +59,7 @@ class DiscoverPresenter @AssistedInject constructor(
             actionItems = actionItems,
             horrorItems = horrorItems,
             netflixItems = netflixItems,
+            harryPotterItems = hPotterItems,
             warItems = warItems,
         ) { event ->
             when (event) {

@@ -6,6 +6,7 @@ sealed interface DiscoverCategory {
     data object TopRated : DiscoverCategory
     data class Trending(val trendWindow: TrendWindow) : DiscoverCategory
     data class Streaming(val provider: StreamerProvider) : DiscoverCategory
+    data class Collection(val collection: MovieCollection) : DiscoverCategory
 }
 
 enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
@@ -40,4 +41,12 @@ enum class StreamerProvider(val id: String) {
     AMAZON_PRIME(id = "9"),
     DISNEY_PLUS(id = "337"),
     APPLE_TV_PLUS(id = "350"),
+}
+
+// Complete list available at https://developer.themoviedb.org/docs/daily-id-exports
+enum class MovieCollection(val id: Int) {
+    HARRY_POTTER(id = 1241),
+    HUNGER_GAMES(id = 131635),
+    AVENGERS(id = 86311),
+    LORD_OF_RINGS(id = 119)
 }

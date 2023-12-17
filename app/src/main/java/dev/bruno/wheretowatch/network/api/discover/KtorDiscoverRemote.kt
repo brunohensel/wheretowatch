@@ -29,7 +29,14 @@ class KtorDiscoverRemote @Inject constructor(
             is DiscoverCategory.Popular -> fetchPopularMovies(category.genre)
             is DiscoverCategory.Trending -> fetchTrendingMovies(category.trendWindow.key)
             is DiscoverCategory.Streaming -> fetchStreamProviderMovies(category.provider.id)
+            is DiscoverCategory.Collection -> fetchMovieCollection(category.collection.id)
         }
+    }
+
+    private suspend fun fetchMovieCollection(collectionId: Int): List<Movie> {
+        val res = CollectionRequest.Id(collectionId = collectionId.toString())
+        val response = httpClient.get(res).body<MovieCollectionDto>()
+        return response.toMovies()
     }
 
     private suspend fun fetchPopularMovies(genre: MovieGenre): List<Movie> {

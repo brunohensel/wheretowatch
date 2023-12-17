@@ -2,11 +2,22 @@ package dev.bruno.wheretowatch.features.discover
 
 import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Action
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.HarryPotterCollection
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Netflix
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Trending
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
+import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
+import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieFlowSource
 import dev.bruno.wheretowatch.features.discover.movies.PopularMovieFlowSource
 import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieFlowSource
 import dev.bruno.wheretowatch.features.discover.movies.TopRatedFlowSource
 import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieFlowSource
 import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieFlowSource
+import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.ImmutableList
@@ -21,7 +32,8 @@ class DiscoverContentListsImpl @Inject constructor(
     private val popularSource: PopularMovieFlowSource,
     private val upcomingSource: UpcomingMovieFlowSource,
     private val streamSource: StreamProviderMovieFlowSource,
-    private val topRatedSource: TopRatedFlowSource
+    private val topRatedSource: TopRatedFlowSource,
+    private val collectionSource: CollectionMovieFlowSource,
 ) : DiscoverPresenter.HomeContentLists {
 
     override val contents: DiscoverContentFlows
@@ -32,6 +44,7 @@ class DiscoverContentListsImpl @Inject constructor(
             horrorContent = popularSource.flow.toContentFlow(key = MovieGenre.HORROR),
             warContent = popularSource.flow.toContentFlow(key = MovieGenre.WAR),
             netflixContent = streamSource.flow.toContentFlow(key = StreamerProvider.NETFLIX),
+            harryPotterContent = collectionSource.flow.toContentFlow(key = HARRY_POTTER),
             upcomingContent = upcomingSource.flow,
             topRatedContent = topRatedSource.flow,
         )
@@ -44,14 +57,15 @@ class DiscoverContentListsImpl @Inject constructor(
 
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-            is DiscoverContentType.Trending -> trendingSource.getTrending(contentType.window)
-            DiscoverContentType.Popular -> popularSource.getPopular()
-            DiscoverContentType.Upcoming -> upcomingSource.getUpComing()
-            DiscoverContentType.TopRated -> topRatedSource.getTopRated()
-            DiscoverContentType.Action -> popularSource.getPopular(MovieGenre.ACTION)
-            DiscoverContentType.Horror -> popularSource.getPopular(MovieGenre.HORROR)
-            DiscoverContentType.Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
-            DiscoverContentType.War -> popularSource.getPopular(MovieGenre.WAR)
+            is Trending -> trendingSource.getTrending(contentType.window)
+            Popular -> popularSource.getPopular()
+            Upcoming -> upcomingSource.getUpComing()
+            TopRated -> topRatedSource.getTopRated()
+            Action -> popularSource.getPopular(MovieGenre.ACTION)
+            Horror -> popularSource.getPopular(MovieGenre.HORROR)
+            Netflix -> streamSource.fetchProviderMovies(StreamerProvider.NETFLIX)
+            War -> popularSource.getPopular(MovieGenre.WAR)
+            HarryPotterCollection -> collectionSource.getCollection(HARRY_POTTER)
         }
     }
 }
