@@ -53,22 +53,42 @@ class DiscoverContentListsImpl @Inject constructor(
                     feedMap[DiscoverSections.Trending] =
                         DiscoverTrending(contentType.window, sourceContent.items)
                 }
-                feedState.update { it.copy(section = feedMap.toMap()) }
+                updateSorted()
             }
 
-            Popular -> popularSource.get().updateMapState(DiscoverSections.Popular)
-            Upcoming -> upcomingSource.get().updateMapState(DiscoverSections.Upcoming)
-            TopRated -> topRatedSource.get().updateMapState(DiscoverSections.TopRated)
-            Action -> popularSource.get(MovieGenre.ACTION).updateMapState(DiscoverSections.Action)
-            Horror -> popularSource.get(MovieGenre.HORROR).updateMapState(DiscoverSections.Horror)
-            Netflix -> streamSource.get(StreamerProvider.NETFLIX).updateMapState(DiscoverSections.Netflix)
-            War -> popularSource.get(MovieGenre.WAR).updateMapState(DiscoverSections.War)
-            HarryPotterCollection -> collectionSource.get(HARRY_POTTER).updateMapState(DiscoverSections.HarryPotter)
+            Popular -> popularSource.get()
+                .update(section = DiscoverSections.Popular)
+
+            Upcoming -> upcomingSource.get()
+                .update(section = DiscoverSections.Upcoming)
+
+            TopRated -> topRatedSource.get()
+                .update(section = DiscoverSections.TopRated)
+
+            Action -> popularSource.get(MovieGenre.ACTION)
+                .update(section = DiscoverSections.Action)
+
+            Horror -> popularSource.get(MovieGenre.HORROR)
+                .update(section = DiscoverSections.Horror)
+
+            Netflix -> streamSource.get(StreamerProvider.NETFLIX)
+                .update(section = DiscoverSections.Netflix)
+
+            War -> popularSource.get(MovieGenre.WAR)
+                .update(section = DiscoverSections.War)
+
+            HarryPotterCollection -> collectionSource.get(HARRY_POTTER)
+                .update(section = DiscoverSections.HarryPotter)
         }
     }
 
-    private fun DiscoverContent.updateMapState(sections: DiscoverSections) {
-        feedMap.putIfAbsent(sections, this)
-        feedState.update { it.copy(section = feedMap.toMap()) }
+    private fun DiscoverContent.update(section: DiscoverSections) {
+        feedMap.putIfAbsent(section, this)
+        updateSorted()
+    }
+
+    private fun updateSorted() {
+        val sortedMap = feedMap.toSortedMap(compareBy { it.order })
+        feedState.update { it.copy(section = sortedMap) }
     }
 }
