@@ -1,22 +1,20 @@
-package dev.bruno.wheretowatch.services.discover
+package dev.bruno.wheretowatch.services.streamproviders
 
 import coil.intercept.Interceptor
 import coil.request.ImageResult
 import coil.size.Dimension
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.services.images.ImageUrlResolver
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class)
-class DiscoverImageInterceptor @Inject constructor(
+class StreamProviderImageInterceptor @Inject constructor(
     private val urlResolver: ImageUrlResolver,
 ) : Interceptor {
-
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val rq = when (val value = chain.request.data) {
-            is DiscoveryImageModel -> {
+            is StreamProviderImageModel -> {
                 chain.request.newBuilder()
                     .data(buildTrendUrl(value, chain.size.width))
                     .build()
@@ -28,16 +26,12 @@ class DiscoverImageInterceptor @Inject constructor(
         return chain.proceed(rq)
     }
 
-    private fun buildTrendUrl(model: DiscoveryImageModel, width: Dimension): String {
-        val path = when (model.type) {
-            ImageType.Backdrop -> model.backdropPath
-            ImageType.Poster -> model.posterPath
-            else -> throw IllegalArgumentException("Not supported image type: ${model.type} for Card")
-        }
+
+    private fun buildTrendUrl(model: StreamProviderImageModel, width: Dimension): String {
 
         return urlResolver.resolve(
             type = model.type,
-            path = path ?: "",
+            path = model.logoPath,
             width = width
         )
     }

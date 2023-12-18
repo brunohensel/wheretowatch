@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.collectAsRetainedState
@@ -15,10 +16,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.discover.TrendWindow
+import dev.bruno.wheretowatch.services.model.StreamProvider
+import dev.bruno.wheretowatch.services.streamproviders.StreamProviderSupplier
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
+import okhttp3.internal.immutableListOf
 
 class DiscoverPresenter @AssistedInject constructor(
     private val homeContentLists: HomeContentLists,
+    private val streamProviders: StreamProviderSupplier,
     @Assisted private val navigator: Navigator,
 ) : Presenter<DiscoverScreen.State> {
 
@@ -27,6 +33,10 @@ class DiscoverPresenter @AssistedInject constructor(
 
         var trendingWindow by rememberRetained { mutableStateOf(TrendWindow.DAY) }
         val discoverFeed by homeContentLists.feedFlow.collectAsRetainedState(initial = DiscoverFeed())
+        val providers by produceState(initialValue = immutableListOf<StreamProvider>()) {
+            val supplied = streamProviders.get()
+            value = supplied
+        }
 
         LaunchedEffect(key1 = trendingWindow) {
             homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
@@ -44,6 +54,7 @@ class DiscoverPresenter @AssistedInject constructor(
         }
 
         return DiscoverScreen.State(
+            providers = providers.toImmutableList(),
             discoverFeed = discoverFeed,
         ) { event ->
             when (event) {

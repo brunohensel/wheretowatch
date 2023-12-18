@@ -44,6 +44,7 @@ fun WhereToWatchCard(
                 onClick = onClick,
             )
         }
+        else -> throw IllegalArgumentException("Not supported image type: $type for Card")
     }
 }
 

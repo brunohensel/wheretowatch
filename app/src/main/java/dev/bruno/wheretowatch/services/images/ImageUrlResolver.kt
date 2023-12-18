@@ -16,7 +16,14 @@ class ImageUrlResolver @Inject constructor(
         return when (type) {
             ImageType.Backdrop -> resolveBackdropUrl(width, path)
             ImageType.Poster -> resolvePosterUrl(width, path)
+            ImageType.Logo -> resolveLogoUrl(width, path)
         }
+    }
+
+    private fun resolveLogoUrl(width: Dimension.Pixels, path: String): String {
+        val imageConfig = imageConfigSupplier.get()
+        val bestSize = pickBestSize(imageConfig.logoSizes, width.px)
+        return "${imageConfig.baseUrl}$bestSize$path"
     }
 
     private fun resolveBackdropUrl(width: Dimension.Pixels, path: String): String {
