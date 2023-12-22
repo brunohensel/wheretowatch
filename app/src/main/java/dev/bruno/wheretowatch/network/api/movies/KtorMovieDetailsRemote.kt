@@ -22,7 +22,7 @@ class KtorMovieDetailsRemote @Inject constructor(
     private fun MovieDetailsDto.toMovieDetails(): MovieDetails {
         return MovieDetails(
             movieId = this.movieId,
-            homePage = this.homePage,
+            homePage = this.homepage,
             budget = this.budget,
             revenue = this.revenue,
             runtime = this.runtime,

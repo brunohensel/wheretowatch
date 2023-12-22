@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class MovieDetailsDto(
     @SerialName("id")
     val movieId: Int = Int.MIN_VALUE,
-    val homePage: String = "",
+    val homepage: String = "",
     val budget: Long = 0L,
     val revenue: Long = 0L,
     val runtime: Int = 0,

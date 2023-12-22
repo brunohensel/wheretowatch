@@ -105,7 +105,6 @@ fun DiscoverContent(
 
                                     HomeListHeader(
                                         headerTitle = "Popular Movies",
-                                        modifier = Modifier,
                                         alignment = Alignment.CenterVertically,
                                     )
 
@@ -144,6 +143,7 @@ fun DiscoverContent(
                                 HorizontalParallaxCarousel(
                                     items = trendContent.items,
                                     headerTitle = "Trending Movies",
+                                    onClick = { },
                                     aspectRatio = LandscapeRatio,
                                     rightSideContent = {
                                         TrendingToggle(
@@ -162,6 +162,7 @@ fun DiscoverContent(
                             item(key = "Harry Potter Items") {
                                 HorizontalParallaxCarousel(
                                     items = content.items,
+                                    onClick = { id -> state.onEvent(Event.OnMovieClicked(id)) },
                                     headerTitle = "Harry Potter Collection",
                                     aspectRatio = LandscapeRatio,
                                 )
@@ -178,7 +179,7 @@ fun DiscoverContent(
                                             model = item,
                                             type = ImageType.Poster,
                                             title = item.title,
-                                            onClick = { },
+                                            onClick = { state.onEvent(Event.OnMovieClicked(item.id)) },
                                             modifier = Modifier
                                                 .animateItemPlacement()
                                                 .width(150.dp) // TODO make it dynamic
@@ -191,7 +192,7 @@ fun DiscoverContent(
                     }
                 }
 
-                item {
+                item(key = "bottomSpacer") {
                     Spacer(Modifier.height(8.dp))
                 }
             }

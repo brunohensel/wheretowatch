@@ -73,6 +73,7 @@ fun HorizontalParallaxCarousel(
     items: ImmutableList<DiscoverMovieItem>,
     headerTitle: String,
     aspectRatio: Float,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     rightSideContent: (@Composable () -> Unit)? = null,
 ) {
@@ -103,7 +104,7 @@ fun HorizontalParallaxCarousel(
                         model = item,
                         type = ImageType.Backdrop,
                         title = item.title,
-                        onClick = { },
+                        onClick = { onClick(item.id) },
                         alignment = remember {
                             ParallaxAlignment(
                                 horizontalBias = {
