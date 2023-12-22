@@ -58,6 +58,7 @@ data object DiscoverScreen : Screen {
 
     sealed interface Event : CircuitUiEvent {
         data class ChangeTrendWindow(val value: TrendWindow) : Event
+        data class OnMovieClicked(val movieId: Int) : Event
     }
 }
 
@@ -117,6 +118,7 @@ fun DiscoverContent(
                                         items = content.items,
                                         pagerState = pagerState,
                                         aspectRatio = LandscapeRatio,
+                                        onClick = { id -> state.onEvent(Event.OnMovieClicked(id)) }
                                     )
 
                                     val coroutineScope = rememberCoroutineScope()

@@ -14,6 +14,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
+import dev.bruno.wheretowatch.features.movies.MovieDetailScreen
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.coroutines.flow.Flow
 
@@ -47,7 +49,8 @@ class DiscoverPresenter @AssistedInject constructor(
             discoverFeed = discoverFeed,
         ) { event ->
             when (event) {
-                is DiscoverScreen.Event.ChangeTrendWindow -> trendingWindow = event.value
+                is Event.ChangeTrendWindow -> trendingWindow = event.value
+                is Event.OnMovieClicked -> navigator.goTo(MovieDetailScreen(event.movieId))
             }
         }
     }
