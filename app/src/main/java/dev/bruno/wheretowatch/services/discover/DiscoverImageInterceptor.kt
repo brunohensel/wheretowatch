@@ -32,7 +32,6 @@ class DiscoverImageInterceptor @Inject constructor(
         val path = when (model.type) {
             ImageType.Backdrop -> model.backdropPath
             ImageType.Poster -> model.posterPath
-            else -> throw IllegalArgumentException("Not supported image type: ${model.type} for Card")
         }
 
         return urlResolver.resolve(
@@ -41,4 +40,5 @@ class DiscoverImageInterceptor @Inject constructor(
             width = width
         )
     }
+
 }

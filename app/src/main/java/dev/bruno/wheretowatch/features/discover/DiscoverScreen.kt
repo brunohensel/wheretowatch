@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,22 +23,17 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -52,8 +45,6 @@ import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
 import dev.bruno.wheretowatch.services.discover.TrendWindow
-import dev.bruno.wheretowatch.services.model.StreamProvider
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -61,7 +52,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data object DiscoverScreen : Screen {
     data class State(
-        val providers: ImmutableList<StreamProvider>,
         val discoverFeed: DiscoverFeed,
         val onEvent: (Event) -> Unit,
     ) : CircuitUiState
@@ -83,7 +73,6 @@ fun DiscoverContent(
 ) {
 
     val feed = state.discoverFeed
-    val providers = state.providers
 
     Scaffold(
         modifier = modifier,
@@ -105,15 +94,6 @@ fun DiscoverContent(
                         )
                     }
             ) {
-
-                item(key = "Filter header") {
-                    ProvidersBar(
-                        providers = providers,
-                        onClicked = {},
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Spacer(Modifier.height(8.dp))
-                }
 
                 for ((key, content) in feed.section) {
                     when (key) {
@@ -266,54 +246,6 @@ private fun TrendingToggle(
             }
         }
     }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun ProvidersBar(
-    providers: ImmutableList<StreamProvider>,
-    onClicked: (Pair<Int, Boolean>) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    FlowRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-        maxItemsInEachRow = 4,
-    ) {
-        providers.forEach { provider ->
-            ProviderChip(provider, onClicked, modifier = Modifier.width(IntrinsicSize.Min))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ProviderChip(
-    provider: StreamProvider,
-    onSelected: (Pair<Int, Boolean>) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var selected by remember { mutableStateOf(false) }
-
-    FilterChip(
-        modifier = modifier.padding(end = 8.dp),
-        selected = selected,
-        onClick = {
-            selected = !selected
-            onSelected(provider.id to selected)
-        },
-        label = {
-            Text(
-                text = provider.name,
-                style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 8.dp)
-            )
-        }
-    )
 }
 
 // TODO extract to resources
