@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS movieAndDetail (
+movieId INTEGER AS kotlin.Int NOT NULL,
+homePage TEXT NOT NULL,
+budget INTEGER NOT NULL,
+revenue INTEGER NOT NULL,
+runtime INTEGER AS kotlin.Int NOT NULL,
+tagline TEXT NOT NULL,
+collectionId INTEGER AS kotlin.Int,
+FOREIGN KEY (movieId) REFERENCES movieEntity(id),
+UNIQUE(movieId) ON CONFLICT REPLACE
+);
+
+getMovieDetails:
+SELECT * FROM movieAndDetail
+INNER JOIN movieEntity ON movieAndDetail.movieId = movieEntity.id
+WHERE movieAndDetail.movieId = :movieId
+;
+
+insertMovieDetail:
+INSERT OR IGNORE INTO movieAndDetail(
+movieId,
+homePage,
+budget,
+revenue,
+runtime,
+tagline,
+collectionId
+) VALUES ?
+;
