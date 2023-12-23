@@ -31,17 +31,17 @@ class DiscoverPresenter @AssistedInject constructor(
         val discoverFeed by homeContentLists.feedFlow.collectAsRetainedState(initial = DiscoverFeed())
 
         LaunchedEffect(key1 = trendingWindow) {
-            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
+//            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
         }
         // TODO get content concurrently?
         LaunchedEffect(key1 = Unit) {
             homeContentLists.getContent(DiscoverContentType.Popular)
             homeContentLists.getContent(DiscoverContentType.Action)
             homeContentLists.getContent(DiscoverContentType.Horror)
-            homeContentLists.getContent(DiscoverContentType.Upcoming)
-            homeContentLists.getContent(DiscoverContentType.TopRated)
+//            homeContentLists.getContent(DiscoverContentType.Upcoming)
+//            homeContentLists.getContent(DiscoverContentType.TopRated)
             homeContentLists.getContent(DiscoverContentType.War)
-            homeContentLists.getContent(DiscoverContentType.Netflix)
+//            homeContentLists.getContent(DiscoverContentType.Netflix)
             homeContentLists.getContent(DiscoverContentType.HarryPotterCollection)
         }
 
