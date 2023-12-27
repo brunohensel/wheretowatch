@@ -117,6 +117,8 @@ fun MovieDetailContent(
                         val revenue = "%,d".format(movie.revenue)
                         InfoRow(rowTitle = "Revenue", rowInfo = revenue)
 
+                        InfoRow(rowTitle = "Duration", rowInfo = movie.runtime.asHumanRuntime())
+
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             style = MaterialTheme.typography.labelLarge,
@@ -248,4 +250,10 @@ private fun UserScore(
             )
         )
     }
+}
+
+private fun Int.asHumanRuntime(): String {
+    val hours = this / 60
+    val min = this % 60
+    return "${hours}h${min}min"
 }
