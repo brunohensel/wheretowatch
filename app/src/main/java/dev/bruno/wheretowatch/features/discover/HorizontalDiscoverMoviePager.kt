@@ -32,6 +32,7 @@ fun LazyItemScope.HorizontalHomeMoviePager(
     pagerState: PagerState,
     aspectRatio: Float,
     modifier: Modifier = Modifier,
+    onClick: (Int) -> Unit,
 ) {
 
     HorizontalPager(
@@ -44,7 +45,7 @@ fun LazyItemScope.HorizontalHomeMoviePager(
             model = items[page],
             type = ImageType.Backdrop,
             title = items[page].title,
-            onClick = { /*TODO*/ },
+            onClick = { onClick(items[page].id) },
             modifier = Modifier
                 .graphicsLayer {
                     // Calculate the absolute offset for the current page from the

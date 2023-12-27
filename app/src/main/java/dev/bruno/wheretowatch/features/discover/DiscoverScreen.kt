@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -19,6 +21,8 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,7 +47,8 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
-import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.ChangeTrendWindow
+import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.OnMovieClicked
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -58,13 +63,14 @@ data object DiscoverScreen : Screen {
 
     sealed interface Event : CircuitUiEvent {
         data class ChangeTrendWindow(val value: TrendWindow) : Event
+        data class OnMovieClicked(val movieId: Int) : Event
     }
 }
 
 private const val LandscapeRatio = 16 / 11f
 private const val PortraitRatio = 2 / 3f
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(DiscoverScreen::class, AppScope::class)
 @Composable
 fun DiscoverContent(
@@ -82,11 +88,14 @@ fun DiscoverContent(
             )
         },
     ) { paddingValues ->
-        Box {
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
             LazyColumn(
-                contentPadding = paddingValues,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxHeight()
                     .composed {
                         windowInsetsPadding(
                             WindowInsets.systemBars
@@ -95,104 +104,117 @@ fun DiscoverContent(
                     }
             ) {
 
-                for ((key, content) in feed.section) {
-                    when (key) {
-                        DiscoverSections.Popular -> {
-                            item(key = "popular Items") {
-                                if (content.items.isNotEmpty()) {
-                                    Spacer(Modifier.height(8.dp))
-
-                                    HomeListHeader(
-                                        headerTitle = "Popular Movies",
-                                        modifier = Modifier,
-                                        alignment = Alignment.CenterVertically,
-                                    )
-
-                                    val pagerState =
-                                        rememberPagerState(pageCount = { content.items.size })
-                                    HorizontalHomeMoviePager(
-                                        modifier = Modifier
-                                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                                            .clip(MaterialTheme.shapes.large),
-                                        items = content.items,
-                                        pagerState = pagerState,
-                                        aspectRatio = LandscapeRatio,
-                                    )
-
-                                    val coroutineScope = rememberCoroutineScope()
-                                    HomeMoviePagerIndicator(
-                                        pagerState = pagerState,
-                                        modifier = Modifier
-                                            .height(24.dp)
-                                            .padding(horizontal = 16.dp)
-                                            .fillMaxWidth()
-                                            .align(Alignment.BottomCenter),
-                                        horizontalArrangement = Arrangement.Start,
-                                        onClick = { page ->
-                                            coroutineScope.launch { pagerState.scrollToPage(page) }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-
-                        DiscoverSections.Trending -> {
-                            val trendContent = content as DiscoverTrending
-                            item(key = "trending Items") {
-                                HorizontalParallaxCarousel(
-                                    items = trendContent.items,
-                                    headerTitle = "Trending Movies",
-                                    aspectRatio = LandscapeRatio,
-                                    rightSideContent = {
-                                        TrendingToggle(
-                                            trendWindow = trendContent.trendWindow,
-                                            onChange = { state.onEvent(Event.ChangeTrendWindow(it)) },
-                                            choices = TrendWindow.entries,
-                                            modifier = Modifier
-                                                .width(IntrinsicSize.Max),
-                                        )
-                                    },
-                                )
-                            }
-                        }
-
-                        DiscoverSections.HarryPotter -> {
-                            item(key = "Harry Potter Items") {
-                                HorizontalParallaxCarousel(
-                                    items = content.items,
-                                    headerTitle = "Harry Potter Collection",
-                                    aspectRatio = LandscapeRatio,
-                                )
-                            }
-                        }
-
-                        else -> {
-                            item(key = "$key") {
-                                HorizontalCarousel(
-                                    items = feed.section[key]?.items ?: persistentListOf(),
-                                    headerTitle = "$key",
-                                    carouselItemContent = { item ->
-                                        WhereToWatchCard(
-                                            model = item,
-                                            type = ImageType.Poster,
-                                            title = item.title,
-                                            onClick = { },
-                                            modifier = Modifier
-                                                .animateItemPlacement()
-                                                .width(150.dp) // TODO make it dynamic
-                                                .aspectRatio(PortraitRatio)
-                                        )
-                                    },
-                                )
-                            }
-                        }
-                    }
+                items(
+                    items = feed.section.keys.toList(),
+                    key = { key -> key.order },
+                ) { sectionKey ->
+                    FeedSections(
+                        sectionKey = sectionKey,
+                        contentMap = feed.section,
+                        onMovieClick = { id -> state.onEvent(OnMovieClicked(id)) },
+                        onTrendWindowClick = { window -> state.onEvent(ChangeTrendWindow(window)) },
+                    )
                 }
 
-                item {
+                item(key = "bottomSpacer") {
                     Spacer(Modifier.height(8.dp))
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun LazyItemScope.FeedSections(
+    sectionKey: DiscoverSections,
+    contentMap: Map<DiscoverSections, DiscoverContent>,
+    onMovieClick: (Int) -> Unit,
+    onTrendWindowClick: (TrendWindow) -> Unit,
+) {
+    val content = contentMap.getOrDefault(sectionKey, null)
+    val items = content?.items ?: persistentListOf()
+    when (sectionKey) {
+        DiscoverSections.HarryPotter -> {
+            HorizontalParallaxCarousel(
+                items = items,
+                onClick = onMovieClick,
+                headerTitle = "Harry Potter Collection",
+                aspectRatio = LandscapeRatio,
+            )
+        }
+
+        DiscoverSections.Popular -> {
+            if (items.isNotEmpty()) {
+
+                HomeListHeader(
+                    headerTitle = "Popular Movies",
+                    alignment = Alignment.CenterVertically,
+                )
+
+                val pagerState =
+                    rememberPagerState(pageCount = { items.size })
+                HorizontalHomeMoviePager(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clip(MaterialTheme.shapes.large),
+                    items = items,
+                    pagerState = pagerState,
+                    aspectRatio = LandscapeRatio,
+                    onClick = onMovieClick
+                )
+
+                val coroutineScope = rememberCoroutineScope()
+                HomeMoviePagerIndicator(
+                    pagerState = pagerState,
+                    modifier = Modifier
+                        .height(24.dp)
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    onClick = { page ->
+                        coroutineScope.launch { pagerState.scrollToPage(page) }
+                    }
+                )
+            }
+        }
+
+        DiscoverSections.Trending -> {
+            val trendContent = content as DiscoverTrending
+            HorizontalParallaxCarousel(
+                items = trendContent.items,
+                headerTitle = "Trending Movies",
+                onClick = { },
+                aspectRatio = LandscapeRatio,
+                rightSideContent = {
+                    TrendingToggle(
+                        trendWindow = trendContent.trendWindow,
+                        onChange = onTrendWindowClick,
+                        choices = TrendWindow.entries,
+                        modifier = Modifier
+                            .width(IntrinsicSize.Max),
+                    )
+                },
+            )
+        }
+
+        else -> {
+            HorizontalCarousel(
+                items = items,
+                headerTitle = "$sectionKey",
+                carouselItemContent = { item ->
+                    WhereToWatchCard(
+                        model = item,
+                        type = ImageType.Poster,
+                        title = item.title,
+                        onClick = { onMovieClick(item.id) },
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .width(150.dp) // TODO make it dynamic
+                            .aspectRatio(PortraitRatio)
+                    )
+                },
+            )
         }
     }
 }

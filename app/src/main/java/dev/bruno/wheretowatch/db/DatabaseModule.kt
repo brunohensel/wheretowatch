@@ -9,6 +9,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dev.bruno.wheretowatch.GenreEntity
+import dev.bruno.wheretowatch.MovieAndDetail
 import dev.bruno.wheretowatch.MovieAndGenre
 import dev.bruno.wheretowatch.MovieEntity
 import dev.bruno.wheretowatch.PopularMovieEntity
@@ -58,6 +59,11 @@ object DatabaseModule {
                 genreIdAdapter = IntColumnAdapter,
                 movieIdAdapter = IntColumnAdapter,
             ),
+            movieAndDetailAdapter = MovieAndDetail.Adapter(
+                movieIdAdapter = IntColumnAdapter,
+                runtimeAdapter = IntColumnAdapter,
+                collectionIdAdapter = IntColumnAdapter,
+            )
         )
     }
 }
