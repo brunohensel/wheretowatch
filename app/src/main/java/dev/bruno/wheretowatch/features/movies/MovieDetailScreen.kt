@@ -140,6 +140,23 @@ fun MovieDetailContent(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        style = MaterialTheme.typography.labelLarge,
+                        text = "Overview"
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        style = MaterialTheme.typography.bodyMedium,
+                        text = movie.overview
+                    )
+                }
             }
         }
     }
