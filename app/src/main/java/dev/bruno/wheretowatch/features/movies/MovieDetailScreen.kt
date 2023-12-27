@@ -59,7 +59,7 @@ fun MovieDetailContent(
     Scaffold(modifier = modifier) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
             val movie = state.movie
-            item(key = "backdropBox") {
+            item(key = "HeaderBackdropBox") {
                 Box {
                     AndroidAsyncImage(
                         model = movie.buildImgModel(ImageType.Backdrop),
@@ -93,78 +93,93 @@ fun MovieDetailContent(
                 }
             }
 
-            item(key = "poster") {
-                Spacer(modifier = Modifier.height(8.dp))
+            item(key = "DetailInfoHeader") {
+                DetailInfoHeader(movie = movie)
+            }
 
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                ) {
-                    AndroidAsyncImage(
-                        model = movie.buildImgModel(ImageType.Poster),
-                        contentDescription = "Movie detail poster image",
-                        modifier = Modifier
-                            .width(150.dp)
-                            .aspectRatio(2f / 3)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Column {
-                        InfoRow(
-                            rowTitle = "Release date",
-                            rowInfo = movie.releaseDate?.toString() ?: ""
-                        )
-                        val budget = "%,d".format(movie.budget)
-                        InfoRow(rowTitle = "Budget", rowInfo = budget)
-
-                        val revenue = "%,d".format(movie.revenue)
-                        InfoRow(rowTitle = "Revenue", rowInfo = revenue)
-
-                        InfoRow(rowTitle = "Duration", rowInfo = movie.runtime.asHumanRuntime())
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            style = MaterialTheme.typography.labelLarge,
-                            text = "Tmdb Rating",
-                        )
-                        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-                            Row {
-                                Text(
-                                    style = MaterialTheme.typography.labelLarge,
-                                    text = "User score :",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterVertically)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                UserScore(movie.voteAverage)
-                                Spacer(modifier = Modifier.width(8.dp))
-                            }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            val voteCount = "%,d".format(movie.voteCount)
-                            InfoRow(rowTitle = "Vote count", rowInfo = voteCount)
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text(
-                        style = MaterialTheme.typography.labelLarge,
-                        text = "Overview"
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        style = MaterialTheme.typography.bodyMedium,
-                        text = movie.overview
-                    )
-                }
+            item(key = "DetailOverview") {
+                DetailOverview(movie = movie)
             }
         }
     }
+}
+
+@Composable
+private fun DetailOverview(movie: MovieDetailsItem) {
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            style = MaterialTheme.typography.labelLarge,
+            text = "Overview"
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            text = movie.overview
+        )
+    }
+}
+
+@Composable
+private fun DetailInfoHeader(
+    movie: MovieDetailsItem,
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+    ) {
+        AndroidAsyncImage(
+            model = movie.buildImgModel(ImageType.Poster),
+            contentDescription = "Movie detail poster image",
+            modifier = Modifier
+                .width(150.dp)
+                .aspectRatio(2f / 3)
+                .clip(RoundedCornerShape(8.dp))
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            InfoRow(
+                rowTitle = "Release date",
+                rowInfo = movie.releaseDate?.toString() ?: ""
+            )
+            InfoRow(rowTitle = "Budget", rowInfo = movie.budget.withThousedSeparator())
+
+            InfoRow(rowTitle = "Revenue", rowInfo = movie.revenue.withThousedSeparator())
+
+            InfoRow(rowTitle = "Duration", rowInfo = movie.runtime.asHumanRuntime())
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                style = MaterialTheme.typography.labelLarge,
+                text = "Tmdb Rating",
+            )
+            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+                Row {
+                    Text(
+                        style = MaterialTheme.typography.labelLarge,
+                        text = "User score :",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    UserScore(movie.voteAverage)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                InfoRow(rowTitle = "Vote count", rowInfo = movie.voteCount.withThousedSeparator())
+            }
+        }
+    }
+}
+
+private fun Number.withThousedSeparator(): String {
+    return "%,d".format(this)
 }
 
 @Composable
