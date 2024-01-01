@@ -4,8 +4,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.services.model.DiscoverContent
 import dev.bruno.wheretowatch.services.model.Movie
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -13,7 +11,7 @@ class DiscoverContentSupplierImpl @Inject constructor(
     private val discoverMovieRemote: DiscoverMovieRemote,
     private val discoverContentStore: DiscoverContentStore,
 ) : DiscoverContentSupplier {
-    override suspend fun get(category: DiscoverCategory): ImmutableList<DiscoverContent> {
+    override suspend fun get(category: DiscoverCategory): List<DiscoverContent> {
         return when (category) {
             is DiscoverCategory.Collection -> discoverContentStore.getCollectionContent(category.collection)
             is DiscoverCategory.Popular -> discoverContentStore.getPopularContent(category)
@@ -34,5 +32,5 @@ class DiscoverContentSupplierImpl @Inject constructor(
             posterPath = dto.posterPath,
             backdropPath = dto.backdropPath,
         )
-    }.toImmutableList()
+    }
 }
