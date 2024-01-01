@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
-import dev.bruno.wheretowatch.services.model.DiscoverContent as DiscoverContentModel
 
 @ContributesBinding(AppScope::class)
 class DiscoverContentListsImpl @Inject constructor(
@@ -109,22 +108,6 @@ class DiscoverContentListsImpl @Inject constructor(
                     buildImgModel = item.curried()
                 )
             }.toImmutableList()
-
-        return ContentList(items)
-    }
-
-    private fun List<DiscoverContentModel>.asDiscoverMovieItem(): DiscoverContent {
-        val items = this.map { item ->
-            DiscoverMovieItem(
-                id = item.id,
-                title = item.title,
-                originalTitle = item.originalTitle,
-                popularity = item.popularity,
-                voteAverage = item.voteAverage,
-                voteCount = item.voteCount,
-                buildImgModel = item.curried()
-            )
-        }.toImmutableList()
 
         return ContentList(items)
     }
