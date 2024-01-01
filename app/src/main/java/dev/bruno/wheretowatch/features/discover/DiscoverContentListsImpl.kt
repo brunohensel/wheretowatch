@@ -21,7 +21,6 @@ import dev.bruno.wheretowatch.services.discover.MovieCollection
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -88,20 +87,33 @@ class DiscoverContentListsImpl @Inject constructor(
     private suspend fun getPopularMovieContent(
         genre: MovieGenre = MovieGenre.ALL,
     ): DiscoverContent {
-        return supplier
-            .get(DiscoverCategory.Popular(genre))
-            .asDiscoverMovieItem()
+        return getMovieFor(category = DiscoverCategory.Popular(genre))
     }
 
     private suspend fun getMovieCollectionContent(
         collection: MovieCollection,
     ): DiscoverContent {
-        return supplier
-            .get(DiscoverCategory.Collection(collection))
-            .asDiscoverMovieItem()
+        return getMovieFor(category = DiscoverCategory.Collection(collection))
     }
 
-    private fun ImmutableList<DiscoverContentModel>.asDiscoverMovieItem(): DiscoverContent {
+    private suspend fun getMovieFor(category: DiscoverCategory): DiscoverContent {
+        val items = supplier.get(category)
+            .map { item ->
+                DiscoverMovieItem(
+                    id = item.id,
+                    title = item.title,
+                    originalTitle = item.originalTitle,
+                    popularity = item.popularity,
+                    voteAverage = item.voteAverage,
+                    voteCount = item.voteCount,
+                    buildImgModel = item.curried()
+                )
+            }.toImmutableList()
+
+        return ContentList(items)
+    }
+
+    private fun List<DiscoverContentModel>.asDiscoverMovieItem(): DiscoverContent {
         val items = this.map { item ->
             DiscoverMovieItem(
                 id = item.id,
