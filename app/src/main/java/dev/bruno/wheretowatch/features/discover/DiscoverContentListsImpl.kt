@@ -11,13 +11,13 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Trending
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
-import dev.bruno.wheretowatch.features.discover.movies.CollectionMovieSource
 import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
 import dev.bruno.wheretowatch.features.discover.movies.TopRatedSource
 import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieSource
 import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
+import dev.bruno.wheretowatch.services.discover.MovieCollection
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
@@ -37,7 +37,6 @@ class DiscoverContentListsImpl @Inject constructor(
     private val upcomingSource: UpcomingMovieSource,
     private val streamSource: StreamProviderMovieSource,
     private val topRatedSource: TopRatedSource,
-    private val collectionSource: CollectionMovieSource,
     private val supplier: DiscoverContentSupplier,
 ) : DiscoverPresenter.HomeContentLists {
 
@@ -81,7 +80,7 @@ class DiscoverContentListsImpl @Inject constructor(
             War -> getPopularMovieContent(MovieGenre.WAR)
                 .update(section = DiscoverSections.War)
 
-            HarryPotterCollection -> collectionSource.get(HARRY_POTTER)
+            HarryPotterCollection -> getMovieCollectionContent(HARRY_POTTER)
                 .update(section = DiscoverSections.HarryPotter)
         }
     }
@@ -91,6 +90,14 @@ class DiscoverContentListsImpl @Inject constructor(
     ): DiscoverContent {
         return supplier
             .get(DiscoverCategory.Popular(genre))
+            .asDiscoverMovieItem()
+    }
+
+    private suspend fun getMovieCollectionContent(
+        collection: MovieCollection,
+    ): DiscoverContent {
+        return supplier
+            .get(DiscoverCategory.Collection(collection))
             .asDiscoverMovieItem()
     }
 
