@@ -15,7 +15,7 @@ ksp = "2.0.0-1.0.21"
 ktor = "2.3.11"
 jvmTarget = "11"
 junit = "4.13.2"
-lifecycle = "2.6.2"
+lifecycle = "2.7.0"
 sqldelight = "2.0.2"
 
 [libraries]
