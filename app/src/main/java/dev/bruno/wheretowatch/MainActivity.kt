@@ -49,8 +49,8 @@ class MainActivity @Inject constructor(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        val backstack = rememberSaveableBackStack { push(DiscoverScreen) }
-                        val circuitNav = rememberCircuitNavigator(backstack = backstack)
+                        val backstack = rememberSaveableBackStack(listOf(DiscoverScreen))
+                        val circuitNav = rememberCircuitNavigator(backStack = backstack)
                         Home(navigator = circuitNav, backstack = backstack)
                     }
                 }

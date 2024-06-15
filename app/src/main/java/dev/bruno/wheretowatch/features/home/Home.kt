@@ -77,7 +77,7 @@ fun Home(
     ) { paddingValues ->
         NavigableCircuitContent(
             navigator = navigator,
-            backstack = backstack,
+            backStack = backstack,
             modifier = Modifier
                 // this don't do anything since we are not setting top bar in this scaffold
                 // the bottom bar collapse when user scroll the feed, so we don't need to
