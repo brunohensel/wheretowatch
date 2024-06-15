@@ -14,6 +14,7 @@ interface AppComponent {
 
     val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
     val initializers: Set<@JvmSuppressWildcards Initializers>
+    fun getActivityComponentFactory(): ActivityComponent.Factory
 
     @Component.Factory
     interface Factory {

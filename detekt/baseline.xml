@@ -8,7 +8,6 @@
     <ID>NewLineAtEndOfFile:Annotations.kt$dev.bruno.wheretowatch.di.Annotations.kt</ID>
     <ID>NewLineAtEndOfFile:AppComponent.kt$dev.bruno.wheretowatch.di.AppComponent.kt</ID>
     <ID>NewLineAtEndOfFile:AppPreferences.kt$dev.bruno.wheretowatch.AppPreferences.kt</ID>
-    <ID>NewLineAtEndOfFile:CircuitModule.kt$dev.bruno.wheretowatch.di.CircuitModule.kt</ID>
     <ID>NewLineAtEndOfFile:Color.kt$dev.bruno.wheretowatch.ui.theme.Color.kt</ID>
     <ID>NewLineAtEndOfFile:CountriesRepository.kt$dev.bruno.wheretowatch.services.country.CountriesRepository.kt</ID>
     <ID>NewLineAtEndOfFile:CountriesRequest.kt$dev.bruno.wheretowatch.network.api.country.CountriesRequest.kt</ID>

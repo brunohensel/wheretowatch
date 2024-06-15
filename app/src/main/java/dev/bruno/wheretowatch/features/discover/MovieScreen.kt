@@ -38,42 +38,46 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.runtime.CircuitUiEvent
-import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
-import dev.bruno.wheretowatch.di.AppScope
+import androidx.navigation.NavHostController
+import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
-import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.ChangeTrendWindow
-import dev.bruno.wheretowatch.features.discover.DiscoverScreen.Event.OnMovieClicked
+import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event.ChangeTrendWindow
+import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event.OnMovieClicked
 import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data object DiscoverScreen : Screen {
-    data class State(
-        val discoverFeed: DiscoverFeed,
-        val onEvent: (Event) -> Unit,
-    ) : CircuitUiState
+data class MovieScreenState(
+    val discoverFeed: DiscoverFeed,
+    val onEvent: (Event) -> Unit,
+) {
 
-    sealed interface Event : CircuitUiEvent {
+    sealed interface Event {
         data class ChangeTrendWindow(val value: TrendWindow) : Event
         data class OnMovieClicked(val movieId: Int) : Event
     }
 }
 
+@Composable
+fun MovieScreen(
+    navController: NavHostController,
+    viewModel: MovieViewModel = viewModel(navController),
+) {
+    val state: MovieScreenState = viewModel.state()
+
+    MovieContentScreen(state)
+}
+
+
 private const val LandscapeRatio = 16 / 11f
 private const val PortraitRatio = 2 / 3f
 
 @OptIn(ExperimentalMaterial3Api::class)
-@CircuitInject(DiscoverScreen::class, AppScope::class)
 @Composable
-fun DiscoverContent(
-    state: DiscoverScreen.State,
+fun MovieContentScreen(
+    state: MovieScreenState,
     modifier: Modifier = Modifier,
 ) {
 
