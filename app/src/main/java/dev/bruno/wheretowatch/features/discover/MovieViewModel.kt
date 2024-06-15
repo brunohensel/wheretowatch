@@ -2,12 +2,12 @@ package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.slack.circuit.retained.collectAsRetainedState
-import com.slack.circuit.retained.rememberRetained
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.MovieDetail
 import dev.bruno.wheretowatch.di.ViewModelKey
@@ -27,8 +27,8 @@ class MovieViewModel @Inject constructor(
     @Composable
     fun state(): MovieScreenState {
 
-        var trendingWindow by rememberRetained { mutableStateOf(TrendWindow.DAY) }
-        val discoverFeed by homeContentLists.feedFlow.collectAsRetainedState(initial = DiscoverFeed())
+        var trendingWindow by rememberSaveable { mutableStateOf(TrendWindow.DAY) }
+        val discoverFeed by homeContentLists.feedFlow.collectAsState(initial = DiscoverFeed())
 
         LaunchedEffect(key1 = trendingWindow) {
 //            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))

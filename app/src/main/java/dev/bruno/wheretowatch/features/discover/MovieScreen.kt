@@ -39,7 +39,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.slack.circuit.runtime.CircuitUiEvent
 import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
@@ -55,7 +54,7 @@ data class MovieScreenState(
     val onEvent: (Event) -> Unit,
 ) {
 
-    sealed interface Event : CircuitUiEvent {
+    sealed interface Event {
         data class ChangeTrendWindow(val value: TrendWindow) : Event
         data class OnMovieClicked(val movieId: Int) : Event
     }

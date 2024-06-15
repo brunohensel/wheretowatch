@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.slack.circuit.foundation.Circuit
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.AUTO
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.DARK
@@ -27,7 +26,6 @@ import javax.inject.Inject
 @ContributesMultibinding(scope = AppScope::class, boundType = Activity::class)
 @ActivityKey(MainActivity::class)
 class MainActivity @Inject constructor(
-    private val circuit: Circuit,
     private val preferences: AppPreferences,
 ) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

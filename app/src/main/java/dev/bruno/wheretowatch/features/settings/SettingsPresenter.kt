@@ -5,32 +5,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.internal.rememberStableCoroutineScope
-import com.slack.circuit.runtime.presenter.Presenter
+import androidx.lifecycle.ViewModel
 import dev.bruno.wheretowatch.AppPreferences
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig
+import dev.bruno.wheretowatch.features.settings.SettingsScreen.State
 import dev.bruno.wheretowatch.services.country.CountriesSupplier
 import dev.bruno.wheretowatch.services.country.model.Country
-import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.features.settings.SettingsScreen.State
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@CircuitInject(SettingsScreen::class, AppScope::class)
 class SettingsPresenter @Inject constructor(
     private val preferences: AppPreferences,
     private val countriesSupplier: CountriesSupplier,
-) : Presenter<State> {
+) : ViewModel() {
 
     @Composable
-    override fun present(): State {
+    fun present(): State {
 
-        var defaultCountry by rememberRetained { mutableStateOf(Country("BR", "Brazil")) }
-        var state: State by rememberRetained { mutableStateOf(State.Loading) }
-        val scope = rememberStableCoroutineScope()
+        var defaultCountry by rememberSaveable { mutableStateOf(Country("BR", "Brazil")) }
+        var state: State by rememberSaveable { mutableStateOf(State.Loading) }
+        val scope = rememberCoroutineScope()
         val currentThemeConfig by preferences.themeConfig.collectAsState(initial = ThemeConfig.AUTO)
         val producedState by produceState(initialValue = state) {
             val countries = countriesSupplier.get()

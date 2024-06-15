@@ -35,21 +35,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.runtime.CircuitUiEvent
-import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
 import dev.bruno.wheretowatch.AppPreferences
 import dev.bruno.wheretowatch.services.country.model.Country
-import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.settings.SettingsScreen.Event.ThemeConfigSelected
 import dev.bruno.wheretowatch.ds.theme.WhereToWatchTheme
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data object SettingsScreen : Screen {
-    sealed interface State : CircuitUiState {
+data object SettingsScreen {
+    sealed interface State {
         data object Loading : State
 
         data class Success(
@@ -60,13 +53,12 @@ data object SettingsScreen : Screen {
         ) : State
     }
 
-    sealed interface Event : CircuitUiEvent {
+    sealed interface Event {
         data class NewCountrySelected(val index: Int) : Event
         data class ThemeConfigSelected(val newTheme: AppPreferences.ThemeConfig) : Event
     }
 }
 
-@CircuitInject(SettingsScreen::class, AppScope::class)
 @Composable
 internal fun SettingsContent(
     state: SettingsScreen.State,
