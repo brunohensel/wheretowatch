@@ -16,6 +16,7 @@ ktor = "2.3.11"
 jvmTarget = "17"
 junit = "4.13.2"
 lifecycle = "2.8.2"
+navigation = "2.8.0-beta03"
 sqldelight = "2.0.2"
 
 [libraries]
@@ -32,6 +33,7 @@ androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 anvil-annotations = { module = "com.squareup.anvil:annotations", version.ref = "anvil" }
 circuit-circuitx = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }

@@ -125,6 +125,7 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.circuit.circuitx)
     implementation(libs.circuit.foundation)
     implementation(libs.circuit.codegen.annotations)
