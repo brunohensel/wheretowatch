@@ -2,17 +2,16 @@
 agp = "8.2.2"
 androidx-activity = "1.9.0"
 androidx-core = "1.13.1"
-anvil = "2.4.9"
+anvil = "2.5.0-beta09"
 circuit = "0.17.1"
 coil = "2.5.0"
 compose-boom = "2024.06.00"
-compose-compiler = "1.5.5-dev-k1.9.21-163bb051fe5"
 dagger = "2.51.1"
 datastore = "1.1.1"
 detekt = "1.23.4"
-kotlin = "1.9.21"
+kotlin = "2.0.0"
 kotlin_datetime = "0.6.0"
-ksp = "1.9.21-1.0.15"
+ksp = "2.0.0-1.0.21"
 ktor = "2.3.11"
 jvmTarget = "11"
 junit = "4.13.2"
@@ -57,6 +56,7 @@ test-junit = { module = "junit:junit", version.ref = "junit" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

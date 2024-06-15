@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
@@ -78,8 +81,11 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    composeCompiler {
+        enableStrongSkippingMode = true
+    }
+    anvil {
+        useKsp(contributesAndFactoryGeneration = true)
     }
     packaging {
         resources {
@@ -94,6 +100,14 @@ android {
 sqldelight {
     databases {
         create("WhereToWatchDatabase")
+    }
+    tasks.withType<KaptGenerateStubsTask>().configureEach {
+        // TODO necessary until anvil supports something for K2 contribution merging
+        // TODO More at https://www.zacsweers.dev/preparing-for-k2/#anvil
+        compilerOptions {
+            progressiveMode.set(false)
+            languageVersion.set(KotlinVersion.KOTLIN_1_9)
+        }
     }
 }
 
