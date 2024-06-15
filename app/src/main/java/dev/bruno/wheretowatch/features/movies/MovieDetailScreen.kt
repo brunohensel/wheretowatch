@@ -35,25 +35,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
-import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.AndroidAsyncImage
 import dev.bruno.wheretowatch.ds.components.ImageType
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class MovieDetailScreen(val movieId: Int) : Screen {
-    data class State(
-        val movie: MovieDetailsItem,
-    ) : CircuitUiState
+data class MovieDetailState(val movie: MovieDetailsItem) {
+
+    companion object {
+        const val MOVIE_ID_KEY = "movie_id_key"
+    }
 }
 
 @Composable
-@CircuitInject(MovieDetailScreen::class, AppScope::class)
+fun MovieDetailScreen(
+    movieId: Int,
+    viewModel: MovieDetailViewModel = viewModel()
+) {
+    val state = viewModel.present()
+
+    MovieDetailContent(state)
+}
+
+@Composable
 fun MovieDetailContent(
-    state: MovieDetailScreen.State,
+    state: MovieDetailState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(modifier = modifier) { paddingValues ->

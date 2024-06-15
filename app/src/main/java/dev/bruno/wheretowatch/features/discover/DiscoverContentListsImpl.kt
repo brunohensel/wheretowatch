@@ -36,7 +36,7 @@ class DiscoverContentListsImpl @Inject constructor(
     private val streamSource: StreamProviderMovieSource,
     private val topRatedSource: TopRatedSource,
     private val supplier: DiscoverContentSupplier,
-) : DiscoverPresenter.HomeContentLists {
+) : MovieViewModel.HomeContentLists {
 
     private val feedMap = ConcurrentHashMap<DiscoverSections, DiscoverContent>()
     private val feedState = MutableStateFlow(DiscoverFeed(mapOf()))
