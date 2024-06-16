@@ -11,7 +11,8 @@ voteAverage REAL AS kotlin.Float NOT NULL,
 releaseDate TEXT AS kotlinx.datetime.LocalDate,
 posterPath TEXT,
 backdropPath TEXT,
-collectionId INTEGER AS kotlin.Int
+collectionId INTEGER AS kotlin.Int,
+streamProviders TEXT AS kotlin.collections.List<kotlin.Int>
 );
 
 insertMovie:
@@ -27,8 +28,10 @@ voteAverage,
 releaseDate,
 posterPath,
 backdropPath,
-collectionId
+collectionId,
+streamProviders
 ) VALUES (
+?,
 ?,
 ?,
 ?,
@@ -78,5 +81,6 @@ voteAverage = :voteAverage,
 releaseDate = :releaseData,
 posterPath = :posterPath,
 backdropPath = :backdropPath,
-collectionId = :collectionId
+collectionId = :collectionId,
+streamProviders = :providers
 WHERE id = id;

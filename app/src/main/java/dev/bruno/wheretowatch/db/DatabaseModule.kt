@@ -15,6 +15,7 @@ import dev.bruno.wheretowatch.MovieEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.db.columnadapters.GenresAdapter
 import dev.bruno.wheretowatch.db.columnadapters.LocalDateAdapter
+import dev.bruno.wheretowatch.db.columnadapters.StreamProvidersAdapter
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.di.ApplicationContext
 import dev.bruno.wheretowatch.di.SingleIn
@@ -47,6 +48,7 @@ object DatabaseModule {
                 genresAdapter = GenresAdapter,
                 voteCountAdapter = IntColumnAdapter,
                 collectionIdAdapter = IntColumnAdapter,
+                streamProvidersAdapter = StreamProvidersAdapter,
             ),
             genreEntityAdapter = GenreEntity.Adapter(
                 idAdapter = IntColumnAdapter,

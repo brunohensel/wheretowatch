@@ -21,7 +21,7 @@ class SqlDelightMovieCollectionDao @Inject constructor(
             .getMovieCollection(
                 collectionId = collection.id,
                 mapper = { id, title, overview, popularity, genres, originalTitle, voteCount,
-                           voteAverage, releaseDate, posterPath, backdropPath, collectionId ->
+                           voteAverage, releaseDate, posterPath, backdropPath, collectionId, providers ->
                     Movie(
                         id = id,
                         title = title,

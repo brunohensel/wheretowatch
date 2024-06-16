@@ -28,7 +28,7 @@ class SqlDelightMovieDao @Inject constructor(
             .getMovies(
                 limitedBy = 20,
                 mapper = { id, title, overview, popularity, genres, originalTitle, voteCount, voteAverage,
-                           releaseDate, posterPath, backdropPath, collectionId ->
+                           releaseDate, posterPath, backdropPath, collectionId, providers ->
                     Movie(
                         id = id,
                         title = title,
@@ -52,7 +52,7 @@ class SqlDelightMovieDao @Inject constructor(
             .getMoviesByGenre(
                 genreId = genreId,
                 mapper = { id, title, overview, popularity, genres, originalTitle, voteCount, voteAverage,
-                           releaseDate, posterPath, backdropPath, collectionId, _genreId, movieId ->
+                           releaseDate, posterPath, backdropPath, collectionId, providers, _genreId, movieId, ->
                     Movie(
                         id = id,
                         title = title,
