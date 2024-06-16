@@ -96,7 +96,7 @@ fun MovieContentScreen(
 
                 items(
                     items = feed.section.keys.toList(),
-                    key = { key -> key.order },
+                    key = { key -> key.ordinal },
                 ) { sectionKey ->
                     FeedSections(
                         sectionKey = sectionKey,

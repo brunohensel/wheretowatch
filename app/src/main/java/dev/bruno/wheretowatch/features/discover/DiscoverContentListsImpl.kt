@@ -99,7 +99,7 @@ class DiscoverContentListsImpl @Inject constructor(
     }
 
     private fun updateSorted() {
-        val sortedMap = feedMap.toSortedMap(compareBy { it.order })
+        val sortedMap = feedMap.toSortedMap(compareBy { it.ordinal })
         feedState.update { it.copy(section = sortedMap) }
     }
 }
