@@ -7,11 +7,9 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContentType.HarryPotterC
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Netflix
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
 import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
-import dev.bruno.wheretowatch.features.discover.movies.TopRatedSource
 import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
@@ -31,7 +29,6 @@ import javax.inject.Inject
 class DiscoverContentListsImpl @Inject constructor(
     private val upcomingSource: UpcomingMovieSource,
     private val streamSource: StreamProviderMovieSource,
-    private val topRatedSource: TopRatedSource,
     private val supplier: DiscoverContentSupplier,
 ) : MovieViewModel.HomeContentLists {
 
@@ -49,9 +46,6 @@ class DiscoverContentListsImpl @Inject constructor(
 
             Upcoming -> upcomingSource.get()
                 .update(section = DiscoverSections.Upcoming)
-
-            TopRated -> topRatedSource.get()
-                .update(section = DiscoverSections.TopRated)
 
             Action -> getPopularMovieContent(MovieGenre.ACTION)
                 .update(section = DiscoverSections.Action)

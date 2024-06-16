@@ -12,7 +12,6 @@ sealed class DiscoverSections(val order: Int) {
     data object Netflix : DiscoverSections(order = 6)
     data object HarryPotter : DiscoverSections(order = 8)
     data object Upcoming : DiscoverSections(order = 1)
-    data object TopRated : DiscoverSections(order = 2)
 }
 
 sealed interface DiscoverContent {

@@ -3,7 +3,6 @@ package dev.bruno.wheretowatch.services.discover
 sealed interface DiscoverCategory {
     data class Popular(val genre: MovieGenre) : DiscoverCategory
     data object Upcoming : DiscoverCategory
-    data object TopRated : DiscoverCategory
     data class Streaming(val provider: StreamerProvider) : DiscoverCategory
     data class Collection(val collection: MovieCollection) : DiscoverCategory
 }
