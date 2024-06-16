@@ -55,6 +55,8 @@ class SqlDelightMovieStreamDao @Inject constructor(
             }.also { moviesToBeReplaced.add(it) }
         }
 
+        useCase.insert(moviesToBeReplaced)
+
         db.movieAndProviderQueries
             .transaction {
                 for (m in moviesToBeReplaced) {
@@ -68,6 +70,5 @@ class SqlDelightMovieStreamDao @Inject constructor(
                 }
             }
 
-        useCase.insert(moviesToBeReplaced)
     }
 }
