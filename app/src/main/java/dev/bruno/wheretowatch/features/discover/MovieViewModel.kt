@@ -14,7 +14,7 @@ import dev.bruno.wheretowatch.di.ViewModelKey
 import dev.bruno.wheretowatch.di.ViewModelScope
 import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event
 import dev.bruno.wheretowatch.services.discover.TrendWindow
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @ContributesMultibinding(ViewModelScope::class)
@@ -28,7 +28,7 @@ class MovieViewModel @Inject constructor(
     fun state(): MovieScreenState {
 
         var trendingWindow by rememberSaveable { mutableStateOf(TrendWindow.DAY) }
-        val discoverFeed by homeContentLists.feedFlow.collectAsState(initial = DiscoverFeed())
+        val discoverFeed by homeContentLists.feedFlow.collectAsState()
 
         LaunchedEffect(key1 = trendingWindow) {
 //            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
@@ -56,7 +56,7 @@ class MovieViewModel @Inject constructor(
     }
 
     interface HomeContentLists {
-        val feedFlow: Flow<DiscoverFeed>
+        val feedFlow: StateFlow<DiscoverFeed>
         suspend fun getContent(contentType: DiscoverContentType)
     }
 }

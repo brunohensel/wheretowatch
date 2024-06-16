@@ -22,8 +22,8 @@ import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
@@ -41,7 +41,7 @@ class DiscoverContentListsImpl @Inject constructor(
     private val feedMap = ConcurrentHashMap<DiscoverSections, DiscoverContent>()
     private val feedState = MutableStateFlow(DiscoverFeed(mapOf()))
 
-    override val feedFlow: Flow<DiscoverFeed>
+    override val feedFlow: StateFlow<DiscoverFeed>
         get() = feedState.asStateFlow()
 
     override suspend fun getContent(contentType: DiscoverContentType) {
