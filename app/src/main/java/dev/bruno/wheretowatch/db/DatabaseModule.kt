@@ -11,7 +11,9 @@ import dagger.Provides
 import dev.bruno.wheretowatch.GenreEntity
 import dev.bruno.wheretowatch.MovieAndDetail
 import dev.bruno.wheretowatch.MovieAndGenre
+import dev.bruno.wheretowatch.MovieAndProvider
 import dev.bruno.wheretowatch.MovieEntity
+import dev.bruno.wheretowatch.StreamProviderEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.db.columnadapters.GenresAdapter
 import dev.bruno.wheretowatch.db.columnadapters.LocalDateAdapter
@@ -61,6 +63,13 @@ object DatabaseModule {
                 movieIdAdapter = IntColumnAdapter,
                 runtimeAdapter = IntColumnAdapter,
                 collectionIdAdapter = IntColumnAdapter,
+            ),
+            movieAndProviderAdapter = MovieAndProvider.Adapter(
+                providerIdAdapter = IntColumnAdapter,
+                movieIdAdapter = IntColumnAdapter,
+            ),
+            streamProviderEntityAdapter = StreamProviderEntity.Adapter(
+                idAdapter = IntColumnAdapter,
             )
         )
     }

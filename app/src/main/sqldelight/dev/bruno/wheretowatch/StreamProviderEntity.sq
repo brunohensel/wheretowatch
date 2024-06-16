@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS streamProviderEntity  (
+id INTEGER AS kotlin.Int PRIMARY KEY NOT NULL,
+name TEXT NOT NULL
+);
+
+getProvidersCount:
+SELECT count(*) FROM streamProviderEntity
+;
+
+insertProvider:
+INSERT OR REPLACE INTO streamProviderEntity(
+id,
+name
+) VALUES (
+?,
+?
+)
+;

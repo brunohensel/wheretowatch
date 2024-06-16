@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS movieAndProvider (
+providerId INTEGER AS kotlin.Int NOT NULL,
+movieId INTEGER AS kotlin.Int NOT NULL,
+FOREIGN KEY (movieId) REFERENCES movieEntity(id),
+FOREIGN KEY (providerId) REFERENCES streamProviderEntity(id),
+UNIQUE(providerId, movieId) ON CONFLICT REPLACE
+);
+
+insertMovieProvider:
+INSERT OR IGNORE INTO movieAndGenre(
+genreId, movieId
+) VALUES ?
+;
