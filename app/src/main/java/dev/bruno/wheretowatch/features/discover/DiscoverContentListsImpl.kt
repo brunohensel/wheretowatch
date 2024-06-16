@@ -61,6 +61,36 @@ class DiscoverContentListsImpl @Inject constructor(
 
             HarryPotterCollection -> getMovieCollectionContent(HARRY_POTTER)
                 .update(section = DiscoverSections.HarryPotter)
+
+            DiscoverContentType.Comedy -> getPopularMovieContent(MovieGenre.COMEDY)
+                .update(section = DiscoverSections.Comedy)
+
+            DiscoverContentType.Crime -> getPopularMovieContent(MovieGenre.CRIME)
+                .update(section = DiscoverSections.Crime)
+
+            DiscoverContentType.Documentary -> getPopularMovieContent(MovieGenre.DOCUMENTARY)
+                .update(section = DiscoverSections.Documentary)
+
+            DiscoverContentType.Drama -> getPopularMovieContent(MovieGenre.DRAMA)
+                .update(section = DiscoverSections.Drama)
+
+            DiscoverContentType.Family -> getPopularMovieContent(MovieGenre.FAMILY)
+                .update(section = DiscoverSections.Family)
+
+            DiscoverContentType.Fantasy -> getPopularMovieContent(MovieGenre.FANTASY)
+                .update(section = DiscoverSections.Fantasy)
+
+            DiscoverContentType.History -> getPopularMovieContent(MovieGenre.HISTORY)
+                .update(section = DiscoverSections.History)
+
+            DiscoverContentType.Music -> getPopularMovieContent(MovieGenre.MUSIC)
+                .update(section = DiscoverSections.Music)
+
+            DiscoverContentType.Romance -> getPopularMovieContent(MovieGenre.ROMANCE)
+                .update(section = DiscoverSections.Romance)
+
+            DiscoverContentType.Thriller -> getPopularMovieContent(MovieGenre.THRILLER)
+                .update(section = DiscoverSections.Thriller)
         }
     }
 

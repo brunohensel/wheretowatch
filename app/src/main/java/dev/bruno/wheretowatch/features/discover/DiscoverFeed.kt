@@ -13,6 +13,16 @@ enum class DiscoverSections {
     Netflix,
     War,
     HarryPotter,
+    Romance,
+    Thriller,
+    History,
+    Comedy,
+    Drama,
+    Fantasy,
+    Family,
+    Music,
+    Documentary,
+    Crime,
 }
 
 sealed interface DiscoverContent {
