@@ -60,6 +60,7 @@ getMoviesByGenre:
 SELECT * FROM movieEntity
 INNER JOIN movieAndGenre ON movieId = movieEntity.id
 WHERE movieAndGenre.genreId = :genreId
+ORDER BY movieEntity.releaseDate DESC, movieEntity.popularity DESC
 ;
 
 getMovieCollection:
@@ -72,7 +73,7 @@ getMovieByProvider:
 SELECT * FROM movieEntity
 INNER JOIN movieAndProvider ON movieId = movieEntity.id
 WHERE movieAndProvider.providerId IN :providerIds
-ORDER BY movieEntity.popularity DESC
+ORDER BY movieEntity.releaseDate DESC, movieEntity.popularity DESC
 ;
 
 updateMovie:
