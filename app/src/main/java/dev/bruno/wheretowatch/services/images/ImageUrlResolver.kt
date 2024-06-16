@@ -1,6 +1,6 @@
 package dev.bruno.wheretowatch.services.images
 
-import coil.size.Dimension
+import coil3.size.Dimension
 import dev.bruno.wheretowatch.ds.components.ImageType
 import javax.inject.Inject
 

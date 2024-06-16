@@ -1,8 +1,8 @@
 package dev.bruno.wheretowatch.services.discover
 
-import coil.intercept.Interceptor
-import coil.request.ImageResult
-import coil.size.Dimension
+import coil3.intercept.Interceptor
+import coil3.request.ImageResult
+import coil3.size.Dimension
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.ds.components.ImageType
@@ -15,17 +15,17 @@ class DiscoverImageInterceptor @Inject constructor(
 ) : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val rq = when (val value = chain.request.data) {
+        return when (val value = chain.request.data) {
             is DiscoveryImageModel -> {
-                chain.request.newBuilder()
+                val rq = chain.request.newBuilder()
                     .data(buildTrendUrl(value, chain.size.width))
                     .build()
+
+                chain.withRequest(rq).proceed()
             }
 
-            else -> chain.request
+            else -> chain.proceed()
         }
-
-        return chain.proceed(rq)
     }
 
     private fun buildTrendUrl(model: DiscoveryImageModel, width: Dimension): String {
@@ -40,5 +40,4 @@ class DiscoverImageInterceptor @Inject constructor(
             width = width
         )
     }
-
 }

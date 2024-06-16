@@ -14,6 +14,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.AUTO
 import dev.bruno.wheretowatch.AppPreferences.ThemeConfig.DARK
@@ -27,12 +30,16 @@ import javax.inject.Inject
 @ActivityKey(MainActivity::class)
 class MainActivity @Inject constructor(
     private val preferences: AppPreferences,
+    private val imageLoader: ImageLoader
 ) : ComponentActivity() {
+    @OptIn(ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WhereToWatchApp.createComponent(this)
 
         setContent {
+            setSingletonImageLoaderFactory { imageLoader }
+
             val currentThemeConfig by preferences.themeConfig.collectAsState(initial = AUTO)
             val applyDarkTheme = when (currentThemeConfig) {
                 AUTO -> isSystemInDarkTheme()
