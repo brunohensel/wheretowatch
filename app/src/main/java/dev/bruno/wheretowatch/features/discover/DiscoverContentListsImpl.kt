@@ -5,7 +5,6 @@ import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Action
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.HarryPotterCollection
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Netflix
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
@@ -53,9 +52,6 @@ class DiscoverContentListsImpl @Inject constructor(
             Horror -> getPopularMovieContent(MovieGenre.HORROR)
                 .update(section = DiscoverSections.Horror)
 
-            Netflix -> streamSource.get(StreamerProvider.NETFLIX)
-                .update(section = DiscoverSections.Netflix)
-
             War -> getPopularMovieContent(MovieGenre.WAR)
                 .update(section = DiscoverSections.War)
 
@@ -91,6 +87,18 @@ class DiscoverContentListsImpl @Inject constructor(
 
             DiscoverContentType.Thriller -> getPopularMovieContent(MovieGenre.THRILLER)
                 .update(section = DiscoverSections.Thriller)
+
+            StreamContent.Netflix -> streamSource.get(StreamerProvider.NETFLIX)
+                .update(section = DiscoverSections.Netflix)
+
+            StreamContent.AmazonPrime -> streamSource.get(StreamerProvider.AMAZON_PRIME)
+                .update(section = DiscoverSections.AmazonPrime)
+
+            StreamContent.AppleTvPlus -> streamSource.get(StreamerProvider.DISNEY_PLUS)
+                .update(section = DiscoverSections.DisneyPlus)
+
+            StreamContent.DisneyPlus -> streamSource.get(StreamerProvider.APPLE_TV_PLUS)
+                .update(section = DiscoverSections.AppleTvPlus)
         }
     }
 

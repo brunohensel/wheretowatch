@@ -42,7 +42,10 @@ class MovieViewModel @Inject constructor(
             homeContentLists.getContent(DiscoverContentType.Music)
             homeContentLists.getContent(DiscoverContentType.Romance)
             homeContentLists.getContent(DiscoverContentType.Thriller)
-            homeContentLists.getContent(DiscoverContentType.Netflix)
+            homeContentLists.getContent(StreamContent.Netflix)
+            homeContentLists.getContent(StreamContent.AmazonPrime)
+            homeContentLists.getContent(StreamContent.DisneyPlus)
+            homeContentLists.getContent(StreamContent.AppleTvPlus)
             homeContentLists.getContent(DiscoverContentType.HarryPotterCollection)
         }
 

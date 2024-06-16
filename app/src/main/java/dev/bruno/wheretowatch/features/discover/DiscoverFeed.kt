@@ -15,13 +15,16 @@ enum class DiscoverSections {
     HarryPotter,
     Romance,
     Thriller,
+    DisneyPlus,
     History,
     Comedy,
+    AmazonPrime,
     Drama,
     Fantasy,
     Family,
     Music,
     Documentary,
+    AppleTvPlus,
     Crime,
 }
 
