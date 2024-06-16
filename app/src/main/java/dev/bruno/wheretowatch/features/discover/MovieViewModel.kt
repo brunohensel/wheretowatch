@@ -4,16 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.MovieDetail
 import dev.bruno.wheretowatch.di.ViewModelKey
 import dev.bruno.wheretowatch.di.ViewModelScope
 import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event
-import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
@@ -27,12 +23,8 @@ class MovieViewModel @Inject constructor(
     @Composable
     fun state(): MovieScreenState {
 
-        var trendingWindow by rememberSaveable { mutableStateOf(TrendWindow.DAY) }
         val discoverFeed by homeContentLists.feedFlow.collectAsState()
 
-        LaunchedEffect(key1 = trendingWindow) {
-//            homeContentLists.getContent(DiscoverContentType.Trending(trendingWindow))
-        }
         // TODO get content concurrently?
         LaunchedEffect(key1 = Unit) {
             homeContentLists.getContent(DiscoverContentType.Popular)
@@ -49,7 +41,6 @@ class MovieViewModel @Inject constructor(
             discoverFeed = discoverFeed,
         ) { event ->
             when (event) {
-                is Event.ChangeTrendWindow -> trendingWindow = event.value
                 is Event.OnMovieClicked -> navigator.goTo(MovieDetail(event.movieId))
             }
         }

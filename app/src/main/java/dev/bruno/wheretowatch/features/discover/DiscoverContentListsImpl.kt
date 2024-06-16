@@ -8,12 +8,10 @@ import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Netflix
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.TopRated
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Trending
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
 import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
 import dev.bruno.wheretowatch.features.discover.movies.TopRatedSource
-import dev.bruno.wheretowatch.features.discover.movies.TrendingMovieSource
 import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
@@ -31,7 +29,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DiscoverContentListsImpl @Inject constructor(
-    private val trendingSource: TrendingMovieSource,
     private val upcomingSource: UpcomingMovieSource,
     private val streamSource: StreamProviderMovieSource,
     private val topRatedSource: TopRatedSource,
@@ -46,16 +43,6 @@ class DiscoverContentListsImpl @Inject constructor(
 
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-            is Trending -> {
-                val sourceContent = trendingSource.get(contentType.window)
-                val stateContent = feedMap[DiscoverSections.Trending] as? DiscoverTrending
-
-                if (stateContent?.trendWindow != contentType.window) {
-                    feedMap[DiscoverSections.Trending] =
-                        DiscoverTrending(contentType.window, sourceContent.items)
-                }
-                updateSorted()
-            }
 
             Popular -> getPopularMovieContent()
                 .update(section = DiscoverSections.Popular)

@@ -29,9 +29,8 @@ fun AppNavigation(
         composable<Movie> {
             MovieScreen(navController)
         }
-        composable<MovieDetail> { backStackEntry ->
-            val movieDetail: MovieDetail = backStackEntry.toRoute()
-            MovieDetailScreen(movieId = movieDetail.movieId)
+        composable<MovieDetail> {
+            MovieDetailScreen()
         }
     }
 }

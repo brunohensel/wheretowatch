@@ -1,12 +1,8 @@
 package dev.bruno.wheretowatch.features.discover
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -23,29 +19,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.MainScreenTopBar
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
-import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event.ChangeTrendWindow
 import dev.bruno.wheretowatch.features.discover.MovieScreenState.Event.OnMovieClicked
-import dev.bruno.wheretowatch.services.discover.TrendWindow
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
@@ -55,7 +44,6 @@ data class MovieScreenState(
 ) {
 
     sealed interface Event {
-        data class ChangeTrendWindow(val value: TrendWindow) : Event
         data class OnMovieClicked(val movieId: Int) : Event
     }
 }
@@ -114,7 +102,6 @@ fun MovieContentScreen(
                         sectionKey = sectionKey,
                         contentMap = feed.section,
                         onMovieClick = { id -> state.onEvent(OnMovieClicked(id)) },
-                        onTrendWindowClick = { window -> state.onEvent(ChangeTrendWindow(window)) },
                     )
                 }
 
@@ -132,7 +119,6 @@ fun LazyItemScope.FeedSections(
     sectionKey: DiscoverSections,
     contentMap: Map<DiscoverSections, DiscoverContent>,
     onMovieClick: (Int) -> Unit,
-    onTrendWindowClick: (TrendWindow) -> Unit,
 ) {
     val content = contentMap.getOrDefault(sectionKey, null)
     val items = content?.items ?: persistentListOf()
@@ -181,25 +167,6 @@ fun LazyItemScope.FeedSections(
             }
         }
 
-        DiscoverSections.Trending -> {
-            val trendContent = content as DiscoverTrending
-            HorizontalParallaxCarousel(
-                items = trendContent.items,
-                headerTitle = "Trending Movies",
-                onClick = { },
-                aspectRatio = LandscapeRatio,
-                rightSideContent = {
-                    TrendingToggle(
-                        trendWindow = trendContent.trendWindow,
-                        onChange = onTrendWindowClick,
-                        choices = TrendWindow.entries,
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max),
-                    )
-                },
-            )
-        }
-
         else -> {
             HorizontalCarousel(
                 items = items,
@@ -218,64 +185,5 @@ fun LazyItemScope.FeedSections(
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun TrendingToggle(
-    trendWindow: TrendWindow,
-    onChange: (TrendWindow) -> Unit,
-    modifier: Modifier = Modifier,
-    choices: List<TrendWindow> = TrendWindow.entries
-) {
-    val colorScheme = MaterialTheme.colorScheme
-    val selectedTint = colorScheme.primary
-    val onSelectedTint = colorScheme.onPrimary
-    val unselectedTint = colorScheme.surface
-    val onUnselectedTint = colorScheme.onSurface
-
-    Row(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(unselectedTint)
-            .height(IntrinsicSize.Min),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-
-        for (i in choices.indices) {
-            val current = choices[i] == trendWindow
-            val background = if (current) selectedTint else Color.Transparent
-            val textColor = if (current) onSelectedTint else onUnselectedTint
-
-            Row(
-                modifier = Modifier
-                    .background(background, shape = RoundedCornerShape(12.dp))
-                    .toggleable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        value = current,
-                        onValueChange = { selected ->
-                            if (selected) {
-                                onChange(choices[i])
-                            }
-                        }
-                    )
-            ) {
-                Text(
-                    text = getText(choices[i]),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = textColor,
-                    modifier = Modifier.padding(6.dp)
-                )
-            }
-        }
-    }
-}
-
-// TODO extract to resources
-private fun getText(window: TrendWindow): String {
-    return when (window) {
-        TrendWindow.DAY -> "Today"
-        TrendWindow.WEEK -> "This week"
     }
 }

@@ -4,12 +4,10 @@ sealed interface DiscoverCategory {
     data class Popular(val genre: MovieGenre) : DiscoverCategory
     data object Upcoming : DiscoverCategory
     data object TopRated : DiscoverCategory
-    data class Trending(val trendWindow: TrendWindow) : DiscoverCategory
     data class Streaming(val provider: StreamerProvider) : DiscoverCategory
     data class Collection(val collection: MovieCollection) : DiscoverCategory
 }
 
-enum class TrendWindow(val key: String) { DAY("day"), WEEK("week") }
 
 //TODO fetch it from genre/movie/list and store?
 enum class MovieGenre(val id: String) {

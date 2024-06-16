@@ -27,7 +27,6 @@ class KtorDiscoverRemote @Inject constructor(
             DiscoverCategory.Upcoming -> fetchUpComingMovies()
             DiscoverCategory.TopRated -> fetchTopRatedMovies()
             is DiscoverCategory.Popular -> fetchPopularMovies(category.genre)
-            is DiscoverCategory.Trending -> fetchTrendingMovies(category.trendWindow.key)
             is DiscoverCategory.Streaming -> fetchStreamProviderMovies(category.provider.id)
             is DiscoverCategory.Collection -> fetchMovieCollection(category.collection.id)
         }
@@ -84,22 +83,6 @@ class KtorDiscoverRemote @Inject constructor(
             releaseGTE = startDate.toString(),
             releaseLTE = endDate.toString(),
         )
-        val response = httpClient.get(res).body<DiscoverContentResultDto>()
-        return response.toMovies()
-    }
-
-    private suspend fun fetchTrendingMovies(trendWindow: String): List<Movie> {
-        require(trendWindow == "day" || trendWindow == "week") {
-            "Wrong time window! Expected: day or week. Received: $trendWindow"
-        }
-
-        val parentRes = TrendingRequest(language = "en-US", region = "DE")
-        val res = TrendingRequest
-            .TrendType
-            .TimeWindow(
-                parent = TrendingRequest.TrendType(parentRes, "movie"),
-                timeWindow = trendWindow
-            )
         val response = httpClient.get(res).body<DiscoverContentResultDto>()
         return response.toMovies()
     }

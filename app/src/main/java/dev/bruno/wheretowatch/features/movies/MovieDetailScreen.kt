@@ -39,16 +39,10 @@ import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.AndroidAsyncImage
 import dev.bruno.wheretowatch.ds.components.ImageType
 
-data class MovieDetailState(val movie: MovieDetailsItem) {
-
-    companion object {
-        const val MOVIE_ID_KEY = "movie_id_key"
-    }
-}
+data class MovieDetailState(val movie: MovieDetailsItem)
 
 @Composable
 fun MovieDetailScreen(
-    movieId: Int,
     viewModel: MovieDetailViewModel = viewModel()
 ) {
     val state = viewModel.present()

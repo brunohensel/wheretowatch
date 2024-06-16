@@ -5,7 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 data class DiscoverFeed(val section: Map<DiscoverSections, DiscoverContent> = mapOf())
 
 sealed class DiscoverSections(val order: Int) {
-    data object Trending : DiscoverSections(order = 5)
     data object Popular : DiscoverSections(order = 0)
     data object Action : DiscoverSections(order = 3)
     data object Horror : DiscoverSections(order = 4)
