@@ -14,14 +14,14 @@ class SqlDelightConfigMovieGenres @Inject constructor(
 
     suspend fun getGenresCount(): Long {
         return withContext(Dispatchers.IO) {
-            val queries = db.genreQueries
+            val queries = db.genreEntityQueries
             queries.getGenresCount().executeAsOne()
         }
     }
 
     suspend fun insertConfigMovieGenres(genres: List<GenreEntity>) {
         withContext(Dispatchers.IO) {
-            val queries = db.genreQueries
+            val queries = db.genreEntityQueries
             queries.transaction {
                 for ((id, name) in genres) {
                     queries.insertGenre(id, name)
