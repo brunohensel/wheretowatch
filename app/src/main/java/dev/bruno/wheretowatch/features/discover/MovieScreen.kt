@@ -123,11 +123,14 @@ fun LazyItemScope.FeedSections(
     val content = contentMap.getOrDefault(sectionKey, null)
     val items = content?.items ?: persistentListOf()
     when (sectionKey) {
-        DiscoverSections.HarryPotter -> {
+        DiscoverSections.HarryPotter,
+        DiscoverSections.HungerGames,
+        DiscoverSections.LordOfRings,
+        DiscoverSections.Avengers -> {
             HorizontalParallaxCarousel(
                 items = items,
                 onClick = onMovieClick,
-                headerTitle = "Harry Potter Collection",
+                headerTitle = sectionKey.getSpacedName(),
                 aspectRatio = LandscapeRatio,
             )
         }

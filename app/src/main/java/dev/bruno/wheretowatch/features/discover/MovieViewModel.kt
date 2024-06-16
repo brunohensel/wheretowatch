@@ -46,7 +46,10 @@ class MovieViewModel @Inject constructor(
             homeContentLists.getContent(StreamContent.AmazonPrime)
             homeContentLists.getContent(StreamContent.DisneyPlus)
             homeContentLists.getContent(StreamContent.AppleTvPlus)
-            homeContentLists.getContent(DiscoverContentType.HarryPotterCollection)
+            homeContentLists.getContent(CollectionContent.HarryPotter)
+            homeContentLists.getContent(CollectionContent.Avengers)
+            homeContentLists.getContent(CollectionContent.HungerGames)
+            homeContentLists.getContent(CollectionContent.LordOfTheRings)
         }
 
         return MovieScreenState(

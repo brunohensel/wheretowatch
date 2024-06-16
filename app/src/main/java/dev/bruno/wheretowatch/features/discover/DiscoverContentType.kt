@@ -16,12 +16,18 @@ sealed interface DiscoverContentType {
     data object Music : DiscoverContentType
     data object Documentary : DiscoverContentType
     data object Crime : DiscoverContentType
-    data object HarryPotterCollection : DiscoverContentType
+}
+
+sealed interface CollectionContent : DiscoverContentType {
+    data object HarryPotter : CollectionContent
+    data object HungerGames : CollectionContent
+    data object Avengers : CollectionContent
+    data object LordOfTheRings : CollectionContent
+
 }
 
 sealed interface StreamContent : DiscoverContentType {
     data object Netflix : StreamContent
-
     data object AmazonPrime : StreamContent
     data object DisneyPlus : StreamContent
     data object AppleTvPlus : StreamContent

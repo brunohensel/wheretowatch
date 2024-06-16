@@ -3,7 +3,6 @@ package dev.bruno.wheretowatch.features.discover
 import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Action
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.HarryPotterCollection
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
 import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
@@ -13,7 +12,10 @@ import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
 import dev.bruno.wheretowatch.services.discover.MovieCollection
+import dev.bruno.wheretowatch.services.discover.MovieCollection.AVENGERS
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
+import dev.bruno.wheretowatch.services.discover.MovieCollection.HUNGER_GAMES
+import dev.bruno.wheretowatch.services.discover.MovieCollection.LORD_OF_RINGS
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.discover.StreamerProvider
 import kotlinx.collections.immutable.toImmutableList
@@ -55,8 +57,17 @@ class DiscoverContentListsImpl @Inject constructor(
             War -> getPopularMovieContent(MovieGenre.WAR)
                 .update(section = DiscoverSections.War)
 
-            HarryPotterCollection -> getMovieCollectionContent(HARRY_POTTER)
+            CollectionContent.HarryPotter -> getMovieCollectionContent(HARRY_POTTER)
                 .update(section = DiscoverSections.HarryPotter)
+
+            CollectionContent.HungerGames -> getMovieCollectionContent(HUNGER_GAMES)
+                .update(section = DiscoverSections.HungerGames)
+
+            CollectionContent.Avengers -> getMovieCollectionContent(AVENGERS)
+                .update(section = DiscoverSections.Avengers)
+
+            CollectionContent.LordOfTheRings -> getMovieCollectionContent(LORD_OF_RINGS)
+                .update(section = DiscoverSections.LordOfRings)
 
             DiscoverContentType.Comedy -> getPopularMovieContent(MovieGenre.COMEDY)
                 .update(section = DiscoverSections.Comedy)

@@ -9,6 +9,7 @@ enum class DiscoverSections {
     Popular,
     Upcoming,
     Action,
+    Avengers,
     Horror,
     Netflix,
     War,
@@ -17,15 +18,22 @@ enum class DiscoverSections {
     Thriller,
     DisneyPlus,
     History,
+    HungerGames,
     Comedy,
     AmazonPrime,
     Drama,
     Fantasy,
+    LordOfRings,
     Family,
     Music,
     Documentary,
     AppleTvPlus,
     Crime,
+    ;
+
+    fun getSpacedName(): String {
+        return this.name.split(Regex("(?=[A-Z])")).joinToString(" ")
+    }
 }
 
 sealed interface DiscoverContent {
