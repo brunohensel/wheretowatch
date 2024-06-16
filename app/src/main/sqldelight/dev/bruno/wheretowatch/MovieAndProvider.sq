@@ -7,7 +7,7 @@ UNIQUE(providerId, movieId) ON CONFLICT REPLACE
 );
 
 insertMovieProvider:
-INSERT OR IGNORE INTO movieAndGenre(
-genreId, movieId
+INSERT OR IGNORE INTO movieAndProvider(
+providerId, movieId
 ) VALUES ?
 ;

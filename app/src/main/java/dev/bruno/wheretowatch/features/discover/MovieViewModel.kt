@@ -33,7 +33,7 @@ class MovieViewModel @Inject constructor(
             homeContentLists.getContent(DiscoverContentType.Upcoming)
 //            homeContentLists.getContent(DiscoverContentType.TopRated)
             homeContentLists.getContent(DiscoverContentType.War)
-//            homeContentLists.getContent(DiscoverContentType.Netflix)
+            homeContentLists.getContent(DiscoverContentType.Netflix)
             homeContentLists.getContent(DiscoverContentType.HarryPotterCollection)
         }
 

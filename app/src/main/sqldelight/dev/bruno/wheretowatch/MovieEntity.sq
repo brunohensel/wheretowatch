@@ -68,6 +68,13 @@ WHERE collectionId = :collectionId
 ORDER BY movieEntity.releaseDate ASC
 ;
 
+getMovieByProvider:
+SELECT * FROM movieEntity
+INNER JOIN movieAndProvider ON movieId = movieEntity.id
+WHERE movieAndProvider.providerId IN :providerIds
+ORDER BY movieEntity.popularity DESC
+;
+
 updateMovie:
 UPDATE movieEntity SET
 id = :id,

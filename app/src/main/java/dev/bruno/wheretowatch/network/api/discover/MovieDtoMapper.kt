@@ -3,11 +3,14 @@ package dev.bruno.wheretowatch.network.api.discover
 import dev.bruno.wheretowatch.services.model.Movie
 
 internal fun DiscoverContentResultDto.toMovies(): List<Movie> = this.results.toMovies()
+internal fun DiscoverContentResultDto.toMovies(providersId: List<Int>): List<Movie> =
+    this.results.toMovies(providersId = providersId)
 
 internal fun MovieCollectionDto.toMovies(): List<Movie> = this.parts.toMovies(this.id)
 
 private fun List<DiscoverContentDto>.toMovies(
-    collectionId: Int? = null
+    collectionId: Int? = null,
+    providersId: List<Int>? = null,
 ): List<Movie> = this.map { dto ->
     Movie(
         id = dto.id,
@@ -22,5 +25,6 @@ private fun List<DiscoverContentDto>.toMovies(
         posterPath = dto.posterPath,
         backdropPath = dto.backdropPath,
         collectionId = collectionId,
+        streamProviders = providersId,
     )
 }

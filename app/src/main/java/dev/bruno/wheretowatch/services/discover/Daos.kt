@@ -6,6 +6,11 @@ interface MovieCollectionDao : MovieInserterDao {
     suspend fun getMovies(collection: MovieCollection): List<Movie>
 }
 
+interface MovieStreamDao {
+    suspend fun getMovies(stream: StreamerProvider): List<Movie>
+    suspend fun insert(stream: StreamerProvider ,movies: List<Movie>)
+}
+
 interface MovieDao : MovieInserterDao {
     suspend fun getMovies(genre: MovieGenre): List<Movie>
 }
