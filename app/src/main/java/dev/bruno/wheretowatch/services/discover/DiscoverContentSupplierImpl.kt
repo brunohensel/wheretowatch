@@ -13,8 +13,8 @@ class DiscoverContentSupplierImpl @Inject constructor(
 ) : DiscoverContentSupplier {
     override suspend fun get(category: DiscoverCategory): List<DiscoverContent> {
         return when (category) {
-            is DiscoverCategory.Collection -> discoverContentStore.getCollectionContent(category.collection)
-            is DiscoverCategory.Popular -> discoverContentStore.getPopularContent(category)
+            is DiscoverCategory.Collection -> discoverContentStore.getMovies(category.collection)
+            is DiscoverCategory.Popular -> discoverContentStore.getMovies(category)
             else -> discoverMovieRemote.getContent(category)
         }.intoDiscoverContent()
     }

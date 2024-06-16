@@ -47,6 +47,18 @@ SELECT * FROM movieEntity
 WHERE movieEntity.id = :movieId
 ;
 
+getMovies:
+SELECT * FROM movieEntity
+ORDER BY movieEntity.popularity DESC
+LIMIT :limitedBy
+;
+
+getMoviesByGenre:
+SELECT * FROM movieEntity
+INNER JOIN movieAndGenre ON movieId = movieEntity.id
+WHERE movieAndGenre.genreId = :genreId
+;
+
 getMovieCollection:
 SELECT * FROM movieEntity
 WHERE collectionId = :collectionId
