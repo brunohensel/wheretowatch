@@ -98,6 +98,6 @@ class KtorDiscoverRemote @Inject constructor(
             voteCountGTE = 400,
         )
         val response = httpClient.get(res).body<DiscoverContentResultDto>()
-        return response.toMovies()
+        return response.toMovies(providersId = listOf(providerId.toInt()))
     }
 }

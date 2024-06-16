@@ -4,30 +4,31 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.Reusable
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.services.discover.AllPopularDao
+import dev.bruno.wheretowatch.services.discover.MovieDao
 import dev.bruno.wheretowatch.services.discover.MovieGenre
 import dev.bruno.wheretowatch.services.model.Movie
 import javax.inject.Inject
 
 @Reusable
 @ContributesBinding(AppScope::class)
-class SqlDelightPopularDao @Inject constructor(
+class SqlDelightMovieDao @Inject constructor(
     private val db: WhereToWatchDatabase,
     private val useCase: MovieInsertUseCase,
-) : AllPopularDao {
-    override suspend fun getPopularMovies(genre: MovieGenre): List<Movie> {
+) : MovieDao {
+    override suspend fun getMovies(genre: MovieGenre): List<Movie> {
         return if (genre == MovieGenre.ALL) {
-            getAllPopularMovies()
+            getAllMovies()
         } else {
-            getFilteredById(genre.id.toInt())
+            getMoviesByGenreId(genre.id.toInt())
         }
     }
 
-    private fun getAllPopularMovies(): List<Movie> {
-        return db.popularMovieEntityQueries
-            .getPopularMovies(
-                mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
-                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, collectionId ->
+    private fun getAllMovies(): List<Movie> {
+        return db.movieEntityQueries
+            .getMovies(
+                limitedBy = 20,
+                mapper = { id, title, overview, popularity, genres, originalTitle, voteCount, voteAverage,
+                           releaseDate, posterPath, backdropPath, collectionId, providers ->
                     Movie(
                         id = id,
                         title = title,
@@ -46,14 +47,12 @@ class SqlDelightPopularDao @Inject constructor(
             ).executeAsList()
     }
 
-    private fun getFilteredById(genreId: Int): List<Movie> {
-        return db.popularMovieEntityQueries
-            .getPopularGenre(
+    private fun getMoviesByGenreId(genreId: Int): List<Movie> {
+        return db.movieEntityQueries
+            .getMoviesByGenre(
                 genreId = genreId,
-                mapper = { key, popularId, id, title, overview, popularity, genres, originalTitle,
-                           voteCount, voteAverage, releaseDate, posterPath, backdropPath, collectionId,
-                           _genreId, movieId ->
-
+                mapper = { id, title, overview, popularity, genres, originalTitle, voteCount, voteAverage,
+                           releaseDate, posterPath, backdropPath, collectionId, providers, _genreId, movieId, ->
                     Movie(
                         id = id,
                         title = title,
@@ -74,12 +73,5 @@ class SqlDelightPopularDao @Inject constructor(
 
     override suspend fun insert(movies: List<Movie>) {
         useCase.insert(movies)
-
-        db.popularMovieEntityQueries
-            .transaction {
-                for (movie in movies) {
-                    db.popularMovieEntityQueries.insertPopularMovie(movie.id)
-                }
-            }
     }
 }

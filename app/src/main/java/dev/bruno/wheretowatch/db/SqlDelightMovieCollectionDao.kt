@@ -15,12 +15,13 @@ class SqlDelightMovieCollectionDao @Inject constructor(
     private val db: WhereToWatchDatabase,
     private val useCase: MovieInsertUseCase,
 ) : MovieCollectionDao {
-    override suspend fun getMovieCollection(collection: MovieCollection): List<Movie> {
+
+    override suspend fun getMovies(collection: MovieCollection): List<Movie> {
         return db.movieEntityQueries
             .getMovieCollection(
                 collectionId = collection.id,
                 mapper = { id, title, overview, popularity, genres, originalTitle, voteCount,
-                           voteAverage, releaseDate, posterPath, backdropPath, collectionId ->
+                           voteAverage, releaseDate, posterPath, backdropPath, collectionId, providers ->
                     Movie(
                         id = id,
                         title = title,

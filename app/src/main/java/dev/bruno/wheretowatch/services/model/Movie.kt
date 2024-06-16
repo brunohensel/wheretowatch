@@ -15,4 +15,5 @@ data class Movie(
     val posterPath: String? = null,
     val backdropPath: String? = null,
     val collectionId: Int? = null,
+    val streamProviders: List<Int>? = null,
 )

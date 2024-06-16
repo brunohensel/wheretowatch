@@ -5,7 +5,7 @@ import dagger.Reusable
 import dev.bruno.wheretowatch.MovieAndGenre
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.services.discover.MovieDao
+import dev.bruno.wheretowatch.services.discover.MovieInserterDao
 import dev.bruno.wheretowatch.services.model.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class MovieInsertUseCase @Inject constructor(
     private val db: WhereToWatchDatabase,
-) : MovieDao {
+) : MovieInserterDao {
 
     override suspend fun insert(movies: List<Movie>) {
         withContext(Dispatchers.Default) {
@@ -35,6 +35,7 @@ class MovieInsertUseCase @Inject constructor(
                             posterPath = movie.posterPath,
                             backdropPath = movie.backdropPath,
                             collectionId = movie.collectionId,
+                            streamProviders = movie.streamProviders,
                         )
                     }
                 }
