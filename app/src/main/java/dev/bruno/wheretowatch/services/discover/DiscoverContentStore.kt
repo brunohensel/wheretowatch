@@ -28,7 +28,7 @@ class DiscoverContentStore @Inject constructor(
         }
     }
 
-    suspend fun getMovies(category: DiscoverCategory.Popular): List<Movie> {
+    private suspend fun getMovies(category: DiscoverCategory.Popular): List<Movie> {
         val movies = movieDao.getMovies(category.genre)
         //TODO add a more robust logic when add pagination
         return if (movies.size < 20) {
@@ -40,7 +40,7 @@ class DiscoverContentStore @Inject constructor(
         }
     }
 
-    suspend fun getMovies(movieCollection: MovieCollection): List<Movie> {
+    private suspend fun getMovies(movieCollection: MovieCollection): List<Movie> {
         val collection = collectionDao.getMovies(collection = movieCollection)
         return collection.ifEmpty {
             discoverMovieRemote

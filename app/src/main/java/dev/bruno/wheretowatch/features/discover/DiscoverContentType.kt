@@ -23,7 +23,6 @@ sealed interface CollectionContent : DiscoverContentType {
     data object HungerGames : CollectionContent
     data object Avengers : CollectionContent
     data object LordOfTheRings : CollectionContent
-
 }
 
 sealed interface StreamContent : DiscoverContentType {

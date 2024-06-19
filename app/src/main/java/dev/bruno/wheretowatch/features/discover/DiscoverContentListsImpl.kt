@@ -2,22 +2,35 @@ package dev.bruno.wheretowatch.features.discover
 
 import com.squareup.anvil.annotations.ContributesBinding
 import dev.bruno.wheretowatch.di.AppScope
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Action
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Horror
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Popular
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.Upcoming
-import dev.bruno.wheretowatch.features.discover.DiscoverContentType.War
-import dev.bruno.wheretowatch.features.discover.movies.StreamProviderMovieSource
-import dev.bruno.wheretowatch.features.discover.movies.UpcomingMovieSource
 import dev.bruno.wheretowatch.services.discover.DiscoverCategory
+import dev.bruno.wheretowatch.services.discover.DiscoverCategory.Collection
+import dev.bruno.wheretowatch.services.discover.DiscoverCategory.Popular
+import dev.bruno.wheretowatch.services.discover.DiscoverCategory.Streaming
+import dev.bruno.wheretowatch.services.discover.DiscoverCategory.Upcoming
 import dev.bruno.wheretowatch.services.discover.DiscoverContentSupplier
-import dev.bruno.wheretowatch.services.discover.MovieCollection
 import dev.bruno.wheretowatch.services.discover.MovieCollection.AVENGERS
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HARRY_POTTER
 import dev.bruno.wheretowatch.services.discover.MovieCollection.HUNGER_GAMES
 import dev.bruno.wheretowatch.services.discover.MovieCollection.LORD_OF_RINGS
 import dev.bruno.wheretowatch.services.discover.MovieGenre
-import dev.bruno.wheretowatch.services.discover.StreamerProvider
+import dev.bruno.wheretowatch.services.discover.MovieGenre.ACTION
+import dev.bruno.wheretowatch.services.discover.MovieGenre.ALL
+import dev.bruno.wheretowatch.services.discover.MovieGenre.COMEDY
+import dev.bruno.wheretowatch.services.discover.MovieGenre.CRIME
+import dev.bruno.wheretowatch.services.discover.MovieGenre.DOCUMENTARY
+import dev.bruno.wheretowatch.services.discover.MovieGenre.DRAMA
+import dev.bruno.wheretowatch.services.discover.MovieGenre.FAMILY
+import dev.bruno.wheretowatch.services.discover.MovieGenre.FANTASY
+import dev.bruno.wheretowatch.services.discover.MovieGenre.HISTORY
+import dev.bruno.wheretowatch.services.discover.MovieGenre.HORROR
+import dev.bruno.wheretowatch.services.discover.MovieGenre.MUSIC
+import dev.bruno.wheretowatch.services.discover.MovieGenre.ROMANCE
+import dev.bruno.wheretowatch.services.discover.MovieGenre.THRILLER
+import dev.bruno.wheretowatch.services.discover.MovieGenre.WAR
+import dev.bruno.wheretowatch.services.discover.StreamerProvider.AMAZON_PRIME
+import dev.bruno.wheretowatch.services.discover.StreamerProvider.APPLE_TV_PLUS
+import dev.bruno.wheretowatch.services.discover.StreamerProvider.DISNEY_PLUS
+import dev.bruno.wheretowatch.services.discover.StreamerProvider.NETFLIX
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,8 +41,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DiscoverContentListsImpl @Inject constructor(
-    private val upcomingSource: UpcomingMovieSource,
-    private val streamSource: StreamProviderMovieSource,
     private val supplier: DiscoverContentSupplier,
 ) : MovieViewModel.HomeContentLists {
 
@@ -41,91 +52,33 @@ class DiscoverContentListsImpl @Inject constructor(
 
     override suspend fun getContent(contentType: DiscoverContentType) {
         when (contentType) {
-
-            Popular -> getPopularMovieContent()
-                .update(section = DiscoverSections.Popular)
-
-            Upcoming -> upcomingSource.get()
-                .update(section = DiscoverSections.Upcoming)
-
-            Action -> getPopularMovieContent(MovieGenre.ACTION)
-                .update(section = DiscoverSections.Action)
-
-            Horror -> getPopularMovieContent(MovieGenre.HORROR)
-                .update(section = DiscoverSections.Horror)
-
-            War -> getPopularMovieContent(MovieGenre.WAR)
-                .update(section = DiscoverSections.War)
-
-            CollectionContent.HarryPotter -> getMovieCollectionContent(HARRY_POTTER)
-                .update(section = DiscoverSections.HarryPotter)
-
-            CollectionContent.HungerGames -> getMovieCollectionContent(HUNGER_GAMES)
-                .update(section = DiscoverSections.HungerGames)
-
-            CollectionContent.Avengers -> getMovieCollectionContent(AVENGERS)
-                .update(section = DiscoverSections.Avengers)
-
-            CollectionContent.LordOfTheRings -> getMovieCollectionContent(LORD_OF_RINGS)
-                .update(section = DiscoverSections.LordOfRings)
-
-            DiscoverContentType.Comedy -> getPopularMovieContent(MovieGenre.COMEDY)
-                .update(section = DiscoverSections.Comedy)
-
-            DiscoverContentType.Crime -> getPopularMovieContent(MovieGenre.CRIME)
-                .update(section = DiscoverSections.Crime)
-
-            DiscoverContentType.Documentary -> getPopularMovieContent(MovieGenre.DOCUMENTARY)
-                .update(section = DiscoverSections.Documentary)
-
-            DiscoverContentType.Drama -> getPopularMovieContent(MovieGenre.DRAMA)
-                .update(section = DiscoverSections.Drama)
-
-            DiscoverContentType.Family -> getPopularMovieContent(MovieGenre.FAMILY)
-                .update(section = DiscoverSections.Family)
-
-            DiscoverContentType.Fantasy -> getPopularMovieContent(MovieGenre.FANTASY)
-                .update(section = DiscoverSections.Fantasy)
-
-            DiscoverContentType.History -> getPopularMovieContent(MovieGenre.HISTORY)
-                .update(section = DiscoverSections.History)
-
-            DiscoverContentType.Music -> getPopularMovieContent(MovieGenre.MUSIC)
-                .update(section = DiscoverSections.Music)
-
-            DiscoverContentType.Romance -> getPopularMovieContent(MovieGenre.ROMANCE)
-                .update(section = DiscoverSections.Romance)
-
-            DiscoverContentType.Thriller -> getPopularMovieContent(MovieGenre.THRILLER)
-                .update(section = DiscoverSections.Thriller)
-
-            StreamContent.Netflix -> streamSource.get(StreamerProvider.NETFLIX)
-                .update(section = DiscoverSections.Netflix)
-
-            StreamContent.AmazonPrime -> streamSource.get(StreamerProvider.AMAZON_PRIME)
-                .update(section = DiscoverSections.AmazonPrime)
-
-            StreamContent.AppleTvPlus -> streamSource.get(StreamerProvider.DISNEY_PLUS)
-                .update(section = DiscoverSections.DisneyPlus)
-
-            StreamContent.DisneyPlus -> streamSource.get(StreamerProvider.APPLE_TV_PLUS)
-                .update(section = DiscoverSections.AppleTvPlus)
+            DiscoverContentType.Popular -> getMovieFor(Popular(ALL))
+            DiscoverContentType.Upcoming -> getMovieFor(Upcoming)
+            DiscoverContentType.Action -> getMovieFor(Popular(ACTION))
+            DiscoverContentType.Horror -> getMovieFor(Popular(HORROR))
+            DiscoverContentType.War -> getMovieFor(Popular(WAR))
+            DiscoverContentType.Comedy -> getMovieFor(Popular(COMEDY))
+            DiscoverContentType.Crime -> getMovieFor(Popular(CRIME))
+            DiscoverContentType.Documentary -> getMovieFor(Popular(DOCUMENTARY))
+            DiscoverContentType.Drama -> getMovieFor(Popular(DRAMA))
+            DiscoverContentType.Family -> getMovieFor(Popular(FAMILY))
+            DiscoverContentType.Fantasy -> getMovieFor(Popular(FANTASY))
+            DiscoverContentType.History -> getMovieFor(Popular(HISTORY))
+            DiscoverContentType.Music -> getMovieFor(Popular(MUSIC))
+            DiscoverContentType.Romance -> getMovieFor(Popular(ROMANCE))
+            DiscoverContentType.Thriller -> getMovieFor(Popular(THRILLER))
+            CollectionContent.HarryPotter -> getMovieFor(Collection(HARRY_POTTER))
+            CollectionContent.HungerGames -> getMovieFor(Collection(HUNGER_GAMES))
+            CollectionContent.Avengers -> getMovieFor(Collection(AVENGERS))
+            CollectionContent.LordOfTheRings -> getMovieFor(Collection(LORD_OF_RINGS))
+            StreamContent.Netflix -> getMovieFor(Streaming(NETFLIX))
+            StreamContent.AmazonPrime -> getMovieFor(Streaming(AMAZON_PRIME))
+            StreamContent.AppleTvPlus -> getMovieFor(Streaming(DISNEY_PLUS))
+            StreamContent.DisneyPlus -> getMovieFor(Streaming(APPLE_TV_PLUS))
         }
     }
 
-    private suspend fun getPopularMovieContent(
-        genre: MovieGenre = MovieGenre.ALL,
-    ): DiscoverContent {
-        return getMovieFor(category = DiscoverCategory.Popular(genre))
-    }
-
-    private suspend fun getMovieCollectionContent(
-        collection: MovieCollection,
-    ): DiscoverContent {
-        return getMovieFor(category = DiscoverCategory.Collection(collection))
-    }
-
-    private suspend fun getMovieFor(category: DiscoverCategory): DiscoverContent {
+    private suspend fun getMovieFor(category: DiscoverCategory) {
         val items = supplier.get(category)
             .map { item ->
                 DiscoverMovieItem(
@@ -139,7 +92,50 @@ class DiscoverContentListsImpl @Inject constructor(
                 )
             }.toImmutableList()
 
-        return ContentList(items)
+        ContentList(items).update(category.toSection())
+    }
+
+    private fun DiscoverCategory.toSection(): DiscoverSections {
+        return when (this) {
+            is Collection -> when (this.collection) {
+                HARRY_POTTER -> DiscoverSections.HarryPotter
+                HUNGER_GAMES -> DiscoverSections.HungerGames
+                AVENGERS -> DiscoverSections.Avengers
+                LORD_OF_RINGS -> DiscoverSections.LordOfRings
+            }
+
+            is Popular -> when (this.genre) {
+                ALL -> DiscoverSections.Popular
+                ACTION -> DiscoverSections.Action
+                MovieGenre.ADVENTURE -> TODO()
+                MovieGenre.ANIMATION -> TODO()
+                COMEDY -> DiscoverSections.Comedy
+                CRIME -> DiscoverSections.Crime
+                DOCUMENTARY -> DiscoverSections.Documentary
+                DRAMA -> DiscoverSections.Drama
+                FAMILY -> DiscoverSections.Family
+                FANTASY -> DiscoverSections.Fantasy
+                HISTORY -> DiscoverSections.History
+                HORROR -> DiscoverSections.Horror
+                MUSIC -> DiscoverSections.Music
+                MovieGenre.MYSTERY -> TODO()
+                ROMANCE -> DiscoverSections.Romance
+                MovieGenre.SCIENCE_FICTION -> TODO()
+                MovieGenre.TV_MOVIE -> TODO()
+                THRILLER -> DiscoverSections.Thriller
+                WAR -> DiscoverSections.War
+                MovieGenre.WESTERN -> TODO()
+            }
+
+            is Streaming -> when (this.provider) {
+                NETFLIX -> DiscoverSections.Netflix
+                AMAZON_PRIME -> DiscoverSections.AmazonPrime
+                DISNEY_PLUS -> DiscoverSections.DisneyPlus
+                APPLE_TV_PLUS -> DiscoverSections.AppleTvPlus
+            }
+
+            Upcoming -> DiscoverSections.Upcoming
+        }
     }
 
     private fun DiscoverContent.update(section: DiscoverSections) {
