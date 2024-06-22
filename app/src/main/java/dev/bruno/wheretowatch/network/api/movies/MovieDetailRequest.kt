@@ -5,5 +5,8 @@ import io.ktor.resources.Resource
 @Resource("movie")
 class MovieDetailRequest {
     @Resource("{movieId}")
-    class Id(val parent: MovieDetailRequest = MovieDetailRequest(), val movieId: Int)
+    class Id(val parent: MovieDetailRequest = MovieDetailRequest(), val movieId: Int) {
+        @Resource("videos")
+        class Videos(val parent: Id)
+    }
 }

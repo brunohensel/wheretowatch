@@ -1,7 +1,6 @@
 package dev.bruno.wheretowatch.services.discover
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
@@ -18,9 +17,10 @@ class LocalDateSerializer : KSerializer<LocalDate?> {
     override fun deserialize(decoder: Decoder): LocalDate? {
         val result = stringSerializer.deserialize(decoder)
         if (result.isNullOrBlank()) return null
+        val date = result.substring(0,10) //in case the string contains time/time zone we get only the date
 
         return try {
-            result.toLocalDate()
+            LocalDate.parse(date)
         } catch (e: IllegalArgumentException) {
             null
         }

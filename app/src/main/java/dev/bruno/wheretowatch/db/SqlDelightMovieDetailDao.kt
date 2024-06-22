@@ -19,8 +19,8 @@ class SqlDelightMovieDetailDao @Inject constructor(
         return db.movieAndDetailQueries
             .getMovieDetails(
                 movieId = id,
-                mapper = { movieId, homePage, budget, revenue, runtime, tagline, collectionId, _id,
-                           title, overview, popularity, genres, originalTitle, voteCount,
+                mapper = { movieId, homePage, budget, revenue, runtime, tagline, collectionId,
+                           movieVideos, _id, title, overview, popularity, genres, originalTitle, voteCount,
                            voteAverage, releaseDate, posterPath, backdropPath, _collectionId, providers ->
                     MovieWithDetails(
                         id = movieId,
@@ -40,6 +40,7 @@ class SqlDelightMovieDetailDao @Inject constructor(
                         collectionId = _collectionId,
                         posterPath = posterPath,
                         backdropPath = backdropPath,
+                        videos = movieVideos,
                     )
                 }
             ).executeAsOneOrNull()
@@ -56,6 +57,7 @@ class SqlDelightMovieDetailDao @Inject constructor(
                     runtime = details.runtime,
                     tagline = details.tagline,
                     collectionId = details.collectionId,
+                    videos = details.videos,
                 )
             )
     }
