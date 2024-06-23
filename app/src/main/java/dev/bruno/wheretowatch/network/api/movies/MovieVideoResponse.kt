@@ -11,6 +11,7 @@ data class MovieVideoResponse(val results: List<MovieVideoDto>)
 @Serializable
 data class MovieVideoDto(
     val id: String,
+    val type: String,
     val key: String,
     val site: String,
     val official: Boolean,

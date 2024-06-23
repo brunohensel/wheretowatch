@@ -16,6 +16,7 @@ import javax.inject.Inject
 class KtorMovieDetailsRemote @Inject constructor(
     private val httpClient: HttpClient,
 ) : MovieDetailsRemote {
+
     override suspend fun fetchMovieDetail(movieId: Int): MovieDetails {
         val movieRes = MovieDetailRequest.Id(movieId = movieId)
         val videoRes = MovieDetailRequest.Id.Videos(movieRes)
@@ -24,8 +25,25 @@ class KtorMovieDetailsRemote @Inject constructor(
             val detailDeferred = async { httpClient.get(movieRes).body<MovieDetailsDto>() }
             val videosDeferred = async { httpClient.get(videoRes).body<MovieVideoResponse>() }
 
-            detailDeferred.await().toMovieDetails(videosDeferred.await().results)
+            val officialVideos = videosDeferred.await().results.filterRelevantVideos()
+            detailDeferred.await().toMovieDetails(officialVideos)
         }
+    }
+
+    private fun List<MovieVideoDto>.filterRelevantVideos(): List<MovieVideoDto> {
+        if (this.size <= 6) return this.sortedByDescending { it.date }
+
+        val acceptedVideoTypes = listOf("Teaser", "Trailer")
+        val officialAcceptedVideos: (MovieVideoDto) -> Boolean = {
+            it.official && (it.site == "YouTube" && it.type in acceptedVideoTypes)
+        }
+
+        return this.filter(officialAcceptedVideos)
+            .partition { it.type == "Teaser" }
+            .let { (teasers, trailers) ->
+                trailers.sortedByDescending { it.date }.take(3)
+                    .plus(teasers.sortedByDescending { it.date }.take(3))
+            }
     }
 
     private fun MovieDetailsDto.toMovieDetails(videosDto: List<MovieVideoDto>): MovieDetails {
@@ -44,6 +62,7 @@ class KtorMovieDetailsRemote @Inject constructor(
     private fun List<MovieVideoDto>.toVideos(): List<MovieVideo> = this.map {
         MovieVideo(
             id = it.id,
+            type = it.type,
             key = it.key,
             site = it.site,
             official = it.official,

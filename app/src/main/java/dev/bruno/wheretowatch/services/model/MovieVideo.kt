@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieVideo(
     val id: String,
+    val type: String,
     val key: String,
     val site: String,
     val official: Boolean,
