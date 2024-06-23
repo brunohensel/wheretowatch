@@ -1,4 +1,5 @@
-import dev.bruno.wheretowatch.services.model.MovieVideo;
+import dev.bruno.wheretowatch.db.MovieVideoEntity;
+
 
 CREATE TABLE IF NOT EXISTS movieAndDetail (
 movieId INTEGER AS kotlin.Int NOT NULL,
@@ -8,7 +9,7 @@ revenue INTEGER NOT NULL,
 runtime INTEGER AS kotlin.Int NOT NULL,
 tagline TEXT NOT NULL,
 collectionId INTEGER AS kotlin.Int,
-videos TEXT AS kotlin.collections.List<MovieVideo> NOT NULL,
+videos TEXT AS kotlin.collections.List<MovieVideoEntity> NOT NULL,
 FOREIGN KEY (movieId) REFERENCES movieEntity(id),
 UNIQUE(movieId) ON CONFLICT REPLACE
 );
