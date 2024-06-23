@@ -5,6 +5,7 @@ import coil3.request.ImageResult
 import coil3.size.Dimension
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.di.AppScope
+import dev.bruno.wheretowatch.services.images.ImageSizeChooser
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class)
@@ -30,43 +31,18 @@ class VideoImageInterceptor @Inject constructor() : Interceptor {
     private fun buildVideoUrl(model: VideoImageModel, width: Dimension): String {
         if (width !is Dimension.Pixels) return ""
 
-        val resolution = pickBestResolution(width)
+        val sizes = supportedQuality.keys.toList()
+        val bestSize = ImageSizeChooser.chooseBestSize(sizes, width.px)
 
-        return YT_THUMBNAIL_URL.format(model.key, resolution)
+        return YT_THUMBNAIL_URL.format(model.key, supportedQuality[bestSize])
     }
 
     private val supportedQuality = mapOf(
-        MQ_DEFAULT to 320,
-        HQ_DEFAULT to 480,
-        SDD_DEFAULT to 640,
-        MAX_RES_DEFAULT to 1280
+        "320" to MQ_DEFAULT,
+        "480" to HQ_DEFAULT,
+        "640" to SDD_DEFAULT,
+        "1280" to MAX_RES_DEFAULT,
     )
-
-    private fun pickBestResolution(dimension: Dimension.Pixels): String {
-        val width = dimension.px
-        var previousSize: String? = null
-        var previousWidth = 0
-
-        for (key in supportedQuality.keys) {
-            val resolution = supportedQuality[key] ?: 0
-
-            if (resolution > width) {
-                if (previousSize != null && width > (previousWidth + resolution) / 2) {
-                    return key
-                } else if (previousSize != null) {
-                    return previousSize
-                }
-            } else if (key == supportedQuality.keys.last()) {
-                if (width < resolution * 2) {
-                    return key
-                }
-            }
-            previousSize = key
-            previousWidth = resolution
-        }
-
-        return previousSize ?: supportedQuality.keys.last()
-    }
 
     private companion object {
 
