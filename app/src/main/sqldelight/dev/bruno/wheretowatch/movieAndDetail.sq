@@ -1,6 +1,5 @@
 import dev.bruno.wheretowatch.db.MovieVideoEntity;
 
-
 CREATE TABLE IF NOT EXISTS movieAndDetail (
 movieId INTEGER AS kotlin.Int NOT NULL,
 homePage TEXT NOT NULL,
