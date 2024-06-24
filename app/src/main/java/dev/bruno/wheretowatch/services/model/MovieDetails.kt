@@ -10,6 +10,7 @@ data class MovieDetails(
     val runtime: Int = 0,
     val tagline: String = "",
     val collectionId: Int? = null,
+    val videos: List<MovieVideo> = emptyList(),
 )
 
 data class MovieWithDetails(
@@ -30,4 +31,5 @@ data class MovieWithDetails(
     val collectionId: Int? = null,
     val posterPath: String? = null,
     val backdropPath: String? = null,
+    val videos: List<MovieVideo> = emptyList(),
 )

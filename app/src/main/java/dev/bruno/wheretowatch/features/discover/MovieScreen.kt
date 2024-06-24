@@ -143,8 +143,7 @@ fun LazyItemScope.FeedSections(
                     alignment = Alignment.CenterVertically,
                 )
 
-                val pagerState =
-                    rememberPagerState(pageCount = { items.size })
+                val pagerState = rememberPagerState(pageCount = { items.size })
                 HorizontalHomeMoviePager(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)

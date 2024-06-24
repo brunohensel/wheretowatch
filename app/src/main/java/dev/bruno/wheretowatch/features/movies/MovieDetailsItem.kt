@@ -3,6 +3,7 @@ package dev.bruno.wheretowatch.features.movies
 import dev.bruno.wheretowatch.ds.components.ImageModelBuilder
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.services.discover.DiscoveryImageModel
+import dev.bruno.wheretowatch.services.model.MovieVideo
 import kotlinx.datetime.LocalDate
 
 data class MovieDetailsItem(
@@ -21,6 +22,7 @@ data class MovieDetailsItem(
     val runtime: Int = 0,
     val tagline: String = "",
     val collectionId: Int? = null,
+    val videos: List<MovieVideo> = emptyList(),
     override val buildImgModel: (type: ImageType) -> DiscoveryImageModel,
 ) : ImageModelBuilder<DiscoveryImageModel> {
 

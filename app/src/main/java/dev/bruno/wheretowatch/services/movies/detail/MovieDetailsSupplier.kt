@@ -46,6 +46,7 @@ class MovieDetailStore @Inject constructor(
             runtime = runtime,
             tagline = tagline,
             collectionId = collectionId,
+            videos = videos,
             buildImgModel = partialImgModel()
         )
     }

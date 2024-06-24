@@ -17,6 +17,7 @@ import dev.bruno.wheretowatch.StreamProviderEntity
 import dev.bruno.wheretowatch.WhereToWatchDatabase
 import dev.bruno.wheretowatch.db.columnadapters.GenresAdapter
 import dev.bruno.wheretowatch.db.columnadapters.LocalDateAdapter
+import dev.bruno.wheretowatch.db.columnadapters.MovieVideoAdapter
 import dev.bruno.wheretowatch.db.columnadapters.StreamProvidersAdapter
 import dev.bruno.wheretowatch.di.AppScope
 import dev.bruno.wheretowatch.di.ApplicationContext
@@ -63,6 +64,7 @@ object DatabaseModule {
                 movieIdAdapter = IntColumnAdapter,
                 runtimeAdapter = IntColumnAdapter,
                 collectionIdAdapter = IntColumnAdapter,
+                videosAdapter = MovieVideoAdapter,
             ),
             movieAndProviderAdapter = MovieAndProvider.Adapter(
                 providerIdAdapter = IntColumnAdapter,

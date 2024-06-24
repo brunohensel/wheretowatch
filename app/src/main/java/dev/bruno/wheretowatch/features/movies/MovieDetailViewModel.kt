@@ -3,13 +3,16 @@ package dev.bruno.wheretowatch.features.movies
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.squareup.anvil.annotations.ContributesMultibinding
 import dev.bruno.wheretowatch.MovieDetail
+import dev.bruno.wheretowatch.YouTubeIntentProvider
 import dev.bruno.wheretowatch.di.ViewModelKey
 import dev.bruno.wheretowatch.di.ViewModelScope
+import dev.bruno.wheretowatch.features.movies.MovieDetailState.MovieDetailEvent
 import dev.bruno.wheretowatch.services.movies.detail.MovieDetailsSupplier
 import javax.inject.Inject
 
@@ -29,6 +32,14 @@ class MovieDetailViewModel @Inject constructor(
             value = detail
         }
 
-        return MovieDetailState(movieDetail)
+        val context = LocalContext.current
+
+        return MovieDetailState(movieDetail) { event ->
+            when (event) {
+                is MovieDetailEvent.OpenVideo -> {
+                    context.startActivity(YouTubeIntentProvider.get(event.key))
+                }
+            }
+        }
     }
 }

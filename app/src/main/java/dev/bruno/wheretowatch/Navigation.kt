@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import dev.bruno.wheretowatch.features.discover.MovieScreen
 import dev.bruno.wheretowatch.features.movies.MovieDetailScreen
 import kotlinx.serialization.Serializable

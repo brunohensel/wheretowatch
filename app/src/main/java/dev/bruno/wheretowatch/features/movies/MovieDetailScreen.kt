@@ -1,6 +1,8 @@
 package dev.bruno.wheretowatch.features.movies
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,8 +43,19 @@ import androidx.compose.ui.unit.dp
 import dev.bruno.wheretowatch.di.viewmodel.viewModel
 import dev.bruno.wheretowatch.ds.components.AndroidAsyncImage
 import dev.bruno.wheretowatch.ds.components.ImageType
+import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
+import dev.bruno.wheretowatch.features.discover.HomeListHeader
+import dev.bruno.wheretowatch.features.movies.MovieDetailState.MovieDetailEvent
+import dev.bruno.wheretowatch.services.model.MovieVideo
 
-data class MovieDetailState(val movie: MovieDetailsItem)
+data class MovieDetailState(
+    val movie: MovieDetailsItem,
+    val onEvent: (MovieDetailEvent) -> Unit,
+) {
+    sealed interface MovieDetailEvent {
+        data class OpenVideo(val key: String) : MovieDetailEvent
+    }
+}
 
 @Composable
 fun MovieDetailScreen(
@@ -98,6 +114,64 @@ fun MovieDetailContent(
 
             item(key = "DetailOverview") {
                 DetailOverview(movie = movie)
+            }
+
+            item {
+                HorizontalVideoThumbnail(
+                    videos = movie.videos,
+                    headerTitle = "Videos",
+                    onClick = { state.onEvent(MovieDetailEvent.OpenVideo(it)) },
+                )
+            }
+        }
+    }
+}
+
+private const val LandscapeRatio = 16 / 11f
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun HorizontalVideoThumbnail(
+    videos: List<MovieVideo>,
+    headerTitle: String,
+    modifier: Modifier = Modifier,
+    onClick: (key: String) -> Unit,
+    rightSideContent: (@Composable () -> Unit)? = null,
+) {
+    Column {
+        Spacer(Modifier.height(8.dp))
+
+        HomeListHeader(
+            headerTitle = headerTitle,
+            modifier = modifier,
+            alignment = Alignment.CenterVertically,
+            content = rightSideContent
+        )
+
+        if (videos.isNotEmpty()) {
+            val lazyListState = rememberLazyListState()
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clip(MaterialTheme.shapes.medium),
+            ) {
+                items(
+                    items = videos,
+                    key = { it.id },
+                ) { video ->
+                    WhereToWatchCard(
+                        model = video,
+                        type = ImageType.Backdrop,
+                        title = "",
+                        onClick = { onClick(video.key) },
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .width(260.dp) // TODO make it dynamic
+                            .aspectRatio(LandscapeRatio)
+                    )
+                }
             }
         }
     }
