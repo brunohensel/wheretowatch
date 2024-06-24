@@ -45,9 +45,17 @@ import dev.bruno.wheretowatch.ds.components.AndroidAsyncImage
 import dev.bruno.wheretowatch.ds.components.ImageType
 import dev.bruno.wheretowatch.ds.components.WhereToWatchCard
 import dev.bruno.wheretowatch.features.discover.HomeListHeader
+import dev.bruno.wheretowatch.features.movies.MovieDetailState.MovieDetailEvent
 import dev.bruno.wheretowatch.services.model.MovieVideo
 
-data class MovieDetailState(val movie: MovieDetailsItem)
+data class MovieDetailState(
+    val movie: MovieDetailsItem,
+    val onEvent: (MovieDetailEvent) -> Unit,
+) {
+    sealed interface MovieDetailEvent {
+        data class OpenVideo(val key: String) : MovieDetailEvent
+    }
+}
 
 @Composable
 fun MovieDetailScreen(
@@ -112,6 +120,7 @@ fun MovieDetailContent(
                 HorizontalVideoThumbnail(
                     videos = movie.videos,
                     headerTitle = "Videos",
+                    onClick = { state.onEvent(MovieDetailEvent.OpenVideo(it)) },
                 )
             }
         }
@@ -126,6 +135,7 @@ private fun HorizontalVideoThumbnail(
     videos: List<MovieVideo>,
     headerTitle: String,
     modifier: Modifier = Modifier,
+    onClick: (key: String) -> Unit,
     rightSideContent: (@Composable () -> Unit)? = null,
 ) {
     Column {
@@ -155,7 +165,7 @@ private fun HorizontalVideoThumbnail(
                         model = video,
                         type = ImageType.Backdrop,
                         title = "",
-                        onClick = { },
+                        onClick = { onClick(video.key) },
                         modifier = Modifier
                             .animateItemPlacement()
                             .width(260.dp) // TODO make it dynamic
