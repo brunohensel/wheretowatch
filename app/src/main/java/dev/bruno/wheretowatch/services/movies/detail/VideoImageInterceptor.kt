@@ -45,7 +45,6 @@ class VideoImageInterceptor @Inject constructor() : Interceptor {
     )
 
     private companion object {
-
         const val MQ_DEFAULT = "mqdefault" //Medium quality 320x180
         const val HQ_DEFAULT = "hqdefault" //High quality 480x360
         const val SDD_DEFAULT = "sddefault" //Standard resolution 640x480
